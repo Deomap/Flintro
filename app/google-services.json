@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1016130912231",
+    "firebase_url": "https://flintro-706e1.firebaseio.com",
+    "project_id": "flintro-706e1",
+    "storage_bucket": "flintro-706e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1016130912231:android:e26174fc0ce391af",
+        "android_client_info": {
+          "package_name": "com.deomap.flintro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1016130912231-4482pqc659tv8niqk2f8h98ghvvuf90n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSDbNwkh36RtQnJfyofWTXLAxRGIh4Cs4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1016130912231-4482pqc659tv8niqk2f8h98ghvvuf90n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

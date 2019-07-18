@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Flintro</string>
+    <string name="login_hint">Email или логин</string>
+    <string name="signin_hint">Email</string>
+    <string name="password_hint">Пароль</string>
+    <string name="login_switch">Зарегистрироваться</string>
+    <string name="signin_switch">Войти</string>
+</resources>
