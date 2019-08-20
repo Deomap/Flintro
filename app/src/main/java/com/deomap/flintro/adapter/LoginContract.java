@@ -3,7 +3,6 @@ package com.deomap.flintro.adapter;
 import android.widget.TextView;
 
 import com.deomap.flintro.login.LoginModel;
-import com.google.firebase.auth.FirebaseUser;
 
 public interface LoginContract {
     interface View{
@@ -17,6 +16,7 @@ public interface LoginContract {
     interface vSignInVerifying extends View{
         void changeTextViewColor(TextView v, String text);
         void neededMode(int mode);
+        void goToMainScreen(int param);
     }
 
     interface Presenter{

@@ -10,7 +10,7 @@ public class appStarted {
     FirebaseUsers fbu = new FirebaseUsers();
 
     public int requestForUsing(){
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+        if(fbu.curUser() != null){
             return 1;
         }
         return 0;

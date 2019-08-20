@@ -41,14 +41,15 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
     public void tryTo(final String email, String password, String passwordRepeated, int mode) {
         if(mode == 0){
             mRepository.logIn(email,password);
-            FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            fbu.userInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     if(flag) {
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
+                        FirebaseUser user = fbu.curUser();
                         if(user != null){
                             if(user.isEmailVerified()){
                                 mView.showToast("NP");
+                                mView.goToMainScreen(0);
                             }
                             else{
                                 mView.neededMode(3);
@@ -68,7 +69,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
         }
         if(mode == 1) {
             if (checkPassword(password, passwordRepeated) == 1) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseUser user = fbu.curUser();
                 mRepository.registerCallback((LoginModel.MyCallback) this);
                 mRepository.signUp(email,password);
             } else {
@@ -79,8 +80,9 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
 
     @Override
     public void emailVerifiedClicked() {
-            if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+            if(fbu.curUser().isEmailVerified()){
                 mView.showToast("LETSGO");
+                mView.goToMainScreen(0);
             }
             else{
                 mView.showToast("email not verified");
@@ -97,10 +99,12 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
         }
     }
 
+    //LOGGED IN = SIGNED UP :)
+
     @Override
     public void returnCallbackLoggedIn() {
         mView.neededMode(3);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = fbu.curUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

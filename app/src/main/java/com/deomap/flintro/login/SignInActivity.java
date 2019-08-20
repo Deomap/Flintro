@@ -23,17 +23,17 @@ public class SignInActivity extends AppCompatActivity implements LoginContract.v
     private LoginContract.LoginPresenter mPresenter;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_sign_in);
 
-        vSignInVerifying = new Intent(this, VerifyingSignInActivity.class);
+            vSignInVerifying = new Intent(this, VerifyingSignInActivity.class);
 
-        mRegButton = findViewById(R.id.registerButton);
-        mSignInButton = findViewById(R.id.loginButton);
+            mRegButton = findViewById(R.id.registerButton);
+            mSignInButton = findViewById(R.id.loginButton);
 
-        mPresenter = new LoginPresenter((LoginContract.vSignIn) this);
+            mPresenter = new LoginPresenter((LoginContract.vSignIn) this);
     }
 
     @Override

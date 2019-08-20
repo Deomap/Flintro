@@ -6,13 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.deomap.flintro.MainPart.vMainScreen;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.LoginContract;
-import com.google.firebase.auth.FirebaseUser;
 
 public class VerifyingSignInActivity extends AppCompatActivity implements LoginContract.vSignInVerifying {
 
@@ -58,7 +57,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
     @Override
     public void neededMode(int mode) {
         if(mode == 0){
-            showToast("AAA");
+            //showToast("AAA");
             mPasswordConfirmation.setEnabled(false);
             mPasswordConfirmation.setVisibility(View.INVISIBLE);
             mGetEmailButton.setEnabled(false);
@@ -70,7 +69,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
 
         }
         if(mode == 1){
-            showToast("BBB");
+            //showToast("BBB");
                 mPasswordConfirmation.setEnabled(true);
                 mPasswordConfirmation.setVisibility(View.VISIBLE);
                 mGetEmailButton.setEnabled(true);
@@ -81,7 +80,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
             mLoginButton.setVisibility(View.INVISIBLE);
         }
         if(mode == 3){
-            showToast("CCC");
+            //showToast("CCC");
             mPasswordConfirmation.setEnabled(false);
             mPasswordConfirmation.setVisibility(View.INVISIBLE);
             mGetEmailButton.setEnabled(false);
@@ -91,6 +90,11 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
             mLoginButton.setEnabled(false);
             mLoginButton.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void goToMainScreen(int param) {
+        startActivity(new Intent(this, vMainScreen.class));
     }
 
     public void getEmail(View view){

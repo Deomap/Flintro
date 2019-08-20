@@ -20,11 +20,13 @@ import static android.content.ContentValues.TAG;
 public class LoginModel implements LoginContract.Repository {
 
     FirebaseUsers fbu = new FirebaseUsers();
-    Exception ex;
+    private Exception ex;
     private  MyCallback callback;
     private String SIEmail;
     private String SIPassword;
 
+
+    //Return result of SIGNING UP(!)
     public interface MyCallback{
         void returnCallbackLoggedIn();
         void returnCallbackNotLoggedIn();
@@ -34,7 +36,7 @@ public class LoginModel implements LoginContract.Repository {
     @Override
     public Exception logIn(String email, String password){
         Log.i("LoginModel","logIn() started");
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+        fbu.userInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener( new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -58,14 +60,14 @@ public class LoginModel implements LoginContract.Repository {
     public int signUp( String email,  String password){
         SIEmail = email;
         SIPassword=password;
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+        fbu.userInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:successs");
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            FirebaseUser user = fbu.curUser();
                             callback.returnCallbackLoggedIn();
                             logIn(SIEmail,SIPassword);
                         } else {

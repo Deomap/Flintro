@@ -10,8 +10,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".login.VerifyingSignInActivity"></activity>
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".MainPart.vMainScreen"></activity>
+        <activity android:name=".MainPart.QuestionsActivity" />
+        <activity android:name=".ChatActivity.ChatAcvitity" />
+        <activity android:name=".MainPart.MainScreen" />
+        <activity android:name=".login.VerifyingSignInActivity" />
         <activity android:name=".login.SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

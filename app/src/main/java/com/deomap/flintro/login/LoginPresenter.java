@@ -35,10 +35,6 @@ public class LoginPresenter implements LoginContract.LoginPresenter{
         this.mRepository = new LoginModel();
     }
 
-    private void loginApproved(){
-        //GO TO MAIN APP SCREEN
-    }
-
     private void tryNdSignUp(int mode){
         mView.goToVerifyingLoginActivity(mode);
     }
