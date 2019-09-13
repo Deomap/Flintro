@@ -11,10 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainPart.vMainScreen"></activity>
-        <activity android:name=".MainPart.QuestionsActivity" />
-        <activity android:name=".ChatActivity.ChatAcvitity" />
-        <activity android:name=".MainPart.MainScreen" />
+        <activity android:name=".FirstLaunchActivity.FLActivity"></activity>
+        <activity android:name=".SwipeActivity.SwipeActivity" />
+        <activity android:name=".QuestionsActivity.QuestionsActivity" />
+        <activity android:name=".ProfileActivity.ProfileActivity" />
+        <activity android:name=".ChatActivity.ChatActivity" />
+        <activity android:name=".LikesActivity.LikesActivity" />
+        <activity
+            android:name=".MainPart.MainScreenActivity"
+            android:label="@string/title_activity_main_screen" />
         <activity android:name=".login.VerifyingSignInActivity" />
         <activity android:name=".login.SignInActivity" />
         <activity android:name=".MainActivity">

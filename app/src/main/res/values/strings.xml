@@ -6,7 +6,12 @@
     <string name="login_switch">Зарегистрироваться</string>
     <string name="signin_switch">Войти</string>
     <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_swipe">Свайп</string>
+    <string name="title_likes">Лайки</string>
+    <string name="title_questions">Вопросы</string>
+    <string name="title_chat">Чат</string>
+    <string name="title_profile">Профиль</string>
+    <string name="title_activity_main_screen">MainScreenActivity</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

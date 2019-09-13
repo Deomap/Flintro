@@ -4,7 +4,8 @@ import android.widget.TextView;
 
 import com.deomap.flintro.login.LoginModel;
 
-public interface LoginContract {
+public interface
+LoginContract {
     interface View{
         void showToast(String text);
     }
@@ -31,6 +32,7 @@ public interface LoginContract {
         void checkPassword(String passwordNeeded, String passwordEntered, TextView v);
         void tryTo(String email, String password, String passwordRepeated, int mode);
         void emailVerifiedClicked();
+        void addUserToDatabase();
     }
 
     interface Repository{
@@ -38,4 +40,6 @@ public interface LoginContract {
         int signUp(String email, String password);
         void registerCallback(LoginModel.MyCallback callback);
     }
+
+
 }

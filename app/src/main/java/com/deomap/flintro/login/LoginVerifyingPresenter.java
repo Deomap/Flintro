@@ -8,11 +8,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.deomap.flintro.adapter.LoginContract;
+import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 //MODE 0 - LOGIN
 //MODE 1 - REGISTER
@@ -22,6 +31,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
     private LoginContract.vSignInVerifying mView;
     private LoginContract.Repository mRepository;
     FirebaseUsers fbu = new FirebaseUsers();
+    FirebaseCloudstore fbcs = new FirebaseCloudstore();
     private boolean flag;
     private boolean emailSent= false;
 
@@ -80,14 +90,40 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
 
     @Override
     public void emailVerifiedClicked() {
+            fbu.curUser().reload();
             if(fbu.curUser().isEmailVerified()){
                 mView.showToast("LETSGO");
+
                 mView.goToMainScreen(0);
+
             }
             else{
                 mView.showToast("email not verified");
+                mView.showToast(fbu.curUser().getUid());
             }
 
+    }
+
+    @Override
+    public void addUserToDatabase() {
+        FirebaseFirestore db = fbcs.DBInstance();
+        String uid = fbu.curUser().getUid();
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("firstLaunch", "y");
+        db.collection("users").document(uid)
+                .set(userInfo)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("LVP-AddingUser", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("LVP-AddingUser", "Error writing document", e);
+                    }
+                });
     }
 
     private int checkPassword(String password, String passwordRepeated){

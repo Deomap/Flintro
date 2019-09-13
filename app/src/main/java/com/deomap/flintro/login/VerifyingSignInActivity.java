@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.deomap.flintro.MainPart.vMainScreen;
+import com.deomap.flintro.MainPart.MainScreenActivity;
+import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.LoginContract;
 
@@ -83,8 +84,8 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
             //showToast("CCC");
             mPasswordConfirmation.setEnabled(false);
             mPasswordConfirmation.setVisibility(View.INVISIBLE);
-            mGetEmailButton.setEnabled(false);
-            mGetEmailButton.setVisibility(View.INVISIBLE);
+            mGetEmailButton.setEnabled(true);
+            mGetEmailButton.setVisibility(View.VISIBLE);
             mEmailVerified.setEnabled(true);
             mEmailVerified.setVisibility(View.VISIBLE);
             mLoginButton.setEnabled(false);
@@ -94,7 +95,8 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
 
     @Override
     public void goToMainScreen(int param) {
-        startActivity(new Intent(this, vMainScreen.class));
+        mPresenter.addUserToDatabase();
+        startActivity(new Intent(this, QuestionsActivity.class));
     }
 
     public void getEmail(View view){
