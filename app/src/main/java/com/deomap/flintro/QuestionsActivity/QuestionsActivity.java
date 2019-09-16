@@ -3,9 +3,11 @@ package com.deomap.flintro.QuestionsActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.deomap.flintro.FirstLaunchActivity.FLActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -42,6 +44,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         mPresenter = new QuestionsPresenter(this);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        startActivity(new Intent(this, FLActivity.class));
     }
 
     @Override

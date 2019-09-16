@@ -15,6 +15,7 @@ public class FirebaseUsers{
     public FirebaseAuth userInstance(){ return FirebaseAuth.getInstance(); }
     public String userName(){ return curUser().getDisplayName(); }
     public boolean isEmailVerified() { return curUser().isEmailVerified(); }
+    public String uID(){return curUser().getUid();}
 
 }
 

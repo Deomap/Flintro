@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.deomap.flintro.FirstLaunchActivity.FLActivity;
 import com.deomap.flintro.MainPart.MainScreenActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
@@ -96,7 +97,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
     @Override
     public void goToMainScreen(int param) {
         mPresenter.addUserToDatabase();
-        startActivity(new Intent(this, QuestionsActivity.class));
+        startActivity(new Intent(this, FLActivity.class));
     }
 
     public void getEmail(View view){

@@ -32,7 +32,8 @@ public interface MainPartContract {
     }
 
     interface iFLActivity extends View{
-
+        void askName();
+        void askInterests();
     }
 
     interface Presenter{
@@ -60,7 +61,8 @@ public interface MainPartContract {
     }
 
     interface iFLPresenter extends Presenter{
-
+        void initiateNextStage(String name);
+        void onPickedInterest(int id);
     }
 
     interface Repository{

@@ -1,35 +1,49 @@
 package com.deomap.flintro;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.deomap.flintro.FirstLaunchActivity.FLActivity;
 import com.deomap.flintro.MainPart.MainScreenActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
+import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
 import com.deomap.flintro.login.SignInActivity;
 import com.deomap.flintro.login.VerifyingSignInActivity;
 import com.deomap.flintro.login.appStarted;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 TextView helloWorldD;
+FirebaseCloudstore fbcs;
+    FirebaseUsers fbu;
+FirebaseFirestore db ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseUsers fbu = new FirebaseUsers();
+         fbu= new FirebaseUsers();
         FirebaseUser user = fbu.curUser();
-        fbu.userInstance().signOut();
+        fbcs = new FirebaseCloudstore();
+        db = fbcs.DBInstance();
         appStarted as = new appStarted();
         if(as.requestForUsing() == 0){
             startActivity(new Intent(this,SignInActivity.class));
         }
         else{
+            user.reload();
             if(user.isEmailVerified()){
-                startActivity(new Intent(this, QuestionsActivity.class));
+                ifFLActivityNeeded();
             }
             else{
                 Intent intent = new Intent(this,VerifyingSignInActivity.class);
@@ -39,4 +53,36 @@ TextView helloWorldD;
         }
 
     }
+    private void ifFLActivityNeeded(){
+        DocumentReference docRef = db.collection("users").document(fbu.curUser().getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("MA", "DocumentSnapshot data: " );
+                        String docData=document.getString("firstLaunch");
+                        if(docData == "y"){
+                            startActivity(new Intent(MainActivity.this, FLActivity.class));
+                        }
+                        else{
+                            startActivity(new Intent(MainActivity.this, QuestionsActivity.class));
+                        }
+                    } else {
+                        Log.d("MA", "No such document");
+                    }
+                } else {
+                    Log.d("MA", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
 }
+
+
+/*
+-- put string into res
+-- put serverside into models
+-- clean code
+ */

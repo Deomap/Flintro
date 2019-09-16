@@ -110,6 +110,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
         String uid = fbu.curUser().getUid();
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("firstLaunch", "y");
+        //!!!!!!!!
         db.collection("users").document(uid)
                 .set(userInfo)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
