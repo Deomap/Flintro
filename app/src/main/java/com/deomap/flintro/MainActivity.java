@@ -3,13 +3,13 @@ package com.deomap.flintro;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.deomap.flintro.FirstLaunchActivity.FLActivity;
-import com.deomap.flintro.MainPart.MainScreenActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
@@ -25,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 TextView helloWorldD;
+
+public static Context contextOfApplication;
+
 FirebaseCloudstore fbcs;
     FirebaseUsers fbu;
 FirebaseFirestore db ;
@@ -34,8 +37,10 @@ FirebaseFirestore db ;
         setContentView(R.layout.activity_main);
          fbu= new FirebaseUsers();
         FirebaseUser user = fbu.curUser();
+       // new ContextBridge().setContext(this);
         fbcs = new FirebaseCloudstore();
         db = fbcs.DBInstance();
+        contextOfApplication = getApplicationContext();
         appStarted as = new appStarted();
         if(as.requestForUsing() == 0){
             startActivity(new Intent(this,SignInActivity.class));
@@ -63,7 +68,8 @@ FirebaseFirestore db ;
                     if (document.exists()) {
                         Log.d("MA", "DocumentSnapshot data: " );
                         String docData=document.getString("firstLaunch");
-                        if(docData == "y"){
+                        //!YY!H!Y!HUH!!!UYHCIUWBCIOWNXIMX<OPW<
+                        if(docData != "y"){
                             startActivity(new Intent(MainActivity.this, FLActivity.class));
                         }
                         else{
@@ -78,11 +84,18 @@ FirebaseFirestore db ;
             }
         });
     }
+    public static Context getContextOfApplication(){
+        return contextOfApplication;
+    }
 }
+
+
 
 
 /*
 -- put string into res
 -- put serverside into models
 -- clean code
+--SOME SETTINGS IN DEVICE STORAGE
+--
  */

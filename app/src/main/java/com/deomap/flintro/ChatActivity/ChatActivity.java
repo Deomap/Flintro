@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.deomap.flintro.LikesActivity.LikesActivity;
 import com.deomap.flintro.ProfileActivity.ProfileActivity;
@@ -16,7 +18,6 @@ import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ChatActivity extends AppCompatActivity implements MainPartContract.iChatActivity{
-
     private MainPartContract.iChatPresenter mPresenter;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -26,18 +27,19 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_swipe:
-                    startActivity(new Intent(ChatActivity.this, SwipeActivity.class));
+                    startIntent("Swipe");
                     return true;
                 case R.id.navigation_likes:
-                    startActivity(new Intent(ChatActivity.this, LikesActivity.class));
+                    startIntent("Likes");
                     return true;
                 case R.id.navigation_questions:
-                    startActivity(new Intent(ChatActivity.this, QuestionsActivity.class));
+                    startIntent("Questions");
                     return true;
                 case R.id.navigation_chat:
+                    startIntent("Chat");
                     return true;
                 case R.id.navigation_profile:
-                    startActivity(new Intent(ChatActivity.this, ProfileActivity.class));
+                    startIntent("Profile");
                     return true;
             }
             return false;
@@ -45,18 +47,42 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
     };
 
     @Override
+    public void startIntent(String intentName) {
+        switch (intentName){
+            case "Questions":
+                Log.i("CA","Q");
+                startActivity(new Intent(this, QuestionsActivity.class));
+                break;
+            case "Swipe":
+                Log.i("CA","S");
+                startActivity(new Intent(this, SwipeActivity.class));
+                break;
+            case "Profile":
+                Log.i("CA","P");
+                startActivity(new Intent(this, ProfileActivity.class));
+                break;
+            case "Likes":
+                Log.i("CA","L");
+                startActivity(new Intent(this, LikesActivity.class));
+                break;
+            case "Chat":
+                Log.i("CA","C");
+                startActivity(new Intent(this, ChatActivity.class));
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
+        TextView tv = findViewById(R.id.textViewCCC);
+        tv.setText("CCC");
         mPresenter = new ChatPresenter(this);
-    }
-
-    @Override
-    public void startIntent(String intentName) {
-
+        navView.getMenu().findItem(R.id.navigation_chat).setChecked(true);
+        overridePendingTransition(0, 0);
     }
 
     @Override

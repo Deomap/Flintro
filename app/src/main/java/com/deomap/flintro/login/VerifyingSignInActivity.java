@@ -10,8 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.deomap.flintro.FirstLaunchActivity.FLActivity;
-import com.deomap.flintro.MainPart.MainScreenActivity;
-import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.LoginContract;
 

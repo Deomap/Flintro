@@ -24,7 +24,7 @@ public interface MainPartContract {
     }
 
     interface iProfileActivity extends View{
-
+        void fillProfile(String userName);
     }
 
     interface iSwipeActivity extends View{
@@ -34,6 +34,8 @@ public interface MainPartContract {
     interface iFLActivity extends View{
         void askName();
         void askInterests();
+        void askPhoto();
+        void accessSharedPreferences(String mode, String prefName, String type,String key, String value);
     }
 
     interface Presenter{
@@ -53,7 +55,7 @@ public interface MainPartContract {
     }
 
     interface iProfilePresenter extends Presenter{
-
+        void setupProfile();
     }
 
     interface iSwipePresenter extends Presenter{
@@ -62,7 +64,7 @@ public interface MainPartContract {
 
     interface iFLPresenter extends Presenter{
         void initiateNextStage(String name);
-        void onPickedInterest(int id);
+        void onPickedInterest(int position);
     }
 
     interface Repository{
