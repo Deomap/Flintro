@@ -1,4 +1,4 @@
-package com.deomap.flintro.FirstLaunchActivity;
+package com.deomap.flintro.adapter;
 
 
 import android.content.Context;
@@ -71,6 +71,6 @@ public class ImageTextAdapter extends BaseAdapter {
         }
 
         // references to our images
-        public Integer[] mThumbIds = { R.drawable.wowrcon, R.drawable.ic_dashboard_black_24dp };
+        public Integer[] mThumbIds = { R.drawable.wowrcon, R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon};
     }
 

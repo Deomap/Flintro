@@ -7,20 +7,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
-import com.deomap.flintro.FirstLaunchActivity.FLActivity;
 import com.deomap.flintro.LikesActivity.LikesActivity;
 import com.deomap.flintro.ProfileActivity.ProfileActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
+import com.deomap.flintro.adapter.ImageTextAdapter;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class QuestionsActivity extends AppCompatActivity implements MainPartContract.iQuestionsActivity {
 
     private MainPartContract.iQuestionsPresenter mPresenter;
-
+    private GridView topicsGrid;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -55,8 +58,21 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_questions).setChecked(true);
+        topicsGrid = findViewById(R.id.interestsGrid);
+        topicsGrid.setOnItemClickListener(gridviewOnItemClickListener);
+        topicsGrid.setAdapter(new ImageTextAdapter(this));
         overridePendingTransition(0, 0);
     }
+
+    private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View v, int position,
+                                long id) {
+            Log.i("okk","!!!!!!!!!!");
+
+        }
+    };
 
     @Override
     public void startIntent(String intentName) {

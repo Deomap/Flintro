@@ -14,7 +14,6 @@ public class ProfilePresenter implements MainPartContract.iProfilePresenter{
     public ProfilePresenter(MainPartContract.iProfileActivity view){
         this.mView = view;
         this.mRepository = new MainOpsModel();
-        
     }
 
 

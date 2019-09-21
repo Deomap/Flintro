@@ -69,7 +69,7 @@ FirebaseFirestore db ;
                         Log.d("MA", "DocumentSnapshot data: " );
                         String docData=document.getString("firstLaunch");
                         //!YY!H!Y!HUH!!!UYHCIUWBCIOWNXIMX<OPW<
-                        if(docData != "y"){
+                        if(docData == "y"){
                             startActivity(new Intent(MainActivity.this, FLActivity.class));
                         }
                         else{

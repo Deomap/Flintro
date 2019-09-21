@@ -3,20 +3,18 @@ package com.deomap.flintro.FirstLaunchActivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
+import com.deomap.flintro.adapter.ImageTextAdapter;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.deomap.flintro.api.SharedPreferencesHub;
 
