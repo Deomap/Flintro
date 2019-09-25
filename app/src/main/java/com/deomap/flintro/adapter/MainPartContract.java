@@ -16,7 +16,7 @@ public interface MainPartContract {
     }
 
     interface iQuestionsActivity extends View{
-
+        void initiateQuestionsList(String[] questionsList);
     }
 
     interface iLikesActivity extends View{
@@ -47,7 +47,7 @@ public interface MainPartContract {
     }
 
     interface iQuestionsPresenter extends Presenter {
-
+        void getQuestions(int pos);
     }
 
     interface iLikesPresenter extends Presenter{

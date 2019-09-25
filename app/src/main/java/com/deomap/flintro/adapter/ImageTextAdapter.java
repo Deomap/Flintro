@@ -13,6 +13,7 @@ import com.deomap.flintro.R;
 
 public class ImageTextAdapter extends BaseAdapter {
         private Context mContext;
+        TopicsPositionMatch tpm = new TopicsPositionMatch();
 
         public ImageTextAdapter(Context c) {
             mContext = c;
@@ -65,7 +66,7 @@ public class ImageTextAdapter extends BaseAdapter {
             ImageView imageView = (ImageView) grid.findViewById(R.id.imagepart);
             TextView textView = (TextView) grid.findViewById(R.id.textpart);
             imageView.setImageResource(mThumbIds[position]);
-            textView.setText("Картинка " + String.valueOf(position));
+            textView.setText(tpm.topicName(position));
 
             return grid;
         }

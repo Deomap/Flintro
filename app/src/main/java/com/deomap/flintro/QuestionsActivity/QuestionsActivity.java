@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
 import com.deomap.flintro.LikesActivity.LikesActivity;
@@ -24,6 +26,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
 
     private MainPartContract.iQuestionsPresenter mPresenter;
     private GridView topicsGrid;
+    private ListView questionsList;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -58,9 +62,12 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_questions).setChecked(true);
+        //SHOULD BE IN FRAGMENTS:
         topicsGrid = findViewById(R.id.interestsGrid);
         topicsGrid.setOnItemClickListener(gridviewOnItemClickListener);
         topicsGrid.setAdapter(new ImageTextAdapter(this));
+        questionsList = findViewById(R.id.questionsList);
+        //
         overridePendingTransition(0, 0);
     }
 
@@ -69,6 +76,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
+            mPresenter.getQuestions(position);
             Log.i("okk","!!!!!!!!!!");
 
         }
@@ -103,5 +111,11 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     @Override
     public void toast(String msg, int time) {
 
+    }
+
+    @Override
+    public void initiateQuestionsList(String[] questionsArray) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, questionsArray);
+        questionsList.setAdapter(adapter);
     }
 }
