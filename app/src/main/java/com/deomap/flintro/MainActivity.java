@@ -40,6 +40,7 @@ FirebaseFirestore db ;
        // new ContextBridge().setContext(this);
         fbcs = new FirebaseCloudstore();
         db = fbcs.DBInstance();
+        //fbu.userInstance().signOut();
         contextOfApplication = getApplicationContext();
         appStarted as = new appStarted();
         if(as.requestForUsing() == 0){
@@ -53,6 +54,7 @@ FirebaseFirestore db ;
             else{
                 Intent intent = new Intent(this,VerifyingSignInActivity.class);
                 intent.putExtra("mode",3);
+                Log.i("MA", "mode 3 started");
                 startActivity(intent);
             }
         }
@@ -97,5 +99,5 @@ FirebaseFirestore db ;
 -- put serverside into models
 -- clean code
 --SOME SETTINGS IN DEVICE STORAGE
---
+--SIGH UP! BUG (DOUBLE)
  */

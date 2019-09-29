@@ -49,6 +49,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
 
     @Override
     public void tryTo(final String email, String password, String passwordRepeated, int mode) {
+        Log.i("LVP-modeswitch", String.valueOf(mode));
         if(mode == 0){
             mRepository.logIn(email,password);
             fbu.userInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
@@ -85,6 +86,22 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
             } else {
                 mView.showToast("passwordsNotEqual");
             }
+        }
+        if(mode == 3){
+            Log.i("LVP-modeswitch", String.valueOf(mode));
+            FirebaseUser user = fbu.curUser();
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("EMAIL", "Email sent.");
+                                mView.showToast("sent");
+                                emailSent=true;
+                            }
+                        }
+                    });
+
         }
     }
 

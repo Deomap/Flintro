@@ -49,7 +49,7 @@ public class LoginModel implements LoginContract.Repository {
                             // If sign in fails, display a message to the user.
                             Log.w("LoginModel", "signInWithEmail:failure");
                             ex = task.getException();
-
+                            Log.i("LoginMode", ex.toString());
                         }
                     }
                 });

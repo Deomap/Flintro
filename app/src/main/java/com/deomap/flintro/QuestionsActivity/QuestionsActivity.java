@@ -10,8 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
 import com.deomap.flintro.LikesActivity.LikesActivity;
@@ -22,11 +25,19 @@ import com.deomap.flintro.adapter.ImageTextAdapter;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
+import io.opencensus.tags.Tag;
+
 public class QuestionsActivity extends AppCompatActivity implements MainPartContract.iQuestionsActivity {
 
     private MainPartContract.iQuestionsPresenter mPresenter;
+    private TextView mainText;
+    private EditText userAnswer;
+    private Button userAnswerButton;
     private GridView topicsGrid;
     private ListView questionsList;
+    private ListView answersList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -62,11 +73,16 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_questions).setChecked(true);
+        mainText = findViewById(R.id.mainText);
+        userAnswer = findViewById(R.id.userAnswer);
+        userAnswerButton = findViewById(R.id.userAnswerButton);
         //SHOULD BE IN FRAGMENTS:
+        answersList = findViewById(R.id.answersList);
         topicsGrid = findViewById(R.id.interestsGrid);
         topicsGrid.setOnItemClickListener(gridviewOnItemClickListener);
         topicsGrid.setAdapter(new ImageTextAdapter(this));
         questionsList = findViewById(R.id.questionsList);
+        questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
         //
         overridePendingTransition(0, 0);
     }
@@ -79,6 +95,14 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
             mPresenter.getQuestions(position);
             Log.i("okk","!!!!!!!!!!");
 
+        }
+    };
+
+    ListView.OnItemClickListener questionsListviewOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.i("QA/questionsList.OICL","clicked");
+            mPresenter.getAnswers(position);
         }
     };
 
@@ -114,8 +138,23 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     }
 
     @Override
-    public void initiateQuestionsList(String[] questionsArray) {
+    public void initiateQuestionsList(ArrayList questionsArray) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, questionsArray);
         questionsList.setAdapter(adapter);
+    }
+
+    @Override
+    public void initiateAnswersList(ArrayList answersArray) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, answersArray);
+        answersList.setAdapter(adapter);
+    }
+
+    @Override
+    public void setMainText(String text){
+        mainText.setText(text);
+    }
+
+    public void userAnswerButtonClicked(View view){
+        mPresenter.sendUserAnswer(userAnswer.getText().toString());
     }
 }

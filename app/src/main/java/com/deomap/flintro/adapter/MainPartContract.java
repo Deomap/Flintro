@@ -5,6 +5,8 @@ import android.provider.ContactsContract;
 
 import com.deomap.flintro.MainPart.MainOpsModel;
 
+import java.util.ArrayList;
+
 public interface MainPartContract {
     interface View{
         void startIntent(String intentName);
@@ -16,7 +18,9 @@ public interface MainPartContract {
     }
 
     interface iQuestionsActivity extends View{
-        void initiateQuestionsList(String[] questionsList);
+        void initiateQuestionsList(ArrayList questionsList);
+        void initiateAnswersList(ArrayList answersList);
+        void setMainText(String text);
     }
 
     interface iLikesActivity extends View{
@@ -48,6 +52,8 @@ public interface MainPartContract {
 
     interface iQuestionsPresenter extends Presenter {
         void getQuestions(int pos);
+        void getAnswers(int pos);
+        void sendUserAnswer(String answerText);
     }
 
     interface iLikesPresenter extends Presenter{

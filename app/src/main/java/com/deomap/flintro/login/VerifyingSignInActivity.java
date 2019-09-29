@@ -56,6 +56,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
 
     @Override
     public void neededMode(int mode) {
+        this.mode = mode;
         if(mode == 0){
             //showToast("AAA");
             mPasswordConfirmation.setEnabled(false);

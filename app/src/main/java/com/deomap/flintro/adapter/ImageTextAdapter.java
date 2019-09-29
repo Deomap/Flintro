@@ -66,7 +66,7 @@ public class ImageTextAdapter extends BaseAdapter {
             ImageView imageView = (ImageView) grid.findViewById(R.id.imagepart);
             TextView textView = (TextView) grid.findViewById(R.id.textpart);
             imageView.setImageResource(mThumbIds[position]);
-            textView.setText(tpm.topicName(position));
+            textView.setText(tpm.topicNameRus(position));
 
             return grid;
         }
