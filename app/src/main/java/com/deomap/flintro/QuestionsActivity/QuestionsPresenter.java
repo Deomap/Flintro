@@ -142,6 +142,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                             Log.w("QP/sendUserAnswer", "Error writing document", e);
                         }
                     });
+            //
         }
 
         //MODELMODELMODEL!
