@@ -57,7 +57,7 @@ public interface MainPartContract {
     }
 
     interface iLikesPresenter extends Presenter{
-
+        void getList(int arg);
     }
 
     interface iProfilePresenter extends Presenter{

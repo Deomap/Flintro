@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
@@ -14,12 +17,31 @@ import com.deomap.flintro.ProfileActivity.ProfileActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
+import com.deomap.flintro.adapter.FirestoreDataTranslator;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.api.FirebaseCloudstore;
+import com.deomap.flintro.api.FirebaseUsers;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LikesActivity extends AppCompatActivity implements MainPartContract.iLikesActivity{
 
     private MainPartContract.iLikesPresenter mPresenter;
+    private Button answersLikesList;
+    private Button swipeLikesList;
+    private Button matchesLikesList;
+    private ListView likesList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -78,7 +100,13 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
         mPresenter = new LikesPresenter(this);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        answersLikesList = findViewById(R.id.answersLikesButton);
+        matchesLikesList = findViewById(R.id.matchesLikesButton);
+        swipeLikesList = findViewById(R.id.swipeLikesButton);
+        likesList = findViewById(R.id.likesList);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         overridePendingTransition(0, 0);
@@ -86,6 +114,24 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
 
     @Override
     public void toast(String msg, int time) {
+
+    }
+
+    //1
+    public void swipeLikesClicked(View view) {
+        mPresenter.getList(1);
+
+    }
+
+    //2
+    public void answersLikesClicked(View view) {
+        mPresenter.getList(2);
+
+    }
+
+    //3
+    public void matchesLikesClicked(View view) {
+        mPresenter.getList(3);
 
     }
 }

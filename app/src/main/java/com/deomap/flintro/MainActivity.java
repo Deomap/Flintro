@@ -100,4 +100,6 @@ FirebaseFirestore db ;
 -- clean code
 --SOME SETTINGS IN DEVICE STORAGE
 --SIGH UP! BUG (DOUBLE)
+--liked questions??
+--creating profile (null pointer fix)
  */

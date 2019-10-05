@@ -31,7 +31,7 @@ import java.util.Map;
 public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter {
     private MainPartContract.iQuestionsActivity mView;
     private MainPartContract.iOpsModel mRepository;
-    FirebaseCloudstore fbcu = new FirebaseCloudstore();
+    FirebaseCloudstore fbcs = new FirebaseCloudstore();
     TopicsPositionMatch tpm =  new TopicsPositionMatch();
     public QueryDocumentSnapshot queryDocumentSnapshot;
     FirestoreDataTranslator fdt = new FirestoreDataTranslator();
@@ -52,7 +52,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
 
     @Override
     public void getQuestions(int pos) {
-        FirebaseFirestore db = fbcu.DBInstance();
+        FirebaseFirestore db = fbcs.DBInstance();
 
         questionsList.clear();
         questionsIDList.clear();
@@ -85,7 +85,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
 
     @Override
     public void getAnswers(int pos) {
-        FirebaseFirestore db = fbcu.DBInstance();
+        FirebaseFirestore db = fbcs.DBInstance();
         //
         answersList.clear();
         answersUserIDList.clear();
@@ -123,7 +123,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
             Map<String, Object> answer = new HashMap<>();
             answer.put(userID, answerText);
 
-            FirebaseFirestore db = fbcu.DBInstance();
+            FirebaseFirestore db = fbcs.DBInstance();
             //Log.i("QP/sendUserAnswer()", selectedTopic+" "+selectedQuestion);
             Log.i("QP/sendUserAnswer()", selectedQuestion+"!");
             //
@@ -153,7 +153,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         //Log.i("QP/sendUserAnswer()", fbu.curUser().getUid()+" "+selectedQuestion);
         Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
         //
-        fbcu.DBInstance().collection("users").document(fbu.curUser().getUid()).collection("answeredQuestions").document(selectedQuestion)
+        fbcs.DBInstance().collection("users").document(fbu.curUser().getUid()).collection("answeredQuestions").document(selectedQuestion)
                 .set(answer)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

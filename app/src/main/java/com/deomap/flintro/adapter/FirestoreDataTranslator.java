@@ -49,4 +49,8 @@ public class FirestoreDataTranslator {
         }
         return null;
     }
+
+    public ArrayList<String> DS_LP_getList_string_to_array(DocumentSnapshot documentSnapshot, String arg){
+        return null;
+    }
 }
