@@ -43,6 +43,8 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     String selectedQuestion = "nullQuestion";
     public String selectedTopic = "nullTopic";
     private FirebaseUsers fbu = new FirebaseUsers();
+    private int lastAnswerPosClicked;
+    private int lastQuestionPosClicked;
 
     SharedPreferencesHub sph = new SharedPreferencesHub(MainActivity.getContextOfApplication());
     public QuestionsPresenter(MainPartContract.iQuestionsActivity view){
@@ -146,6 +148,32 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         }
 
         //MODELMODELMODEL!
+    }
+
+    @Override
+    public void answerClicked(int pos) {
+        Map<String, Object> like = new HashMap<>();
+        //Log.i("QP/sendUserAnswer()", fbu.curUser().getUid()+" "+selectedQuestion);
+        //Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
+        String answerPath = selectedTopic+"/"+selectedQuestion+"/"+answersUserIDList.get(pos);
+        like.put(answerPath,answersList.get(pos));
+        //
+        fbcs.DBInstance().collection("users").document(fbu.curUser().getUid()).collection("likes").document("answers")
+                .set(like)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("QP/answerClicked()", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("QP/answerClicked()", "Error writing document", e);
+                    }
+                });
+
+        mView.toast("liked",0);
     }
 
     private void addAnsweredQuestionToUser(){

@@ -2,8 +2,8 @@ package com.deomap.flintro.adapter;
 
 public class TopicsPositionMatch {
 
-    final String[] topicsRus = new String[]{"Тема","еще тема","тема тем","","",""};
-    final String[] topicsEng = new String[]{"Math","another topic", "topic of topics","","",""};
+    final String[] topicsRus = new String[]{"Избранное","Популярное","Матеша???","","",""};
+    final String[] topicsEng = new String[]{"FavoriteQuestions","Popular", "Math","","",""};
 
     public TopicsPositionMatch(){
     }

@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
 import com.deomap.flintro.LikesActivity.LikesActivity;
@@ -81,6 +82,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         topicsGrid = findViewById(R.id.interestsGrid);
         topicsGrid.setOnItemClickListener(gridviewOnItemClickListener);
         topicsGrid.setAdapter(new ImageTextAdapter(this));
+        answersList.setOnItemClickListener(answersListviewOnItemClickListener);
         questionsList = findViewById(R.id.questionsList);
         questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
         //
@@ -103,6 +105,14 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.i("QA/questionsList.OICL","clicked");
             mPresenter.getAnswers(position);
+        }
+    };
+
+    ListView.OnItemClickListener answersListviewOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.i("QA/answersList.OICL","clicked");
+            mPresenter.answerClicked(position);
         }
     };
 
@@ -134,7 +144,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
 
     @Override
     public void toast(String msg, int time) {
-
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override

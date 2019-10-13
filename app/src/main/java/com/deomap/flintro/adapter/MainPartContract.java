@@ -24,7 +24,10 @@ public interface MainPartContract {
     }
 
     interface iLikesActivity extends View{
-
+        void setList(ArrayList<String> finalList);
+        void likesListClickedNext(int arg_mode);
+        void checkBoxesStateChange(String mode);
+        void nullFinalList();
     }
 
     interface iProfileActivity extends View{
@@ -40,6 +43,7 @@ public interface MainPartContract {
         void askInterests();
         void askPhoto();
         void accessSharedPreferences(String mode, String prefName, String type,String key, String value);
+        void changeItemsAvailibility(String arg);
     }
 
     interface Presenter{
@@ -54,10 +58,14 @@ public interface MainPartContract {
         void getQuestions(int pos);
         void getAnswers(int pos);
         void sendUserAnswer(String answerText);
+        void answerClicked(int pos);
     }
 
     interface iLikesPresenter extends Presenter{
         void getList(int arg);
+        void setCBMode(int mode);
+        void compileLists(int mode);
+        void likesListClicked(int pos);
     }
 
     interface iProfilePresenter extends Presenter{

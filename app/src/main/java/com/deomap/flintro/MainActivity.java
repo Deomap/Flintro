@@ -71,7 +71,7 @@ FirebaseFirestore db ;
                         Log.d("MA", "DocumentSnapshot data: " );
                         String docData=document.getString("firstLaunch");
                         //!YY!H!Y!HUH!!!UYHCIUWBCIOWNXIMX<OPW<
-                        if(docData == "y"){
+                        if(docData.equals("y")){
                             startActivity(new Intent(MainActivity.this, FLActivity.class));
                         }
                         else{
@@ -102,4 +102,8 @@ FirebaseFirestore db ;
 --SIGH UP! BUG (DOUBLE)
 --liked questions??
 --creating profile (null pointer fix)
+--calculate matches etc
+--firstlaunch "y"->"n"
+--scenario: i canceled like, but user tried to press like in LA
+--flactivity - enabled/disabled
  */

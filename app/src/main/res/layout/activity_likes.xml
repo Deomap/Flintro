@@ -21,43 +21,46 @@
         app:menu="@menu/bottom_navigation" />
 
     <Button
-        android:id="@+id/swipeLikesButton"
+        android:id="@+id/meLikesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="128dp"
-        android:layout_marginBottom="499dp"
-        android:onClick="swipeLikesClicked"
-        android:text="Button"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="532dp"
+        android:onClick="meLikesClicked"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toStartOf="@+id/iLikeButton"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Я нравлюсь" />
+
+    <Button
+        android:id="@+id/iLikeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="532dp"
+        android:onClick="iLikeClicked"
+        android:text="Мне нравятся"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
+        app:layout_constraintEnd_toStartOf="@+id/reactionsButton"
+        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintStart_toEndOf="@+id/meLikesButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/answersLikesButton"
+        android:id="@+id/reactionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="127dp"
-        android:layout_marginEnd="47dp"
-        android:layout_marginBottom="500dp"
-        android:onClick="answersLikesClicked"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        app:layout_constraintEnd_toStartOf="@+id/matchesLikesButton"
-        app:layout_constraintStart_toEndOf="@+id/swipeLikesButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/matchesLikesButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="126dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginBottom="501dp"
-        android:onClick="matchesLikesClicked"
-        android:text="Button"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="532dp"
+        android:onClick="reactionsClicked"
+        android:text="Реакции"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -73,7 +76,43 @@
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swipeLikesButton" />
+        app:layout_constraintTop_toBottomOf="@+id/meLikesButton" />
+
+    <CheckBox
+        android:id="@+id/stOptionCB"
+        android:layout_width="149dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="7dp"
+        android:checked="false"
+        android:onClick="cbStateChanged"
+        android:text="Не взаимно"
+        app:layout_constraintBottom_toTopOf="@+id/likesList"
+        app:layout_constraintEnd_toStartOf="@+id/ndOptionCB"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meLikesButton"
+        app:layout_constraintVertical_bias="0.518" />
+
+    <CheckBox
+        android:id="@+id/ndOptionCB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginBottom="15dp"
+        android:checked="true"
+        android:onClick="cbStateChanged"
+        android:text="Взаимно"
+        app:layout_constraintBottom_toTopOf="@+id/likesList"
+        app:layout_constraintEnd_toStartOf="@+id/reactionsButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/iLikeButton"
+        app:layout_constraintTop_toBottomOf="@+id/reactionsButton"
+        app:layout_constraintVertical_bias="0.266" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
