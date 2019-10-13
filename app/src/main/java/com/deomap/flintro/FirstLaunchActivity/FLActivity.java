@@ -1,31 +1,63 @@
 package com.deomap.flintro.FirstLaunchActivity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.deomap.flintro.MainActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.ImageTextAdapter;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.api.FirebaseStorageApi;
+import com.deomap.flintro.api.FirebaseUsers;
 import com.deomap.flintro.api.SharedPreferencesHub;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 public class FLActivity extends AppCompatActivity implements MainPartContract.iFLActivity{
     private MainPartContract.iFLPresenter mPresenter;
+    private FirebaseStorageApi fsapi;
     private EditText editText1;
     private TextView textView1 ;
     private Button nextButton;
     private GridView interestsGrid;
     private SharedPreferencesHub sph ;
     private Button downloadPhotoButton;
+    private Uri photoPath;
+    private ImageView downloadedPhoto;
+
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+
+    private int PICK_IMAGE_AVATAR = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +68,13 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         nextButton = findViewById(R.id.nextButton);
         interestsGrid = findViewById(R.id.interestsGrid);
         downloadPhotoButton = findViewById(R.id.downloadPhotoButton);
+        downloadedPhoto = findViewById(R.id.downloadedPhoto);
+        fsapi = new FirebaseStorageApi();
+
+        storage = fsapi.FSInstance();
+        storageReference = fsapi.FSReference();
+
+        changeItemsAvailibility("onCreate");
 
         //mPresenter.initiateNextStage("");
         interestsGrid.setAdapter(new ImageTextAdapter(this));
@@ -57,6 +96,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             interestsGrid.setEnabled(false);
             downloadPhotoButton.setVisibility(View.GONE);
             downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
         }
         if(arg.equals("name")){
             editText1.setVisibility(View.VISIBLE);
@@ -69,6 +110,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             interestsGrid.setEnabled(true);
             downloadPhotoButton.setVisibility(View.GONE);
             downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
         }
         if(arg.equals("photo")){
             editText1.setVisibility(View.GONE);
@@ -81,6 +124,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             interestsGrid.setEnabled(false);
             downloadPhotoButton.setVisibility(View.VISIBLE);
             downloadPhotoButton.setEnabled(true);
+            downloadedPhoto.setVisibility(View.VISIBLE);
+            downloadedPhoto.setEnabled(true);
         }
         if(arg.equals("interests")){
             editText1.setVisibility(View.GONE);
@@ -93,6 +138,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             interestsGrid.setEnabled(true);
             downloadPhotoButton.setVisibility(View.GONE);
             downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
         }
         if(arg.equals("finish")){
             editText1.setVisibility(View.GONE);
@@ -105,6 +152,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             interestsGrid.setEnabled(false);
             downloadPhotoButton.setVisibility(View.GONE);
             downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
         }
     }
 
@@ -114,7 +163,6 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             Log.i("kk","!!!!!!!!!!");
-            textView1.setText(position+" "+id);
             mPresenter.onPickedInterest(position);
 
         }
@@ -140,13 +188,36 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
     @Override
     public void askInterests() {
         textView1.setText("Укажите ваши интересы:");
-        editText1.setVisibility(View.INVISIBLE);
-        editText1.setEnabled(false);
     }
 
     @Override
     public void askPhoto() {
+        textView1.setText("Загрузите ваше фото: ");
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PICK_IMAGE_AVATAR && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            photoPath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoPath);
+                downloadedPhoto.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void downloadPhotoClicked(View view){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_AVATAR);
     }
 
     public void goNextStageClicked(View view){
@@ -163,6 +234,42 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
                 case "String":
                     sph.getStringSP(prefName,key);
             }
+        }
+    }
+
+    @Override
+    public void uploadImage() {
+
+        if(photoPath != null)
+        {
+            //final ProgressDialog progressDialog = new ProgressDialog(this);
+            //progressDialog.setTitle("Uploading...");
+            //progressDialog.show();
+
+            StorageReference ref = storageReference.child("userAvatars/"+ new FirebaseUsers().uID().toString());
+            ref.putFile(photoPath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //progressDialog.dismiss();
+                            Toast.makeText(FLActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //progressDialog.dismiss();
+                            Toast.makeText(FLActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            //progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
         }
     }
 }

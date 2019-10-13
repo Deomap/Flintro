@@ -44,6 +44,7 @@ public interface MainPartContract {
         void askPhoto();
         void accessSharedPreferences(String mode, String prefName, String type,String key, String value);
         void changeItemsAvailibility(String arg);
+        void uploadImage();
     }
 
     interface Presenter{

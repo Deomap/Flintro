@@ -7,9 +7,12 @@ import androidx.annotation.NonNull;
 
 import com.deomap.flintro.MainPart.MainOpsModel;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.adapter.TopicsPositionMatch;
 import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -19,10 +22,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class FLPresenter implements MainPartContract.iFLPresenter  {
 
     Map<String, Object> userPickedInterests = new HashMap<>();
-    private int stage = -1;
+    TopicsPositionMatch tpm = new TopicsPositionMatch();
+    private int stage = 0;
     String userName = "";
     FirebaseCloudstore fbcu = new FirebaseCloudstore();
     FirebaseUsers fbu = new FirebaseUsers();
@@ -74,28 +80,32 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
 
     @Override
     public void onPickedInterest(int position) {
-        userPickedInterests.put(interestRelation(position),position);
-        Log.i("putted","cff");
-    }
-
-    private String interestRelation(int position){
-        switch (position){
-            case  1:
-                Log.i("case 1","!!");
-                return "hockey";
-            case 0:
-                Log.i("case 0","!!");
-                return "fvb";
-            default:
-                return "errrr";
-        }
+        userPickedInterests.put(tpm.topicNameEng(position),-2);
+        Log.i("put","cff");
     }
 
     private void buildProfile(){
         Log.i("buildProfile","!!");
-        CollectionReference users = fbcu.DBInstance().collection("users");
-        users.document(fbu.uID()).collection("interests").add(userPickedInterests);
+        mView.uploadImage();
+
+        FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
+
+        db.collection("users").document(new FirebaseUsers().uID()).collection("interests").document("topics")
+                .set(userPickedInterests)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("FLP/buildProfile()", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FLP/buildProfile()", "Error writing document", e);
+                    }
+                });
         loadProfileData();
+
         mView.startIntent("Questions");
     }
 

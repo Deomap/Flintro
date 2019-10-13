@@ -106,4 +106,5 @@ FirebaseFirestore db ;
 --firstlaunch "y"->"n"
 --scenario: i canceled like, but user tried to press like in LA
 --flactivity - enabled/disabled
+--uploadImage model()
  */
