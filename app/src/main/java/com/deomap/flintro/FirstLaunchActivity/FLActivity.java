@@ -20,11 +20,12 @@ import com.deomap.flintro.api.SharedPreferencesHub;
 
 public class FLActivity extends AppCompatActivity implements MainPartContract.iFLActivity{
     private MainPartContract.iFLPresenter mPresenter;
-    EditText editText1;
-    TextView textView1 ;
-    Button nextButton;
-    GridView interestsGrid;
-    SharedPreferencesHub sph ;
+    private EditText editText1;
+    private TextView textView1 ;
+    private Button nextButton;
+    private GridView interestsGrid;
+    private SharedPreferencesHub sph ;
+    private Button downloadPhotoButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +35,77 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         textView1 = findViewById(R.id.textView1);
         nextButton = findViewById(R.id.nextButton);
         interestsGrid = findViewById(R.id.interestsGrid);
-        mPresenter.initiateNextStage("");
+        downloadPhotoButton = findViewById(R.id.downloadPhotoButton);
+
+        //mPresenter.initiateNextStage("");
         interestsGrid.setAdapter(new ImageTextAdapter(this));
         interestsGrid.setOnItemClickListener(gridviewOnItemClickListener);
-        editText1.setVisibility(View.VISIBLE);
+
         sph = new SharedPreferencesHub(this);
+    }
+
+    @Override
+    public void changeItemsAvailibility(String arg){
+        if(arg.equals("onCreate")){
+            editText1.setVisibility(View.GONE);
+            editText1.setEnabled(false);
+            textView1.setVisibility(View.GONE);
+            textView1.setEnabled(false);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(false);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+        }
+        if(arg.equals("name")){
+            editText1.setVisibility(View.VISIBLE);
+            editText1.setEnabled(true);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(true);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+        }
+        if(arg.equals("photo")){
+            editText1.setVisibility(View.GONE);
+            editText1.setEnabled(false);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(false);
+            downloadPhotoButton.setVisibility(View.VISIBLE);
+            downloadPhotoButton.setEnabled(true);
+        }
+        if(arg.equals("interests")){
+            editText1.setVisibility(View.GONE);
+            editText1.setEnabled(false);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.VISIBLE);
+            interestsGrid.setEnabled(true);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+        }
+        if(arg.equals("finish")){
+            editText1.setVisibility(View.GONE);
+            editText1.setEnabled(false);
+            textView1.setVisibility(View.GONE);
+            textView1.setEnabled(false);
+            nextButton.setVisibility(View.GONE);
+            nextButton.setEnabled(false);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(false);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+        }
     }
 
     private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {

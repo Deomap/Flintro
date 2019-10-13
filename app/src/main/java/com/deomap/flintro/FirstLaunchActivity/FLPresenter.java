@@ -39,26 +39,30 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     @Override
     //arg in stage 2 is name
     public void initiateNextStage(String arg) {
-        Log.i("stage before",Integer.toString(stage));
+        //Log.i("stage before",Integer.toString(stage));
         stage++;
-        Log.i("stage after",Integer.toString(stage));
+        //Log.i("stage after",Integer.toString(stage));
         FirebaseFirestore db = fbcu.DBInstance();
         switch (stage){
             case 1:
-                mView.askPhoto();
+                mView.askName();
+                mView.changeItemsAvailibility("name");
                 break;
             case 2:
-                mView.askName();
+                mView.askPhoto();
+                mView.changeItemsAvailibility("photo");
                 Log.i("st1","!!");
                 break;
             case 3:
                 if(!arg.equals("")){
                     userName = arg;
                     mView.askInterests();
+                    mView.changeItemsAvailibility("interests");
                     Log.i("st2","!!");
                 }
                 break;
             case 4:
+                mView.changeItemsAvailibility("finish");
                 buildProfile();
                 break;
             default:
@@ -98,6 +102,5 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     private void loadProfileData(){
         mView.accessSharedPreferences("put", "userProfile","String", "userName", userName);
     }
-
 
 }
