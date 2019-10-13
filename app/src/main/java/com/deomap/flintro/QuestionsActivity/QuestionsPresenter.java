@@ -42,6 +42,15 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     private ArrayList<String>  answersUserIDList =  new ArrayList<>();
     String selectedQuestion = "nullQuestion";
     public String selectedTopic = "nullTopic";
+
+    private int stage = 0;
+    /*
+    stage:
+        0 interests
+        1 questions
+        2 answers
+     */
+
     private FirebaseUsers fbu = new FirebaseUsers();
     private int lastAnswerPosClicked;
     private int lastQuestionPosClicked;
@@ -77,8 +86,10 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         } else {
                             Log.d("dd", "Error getting documents: ", task.getException());
                         }
-                        mView.setMainText("QUESTIONS");
+                        stage = 1;
+                        mView.setMainText("Вопросы");
                         mView.initiateQuestionsList(questionsList);
+                        mView.itemsAvailibilitySet(stage);
 
                     }
                 });
@@ -110,8 +121,10 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                 } else {
                     Log.d("QP/getAnswers()", "get failed with ", task.getException());
                 }
-                mView.setMainText("ANSWERS");
+                mView.setMainText("Ответы пользователей");
+                stage = 2;
                 mView.initiateAnswersList(answersList);
+                mView.itemsAvailibilitySet(stage);
             }
         });
         //SHOULD BE IN MODEL!
@@ -174,6 +187,12 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                 });
 
         mView.toast("liked",0);
+    }
+
+    @Override
+    public void backStage() {
+        stage--;
+        mView.itemsAvailibilitySet(stage);
     }
 
     private void addAnsweredQuestionToUser(){

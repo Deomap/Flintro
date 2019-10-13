@@ -21,6 +21,7 @@ public interface MainPartContract {
         void initiateQuestionsList(ArrayList questionsList);
         void initiateAnswersList(ArrayList answersList);
         void setMainText(String text);
+        void itemsAvailibilitySet(int stage);
     }
 
     interface iLikesActivity extends View{
@@ -60,6 +61,7 @@ public interface MainPartContract {
         void getAnswers(int pos);
         void sendUserAnswer(String answerText);
         void answerClicked(int pos);
+        void backStage();
     }
 
     interface iLikesPresenter extends Presenter{

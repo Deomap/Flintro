@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     private MainPartContract.iQuestionsPresenter mPresenter;
     private TextView mainText;
     private EditText userAnswer;
-    private Button userAnswerButton;
+    private ImageView userAnswerButton;
+    private ImageView backButton;
     private GridView topicsGrid;
     private ListView questionsList;
     private ListView answersList;
@@ -77,6 +79,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         mainText = findViewById(R.id.mainText);
         userAnswer = findViewById(R.id.userAnswer);
         userAnswerButton = findViewById(R.id.userAnswerButton);
+        backButton = findViewById(R.id.backButton);
         //SHOULD BE IN FRAGMENTS:
         answersList = findViewById(R.id.answersList);
         topicsGrid = findViewById(R.id.interestsGrid);
@@ -85,6 +88,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         answersList.setOnItemClickListener(answersListviewOnItemClickListener);
         questionsList = findViewById(R.id.questionsList);
         questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
+
+        itemsAvailibilitySet(0);
         //
         overridePendingTransition(0, 0);
     }
@@ -164,7 +169,61 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         mainText.setText(text);
     }
 
+    @Override
+    public void itemsAvailibilitySet(int stage) {
+        if(stage == 0){
+            topicsGrid.setVisibility(View.VISIBLE);
+            topicsGrid.setEnabled(true);
+            questionsList.setVisibility(View.GONE);
+            questionsList.setEnabled(false);
+            answersList.setVisibility(View.GONE);
+            answersList.setEnabled(false);
+            userAnswer.setVisibility(View.GONE);
+            userAnswer.setEnabled(false);
+            userAnswerButton.setVisibility(View.GONE);
+            userAnswerButton.setEnabled(false);
+            backButton.setVisibility(View.GONE);
+            backButton.setEnabled(false);
+        }
+        if(stage == 1){
+            topicsGrid.setVisibility(View.GONE);
+            topicsGrid.setEnabled(false);
+            questionsList.setVisibility(View.VISIBLE);
+            questionsList.setEnabled(true);
+            answersList.setVisibility(View.GONE);
+            answersList.setEnabled(false);
+            userAnswer.setVisibility(View.GONE);
+            userAnswer.setEnabled(false);
+            userAnswerButton.setVisibility(View.GONE);
+            userAnswerButton.setEnabled(false);
+            backButton.setVisibility(View.VISIBLE);
+            backButton.setEnabled(true);
+        }
+        if(stage == 2){
+            topicsGrid.setVisibility(View.GONE);
+            topicsGrid.setEnabled(false);
+            questionsList.setVisibility(View.GONE);
+            questionsList.setEnabled(false);
+            answersList.setVisibility(View.VISIBLE);
+            answersList.setEnabled(true);
+            userAnswer.setVisibility(View.VISIBLE);
+            userAnswer.setEnabled(true);
+            userAnswerButton.setVisibility(View.VISIBLE);
+            userAnswerButton.setEnabled(true);
+            backButton.setVisibility(View.VISIBLE);
+            backButton.setEnabled(true);
+        }
+
+    }
+
+    public void backButtonClicked(View view){
+        mPresenter.backStage();
+    }
+
     public void userAnswerButtonClicked(View view){
         mPresenter.sendUserAnswer(userAnswer.getText().toString());
     }
+
+
+
 }

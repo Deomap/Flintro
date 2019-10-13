@@ -95,6 +95,7 @@ FirebaseFirestore db ;
 
 
 /*
+--AAAAAA GOOGLE KEY (la four r)
 -- put string into res
 -- put serverside into models
 -- clean code
@@ -107,4 +108,5 @@ FirebaseFirestore db ;
 --scenario: i canceled like, but user tried to press like in LA
 --flactivity - enabled/disabled
 --uploadImage model()
+--FLA:back button
  */
