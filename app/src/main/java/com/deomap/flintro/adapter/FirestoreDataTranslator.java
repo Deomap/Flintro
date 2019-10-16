@@ -76,8 +76,34 @@ public class FirestoreDataTranslator {
             return list;
         }
 
-        if(arg.equals("swipe/main/no")){
-            //pass
+        if(arg.equals("iLike/answers")){
+            ArrayList<String> list = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue().toString();
+                list.add(value);
+            }
+            return list;
+        }
+
+        if(arg.equals("iLike/answers/s")){
+            ArrayList<String> list = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue().toString();
+                list.add(key);
+            }
+            return list;
+        }
+
+        if(arg.equals("iLike/swipe")){
+            ArrayList<String> list = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue().toString();
+                list.add(key);
+            }
+            return list;
         }
 
         return null;

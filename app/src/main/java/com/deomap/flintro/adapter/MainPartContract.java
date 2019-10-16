@@ -29,6 +29,7 @@ public interface MainPartContract {
         void likesListClickedNext(int arg_mode);
         void checkBoxesStateChange(String mode);
         void nullFinalList();
+        void setCB(int arg);
     }
 
     interface iProfileActivity extends View{

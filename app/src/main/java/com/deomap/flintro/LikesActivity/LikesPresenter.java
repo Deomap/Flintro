@@ -33,6 +33,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     private MainPartContract.iOpsModel mRepository;
     private ArrayList<String> universalList = new ArrayList<>();
     private ArrayList<String> extraInfoList = new ArrayList<>();
+    private ArrayList<String> special = new ArrayList<>();
     private ArrayList<String> finalList = new ArrayList<>();
     private FirebaseUsers fbu = new FirebaseUsers();
     private FirebaseCloudstore fbcs = new FirebaseCloudstore();
@@ -47,6 +48,9 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
 
     @Override
     public void getList(int arg) {
+
+        mView.setCB(arg);
+
         universalList.clear();
         extraInfoList.clear();
         finalList.clear();
@@ -102,7 +106,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         String uID = fbu.uID();
 
         if(arg == 1) {
-            DocumentReference docRef = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("swipe");
+            DocumentReference docRef = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("answers");
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -110,14 +114,38 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Log.d("LA/getList()", "DocumentSnapshot data: " + document.getData());
-                            universalList = fdt.DS_LP_getList_string_to_array(document,"swipe/main/yes");
-                            extraInfoList = fdt.DS_LP_getList_string_to_array(document, "swipe/extra");
+                            universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
+                            special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
+
                         } else {
                             Log.d("LA/getList()", "No such document");
                         }
                     } else {
                         Log.d("LA/getList()", "get failed with ", task.getException());
                     }
+
+                    compileLists(cb_mode);
+                }
+            });
+
+            DocumentReference docRef2 = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("swipe");
+            docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("LA/getList()", "DocumentSnapshot data: " + document.getData());
+                            extraInfoList = fdt.DS_LP_getList_string_to_array(document,"iLike/swipe");
+
+                        } else {
+                            Log.d("LA/getList()", "No such document");
+                        }
+                    } else {
+                        Log.d("LA/getList()", "get failed with ", task.getException());
+                    }
+
+                    compileLists(cb_mode);
                 }
             });
         }

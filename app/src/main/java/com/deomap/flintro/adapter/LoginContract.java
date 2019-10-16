@@ -33,6 +33,7 @@ LoginContract {
         void tryTo(String email, String password, String passwordRepeated, int mode);
         void emailVerifiedClicked();
         void addUserToDatabase();
+
     }
 
     interface Repository{

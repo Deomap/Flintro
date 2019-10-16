@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.deomap.flintro.adapter.LoginContract;
 import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -83,6 +84,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                 FirebaseUser user = fbu.curUser();
                 mRepository.registerCallback((LoginModel.MyCallback) this);
                 mRepository.signUp(email,password);
+
             } else {
                 mView.showToast("passwordsNotEqual");
             }
@@ -107,19 +109,24 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
 
     @Override
     public void emailVerifiedClicked() {
-            fbu.curUser().reload();
-            if(fbu.curUser().isEmailVerified()){
-                mView.showToast("LETSGO");
+            fbu.curUser().reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(fbu.curUser().isEmailVerified()){
+                        mView.showToast("LETSGO");
 
-                mView.goToMainScreen(0);
+                        mView.goToMainScreen(13);
 
-            }
-            else{
-                mView.showToast("email not verified");
-                mView.showToast(fbu.curUser().getUid());
-            }
-
+                    }
+                    else{
+                        mView.showToast("email not verified");
+                        mView.showToast(fbu.curUser().getUid());
+                    }
+                }
+            });
     }
+
+
 
     @Override
     public void addUserToDatabase() {

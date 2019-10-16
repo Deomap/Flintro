@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.deomap.flintro.FirstLaunchActivity.FLActivity;
+import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.LoginContract;
 
@@ -75,8 +76,8 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
                 mPasswordConfirmation.setVisibility(View.VISIBLE);
                 mGetEmailButton.setEnabled(true);
                 mGetEmailButton.setVisibility(View.VISIBLE);
-            mEmailVerified.setEnabled(true);
-            mEmailVerified.setVisibility(View.VISIBLE);
+            mEmailVerified.setEnabled(false);
+            mEmailVerified.setVisibility(View.GONE);
             mLoginButton.setEnabled(false);
             mLoginButton.setVisibility(View.INVISIBLE);
         }
@@ -96,7 +97,13 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
     @Override
     public void goToMainScreen(int param) {
         mPresenter.addUserToDatabase();
-        startActivity(new Intent(this, FLActivity.class));
+
+        if(param!=0) {
+            startActivity(new Intent(this, FLActivity.class));
+        }
+        else{
+            startActivity(new Intent(this, QuestionsActivity.class));
+        }
     }
 
     public void getEmail(View view){

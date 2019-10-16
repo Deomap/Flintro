@@ -40,7 +40,11 @@ FirebaseFirestore db ;
        // new ContextBridge().setContext(this);
         fbcs = new FirebaseCloudstore();
         db = fbcs.DBInstance();
-        //fbu.userInstance().signOut();
+
+        //
+       // fbu.userInstance().signOut();
+
+
         contextOfApplication = getApplicationContext();
         appStarted as = new appStarted();
         if(as.requestForUsing() == 0){
@@ -109,4 +113,6 @@ FirebaseFirestore db ;
 --flactivity - enabled/disabled
 --uploadImage model()
 --FLA:back button
+--addusertodatabase (lvp)
+--serverside functions: errors
  */

@@ -66,13 +66,13 @@ public class LoginModel implements LoginContract.Repository {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:successs");
+                            Log.d("LM/signUp", "createUserWithEmail:successs");
                             FirebaseUser user = fbu.curUser();
                             callback.returnCallbackLoggedIn();
                             logIn(SIEmail,SIPassword);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Log.i("LM/signUp", "createUserWithEmail:failure", task.getException());
                             callback.returnCallbackNotLoggedIn();
                         }
 

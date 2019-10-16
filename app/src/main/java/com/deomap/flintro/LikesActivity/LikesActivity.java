@@ -105,6 +105,11 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         stOptionCB = findViewById(R.id.stOptionCB);
         ndOptionCB = findViewById(R.id.ndOptionCB);
 
+        stOptionCB.setEnabled(false);
+        stOptionCB.setVisibility(View.GONE);
+        ndOptionCB.setEnabled(false);
+        ndOptionCB.setVisibility(View.GONE);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         overridePendingTransition(0, 0);
@@ -189,6 +194,33 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
 
     @Override
     public void nullFinalList() {
+
+    }
+
+    @Override
+    public void setCB(int arg) {
+        if(arg == 2){
+            stOptionCB.setText("Взаимно");
+            ndOptionCB.setText("Не взаимно");
+            stOptionCB.setEnabled(true);
+            stOptionCB.setVisibility(View.VISIBLE);
+            ndOptionCB.setEnabled(true);
+            ndOptionCB.setVisibility(View.VISIBLE);
+        }
+        if(arg == 1){
+            stOptionCB.setText("Ответы");
+            ndOptionCB.setText("Люди");
+            stOptionCB.setEnabled(true);
+            stOptionCB.setVisibility(View.VISIBLE);
+            ndOptionCB.setEnabled(true);
+            ndOptionCB.setVisibility(View.VISIBLE);
+        }
+        if(arg == 3){
+            stOptionCB.setEnabled(false);
+            stOptionCB.setVisibility(View.GONE);
+            ndOptionCB.setEnabled(false);
+            ndOptionCB.setVisibility(View.GONE);
+        }
 
     }
 }

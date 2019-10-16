@@ -9,6 +9,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+//
+import java.util.ArrayList;
+
+import android.widget.ListView;
+//
+
 import com.deomap.flintro.LikesActivity.LikesActivity;
 import com.deomap.flintro.ProfileActivity.ProfileActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
@@ -19,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ChatActivity extends AppCompatActivity implements MainPartContract.iChatActivity{
     private MainPartContract.iChatPresenter mPresenter;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,6 +83,8 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         TextView tv = findViewById(R.id.textViewCCC);
@@ -89,5 +98,9 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
     public void toast(String msg, int time) {
 
     }
+
+    //
+
+
 }
 
