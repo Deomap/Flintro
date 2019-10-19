@@ -143,7 +143,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
             Log.i("QP/sendUserAnswer()", selectedQuestion+"!");
             //
             db.collection("interests").document(selectedTopic).collection("answers").document(selectedQuestion)
-                    .set(answer)
+                    .update(answer)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -168,11 +168,11 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         Map<String, Object> like = new HashMap<>();
         //Log.i("QP/sendUserAnswer()", fbu.curUser().getUid()+" "+selectedQuestion);
         //Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
-        String answerPath = selectedTopic+"/"+selectedQuestion+"/"+answersUserIDList.get(pos);
+        String answerPath = selectedTopic+","+selectedQuestion+","+answersUserIDList.get(pos);
         like.put(answerPath,answersList.get(pos));
         //
         fbcs.DBInstance().collection("users").document(fbu.curUser().getUid()).collection("likes").document("answers")
-                .set(like)
+                .update(like)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -201,7 +201,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
         //
         fbcs.DBInstance().collection("users").document(fbu.curUser().getUid()).collection("answeredQuestions").document(selectedQuestion)
-                .set(answer)
+                .update(answer)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -217,6 +217,6 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     }
 }
 
-
+// 9 11 9 10
 
 

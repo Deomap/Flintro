@@ -72,6 +72,6 @@ public class ImageTextAdapter extends BaseAdapter {
         }
 
         // references to our images
-        public Integer[] mThumbIds = { R.drawable.wowrcon, R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon};
+        public Integer[] mThumbIds = { R.drawable.wowrcon, R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon};
     }
 
