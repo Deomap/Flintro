@@ -1,5 +1,6 @@
 package com.deomap.flintro.login;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -7,6 +8,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.deomap.flintro.FirstLaunchActivity.FLActivity;
+import com.deomap.flintro.MainActivity;
+import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.adapter.LoginContract;
 import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
@@ -17,6 +21,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -56,21 +62,48 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
             fbu.userInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
                 @Override
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    if(flag) {
+                    //if(flag) {
+                        Log.i("lvp","spec");
                         FirebaseUser user = fbu.curUser();
                         if(user != null){
                             if(user.isEmailVerified()){
                                 mView.showToast("NP");
-                                mView.goToMainScreen(0);
+
+
+                                DocumentReference docRef = new FirebaseCloudstore().DBInstance().collection("users").document(fbu.curUser().getUid());
+                                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                Log.d("MA", "DocumentSnapshot data: " );
+                                                String docData=document.getString("firstLaunch");
+                                                //!YY!H!Y!HUH!!!UYHCIUWBCIOWNXIMX<OPW<
+                                                if(docData.equals("y")){
+                                                    mView.goToMainScreen(13);
+                                                }
+                                                else{
+                                                    mView.goToMainScreen(0);
+                                                }
+                                            } else {
+                                                Log.d("MA", "No such document");
+                                            }
+                                        } else {
+                                            Log.d("MA", "get failed with ", task.getException());
+                                        }
+                                    }
+                                });
+
                             }
                             else{
                                 mView.neededMode(3);
                                 mView.showToast("No email verified");
                             }
-                        }
-                        else{
-                            mView.showToast("login failure");
-                        }
+                        //}
+                        //else{
+                        //    mView.showToast("login failure");
+                        //}
                         flag = false;
                     }
                     else{
@@ -86,7 +119,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                 mRepository.signUp(email,password);
 
             } else {
-                mView.showToast("passwordsNotEqual");
+                mView.showToast("Пароли не совпадают");
             }
         }
         if(mode == 3){
@@ -183,4 +216,6 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
     public void returnCallbackNotLoggedIn(){
         mView.showToast("sign up failure");
     }
+
+
 }

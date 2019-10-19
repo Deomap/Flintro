@@ -58,6 +58,7 @@ public class LoginModel implements LoginContract.Repository {
 
     @Override
     public int signUp( String email,  String password){
+        Log.i("LM/signUp","started");
         SIEmail = email;
         SIPassword=password;
         fbu.userInstance().createUserWithEmailAndPassword(email, password)
