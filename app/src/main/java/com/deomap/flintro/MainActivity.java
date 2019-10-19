@@ -42,7 +42,7 @@ FirebaseFirestore db ;
         db = fbcs.DBInstance();
 
         //
-       // fbu.userInstance().signOut();
+        //fbu.userInstance().signOut();
 
 
         contextOfApplication = getApplicationContext();
