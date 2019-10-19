@@ -110,6 +110,9 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         ndOptionCB.setEnabled(false);
         ndOptionCB.setVisibility(View.GONE);
 
+        stOptionCB.setChecked(false);
+        ndOptionCB.setChecked(true);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         overridePendingTransition(0, 0);
@@ -137,31 +140,35 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
 
     //1
     public void iLikeClicked(View view) {
-        stOptionCB.setChecked(false);
-        ndOptionCB.setChecked(true);
         setDefaultCBState();
+        defineState();
         mPresenter.getList(1);
     }
 
     //2
     public void meLikesClicked(View view) {
         setDefaultCBState();
+        defineState();
         mPresenter.getList(2);
     }
 
     //3
     public void reactionsClicked(View view) {
         setDefaultCBState();
+        defineState();
         mPresenter.getList(3);
     }
 
     public void cbStateChanged(View view){
         defineState();
         mPresenter.compileLists(toPresenterCBMode);
+
     }
 
     private void setDefaultCBState(){
         toPresenterCBMode = 3;
+        stOptionCB.setChecked(false);
+        ndOptionCB.setChecked(true);
     }
 
     private void ifCBEnableSet(boolean ifEnable){

@@ -70,10 +70,13 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         cb_mode = mode;
         switch (mode) {
             case 1:
-                if(!universalList.isEmpty() && !extraInfoList.isEmpty()) {
-                    for(String str : universalList) finalList.add(str);
-                    for(String str : extraInfoList) finalList.add(str);
+                if(!universalList.isEmpty()) {
+                    for (String str : universalList) finalList.add(str);
                 }
+                if(!extraInfoList.isEmpty()) {
+                    for (String str : extraInfoList) finalList.add(str);
+                }
+
                 break;
             case 2:
                 if(!universalList.isEmpty()) {
@@ -103,7 +106,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     }
 
     private void serverSide(int arg){
-        String uID = fbu.uID();
+        final String uID = fbu.uID();
 
         if(arg == 1) {
             DocumentReference docRef = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("answers");
@@ -113,10 +116,11 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Log.d("LA/getList()", "DocumentSnapshot data: " + document.getData());
+                            Log.d("LA/getList()answers", "DocumentSnapshot data: " + document.getData());
                             universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
                             special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
 
+                            Log.i("DDDkans",Integer.toString(universalList.size()));
                         } else {
                             Log.d("LA/getList()", "No such document");
                         }
@@ -135,8 +139,11 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            Log.d("LA/getList()", "DocumentSnapshot data: " + document.getData());
+                            Log.d("LA/getList()swipe", "DocumentSnapshot data: " + document.getData());
+
                             extraInfoList = fdt.DS_LP_getList_string_to_array(document,"iLike/swipe");
+
+                            Log.i("DDDkswipe",Integer.toString(extraInfoList.size()));
 
                         } else {
                             Log.d("LA/getList()", "No such document");
@@ -181,25 +188,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         }
 
         if(arg == 3) {
-            DocumentReference docRef = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("matches");
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d("LA/getList()", "DocumentSnapshot data: " + document.getData());
-                            universalList = fdt.DS_LP_getList_string_to_array(document,"matches/main");
-                            extraInfoList = fdt.DS_LP_getList_string_to_array(document, "matches/extra");
-
-                        } else {
-                            Log.d("LA/getList()", "No such document");
-                        }
-                    } else {
-                        Log.d("LA/getList()", "get failed with ", task.getException());
-                    }
-                }
-            });
+            //pass
         }
 
     }
