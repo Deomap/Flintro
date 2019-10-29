@@ -25,7 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 
-public class LikesActivity extends AppCompatActivity implements MainPartContract.iLikesActivity{
+public class LikesActivity extends AppCompatActivity implements MainPartContract.iLikesActivity {
 
     private MainPartContract.iLikesPresenter mPresenter;
     private Button meLikesButton;
@@ -120,22 +120,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
 
     @Override
     public void toast(String msg, int time) {
-        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
-    }
-
-    private void defineState(){
-        if(stOptionCB.isChecked() && ndOptionCB.isChecked()){
-            toPresenterCBMode = 1;
-        }
-        if(stOptionCB.isChecked() && !ndOptionCB.isChecked()){
-            toPresenterCBMode = 2;
-        }
-        if(!stOptionCB.isChecked() && ndOptionCB.isChecked()){
-            toPresenterCBMode = 3;
-        }
-        if(!stOptionCB.isChecked() && !ndOptionCB.isChecked()){
-            toPresenterCBMode = 4;
-        }
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     //1
@@ -159,34 +144,18 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         mPresenter.getList(3);
     }
 
-    public void cbStateChanged(View view){
-        defineState();
-        mPresenter.compileLists(toPresenterCBMode);
-
-    }
-
-    private void setDefaultCBState(){
-        toPresenterCBMode = 3;
-        stOptionCB.setChecked(false);
-        ndOptionCB.setChecked(true);
-    }
-
-    private void ifCBEnableSet(boolean ifEnable){
-
-    }
-
     ListView.OnItemClickListener likesListOnItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.i("LA/likesList.OICL","clicked");
+            Log.i("LA/likesList.OICL", "clicked");
             //pass
         }
     };
 
     @Override
-    public void setList(ArrayList<String> finalList) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, finalList);
-        likesList.setAdapter(adapter);
+    public void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList){
+       // ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, finalList);
+       // likesList.setAdapter(adapter);
         likesList.setOnItemClickListener(likesListOnItemClickListener);
     }
 
@@ -195,18 +164,35 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     }
 
     @Override
-    public void checkBoxesStateChange(String mode) {
-
-    }
-
-    @Override
     public void nullFinalList() {
 
     }
 
+
+
+
+
+    //(not)USING CB's ::
+
+    private void defineState() {
+        if (stOptionCB.isChecked() && ndOptionCB.isChecked()) {
+            toPresenterCBMode = 1;
+        }
+        if (stOptionCB.isChecked() && !ndOptionCB.isChecked()) {
+            toPresenterCBMode = 2;
+        }
+        if (!stOptionCB.isChecked() && ndOptionCB.isChecked()) {
+            toPresenterCBMode = 3;
+        }
+        if (!stOptionCB.isChecked() && !ndOptionCB.isChecked()) {
+            toPresenterCBMode = 4;
+        }
+    }
+
     @Override
     public void setCB(int arg) {
-        if(arg == 2){
+
+        if (arg == 2) {
             stOptionCB.setText("Взаимно");
             ndOptionCB.setText("Не взаимно");
             stOptionCB.setEnabled(true);
@@ -214,7 +200,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
             ndOptionCB.setEnabled(true);
             ndOptionCB.setVisibility(View.VISIBLE);
         }
-        if(arg == 1){
+        if (arg == 1) {
             stOptionCB.setText("Ответы");
             ndOptionCB.setText("Люди");
             stOptionCB.setEnabled(true);
@@ -222,7 +208,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
             ndOptionCB.setEnabled(true);
             ndOptionCB.setVisibility(View.VISIBLE);
         }
-        if(arg == 3){
+        if (arg == 3) {
             stOptionCB.setEnabled(false);
             stOptionCB.setVisibility(View.GONE);
             ndOptionCB.setEnabled(false);
@@ -230,5 +216,27 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         }
 
     }
-}
 
+
+    @Override
+    public void checkBoxesStateChange(String mode) {
+
+    }
+
+    public void cbStateChanged(View view) {
+        defineState();
+        mPresenter.compileListsOLD(toPresenterCBMode);
+
+    }
+
+    private void setDefaultCBState() {
+        toPresenterCBMode = 3;
+        stOptionCB.setChecked(false);
+        ndOptionCB.setChecked(true);
+    }
+
+    private void ifCBEnableSet(boolean ifEnable) {
+
+    }
+
+}

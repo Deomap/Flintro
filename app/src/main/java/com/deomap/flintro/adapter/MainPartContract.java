@@ -25,7 +25,7 @@ public interface MainPartContract {
     }
 
     interface iLikesActivity extends View{
-        void setList(ArrayList<String> finalList);
+        void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList);
         void likesListClickedNext(int arg_mode);
         void checkBoxesStateChange(String mode);
         void nullFinalList();
@@ -68,7 +68,7 @@ public interface MainPartContract {
     interface iLikesPresenter extends Presenter{
         void getList(int arg);
         void setCBMode(int mode);
-        void compileLists(int mode);
+        void compileListsOLD(int mode);
         void likesListClicked(int pos);
     }
 

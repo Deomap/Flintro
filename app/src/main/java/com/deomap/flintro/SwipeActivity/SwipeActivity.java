@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
@@ -18,6 +22,17 @@ import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SwipeActivity extends AppCompatActivity implements MainPartContract.iSwipeActivity {
+
+    private Button foundUserReportBtn;
+    private Button foundUserLikeBtn;
+    private Button foundUserDislikeBtn;
+    private TextView userMatchedAnswers1;
+    private TextView userMatchedAnswers2;
+    private TextView userMatchedAnswers3;
+    private TextView foundUserMainStatus;
+    private TextView foundUserName;
+    private ImageView foundUserPhoto;
+
 
     private MainPartContract.iSwipePresenter mPresenter;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -79,7 +94,27 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_swipe).setChecked(true);
+
+        foundUserDislikeBtn = findViewById(R.id.foundUserDislikeBtn);
+        foundUserLikeBtn = findViewById(R.id.foundUserLikeBtn);
+        foundUserMainStatus = findViewById(R.id.foundUserMainStatus);
+        foundUserName = findViewById(R.id.foundUserName);
+        foundUserPhoto = findViewById(R.id.foundUserPhoto);
+        foundUserReportBtn = findViewById(R.id.foundUserReportBtn);
+        userMatchedAnswers1 = findViewById(R.id.userMatchedAnswers1);
+        userMatchedAnswers2 = findViewById(R.id.userMatchedAnswers2);
+        userMatchedAnswers3 = findViewById(R.id.userMatchedAnswers3);
+
         overridePendingTransition(0, 0);
+    }
+
+
+    public void likeUserBtnClck(View view){
+
+    }
+
+    public void dislikeUserBtnClck(View view){
+
     }
 
     @Override

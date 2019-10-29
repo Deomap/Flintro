@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -29,17 +30,20 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     ------cbmode
      */
 
+    //to use CB's -> get rid of comments marked "CB"
+
     private MainPartContract.iLikesActivity mView;
     private MainPartContract.iOpsModel mRepository;
     private ArrayList<String> universalList = new ArrayList<>();
     private ArrayList<String> extraInfoList = new ArrayList<>();
     private ArrayList<String> special = new ArrayList<>();
+    //final list NU
     private ArrayList<String> finalList = new ArrayList<>();
     private FirebaseUsers fbu = new FirebaseUsers();
     private FirebaseCloudstore fbcs = new FirebaseCloudstore();
     private FirestoreDataTranslator fdt = new FirestoreDataTranslator();
     private int arg_mode;
-    private int cb_mode = 3;
+    final int cb_mode = 2;
 
     public LikesPresenter(MainPartContract.iLikesActivity view){
         this.mView = view;
@@ -49,49 +53,22 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     @Override
     public void getList(int arg) {
 
-        mView.setCB(arg);
+    //    mView.setCB(arg); CB
 
         universalList.clear();
         extraInfoList.clear();
         finalList.clear();
-        arg_mode = arg;
-        cb_mode = 3;
-        serverSide(arg);
-    }
-
-    @Override
-    public void setCBMode(int mode) {
-        cb_mode = mode;
-    }
-
-    @Override
-    public void compileLists(int mode){
-        finalList.clear();
-        cb_mode = mode;
-        switch (mode) {
-            case 1:
-                if(!universalList.isEmpty()) {
-                    for (String str : universalList) finalList.add(str);
-                }
-                if(!extraInfoList.isEmpty()) {
-                    for (String str : extraInfoList) finalList.add(str);
-                }
-
-                break;
-            case 2:
-                if(!universalList.isEmpty()) {
-                    for (String str : universalList) finalList.add(str);
-                }
-                break;
-            case 3:
-                if(!extraInfoList.isEmpty()) {
-                    for (String str : extraInfoList) finalList.add(str);
-                }
-                break;
-            case 4:
-                break;
+        special.clear();
+    //    cb_mode = 3; CB
+    //    serverSideOLD(arg); OLD
+        if(arg!=arg_mode) {
+            arg_mode = arg;
+            serverSide(arg);
         }
-        mView.setList(finalList);
+    }
+
+    private void setListInView(){
+        mView.setList(universalList,extraInfoList);
     }
 
     @Override
@@ -105,7 +82,86 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         //pass
     }
 
+
+    //new
+
     private void serverSide(int arg){
+        if(arg == 1){
+            DocumentReference docRef = fbcs.DBInstance().collection("users").document(new FirebaseUsers().uID()).collection("likes").document("answers");
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("LA/getList()answers", "DocumentSnapshot data: " + document.getData());
+                            universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
+                            special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
+
+                            Log.i("SSNEW",Integer.toString(universalList.size()));
+                        } else {
+                            Log.d("LA/getList()", "No such document");
+                        }
+                    } else {
+                        Log.d("LA/getList()", "get failed with ", task.getException());
+                    }
+                }
+            });
+
+            String topic,qID;
+
+            for(String str : special){
+                 topic = str.split(",")[0];
+                 qID = str.split(",")[1];
+                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
+                 DocumentReference docRef2 = db.collection("interests").document(topic).collection("answers").document(qID);
+                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d("LP/SS", "DocumentSnapshot data: " + document.getData());
+                                extraInfoList.add(document.get("text").toString());
+                            } else {
+                                Log.d("LP/SS()", "No such document");
+                            }
+                        } else {
+                            Log.d("LP/SS", "get failed with ", task.getException());
+                        }
+                    }
+                });
+            }
+        }
+
+        setListInView();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //OLD ---->>
+
+
+    private void serverSideOLD(int arg){
         final String uID = fbu.uID();
 
         if(arg == 1) {
@@ -128,7 +184,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         Log.d("LA/getList()", "get failed with ", task.getException());
                     }
 
-                    compileLists(cb_mode);
+                    compileListsOLD(cb_mode);
                 }
             });
 
@@ -152,7 +208,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         Log.d("LA/getList()", "get failed with ", task.getException());
                     }
 
-                    compileLists(cb_mode);
+                    compileListsOLD(cb_mode);
                 }
             });
         }
@@ -182,7 +238,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         Log.d("LA/getList()", "get failed with ", task.getException());
                     }
 
-                    compileLists(cb_mode);
+                    compileListsOLD(cb_mode);
                 }
             });
         }
@@ -191,6 +247,42 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
             //pass
         }
 
+    }
+
+    @Override
+    public void compileListsOLD(int mode){
+        finalList.clear();
+        //    cb_mode = mode;
+        switch (mode) {
+            case 1:
+                if(!universalList.isEmpty()) {
+                    for (String str : universalList) finalList.add(str);
+                }
+                if(!extraInfoList.isEmpty()) {
+                    for (String str : extraInfoList) finalList.add(str);
+                }
+
+                break;
+            case 2:
+                if(!universalList.isEmpty()) {
+                    for (String str : universalList) finalList.add(str);
+                }
+                break;
+            case 3:
+                if(!extraInfoList.isEmpty()) {
+                    for (String str : extraInfoList) finalList.add(str);
+                }
+                break;
+            case 4:
+                break;
+        }
+        //mView.setList(finalList);
+    }
+
+
+    @Override
+    public void setCBMode(int mode) {
+        //    cb_mode = mode; CB
     }
 
 }

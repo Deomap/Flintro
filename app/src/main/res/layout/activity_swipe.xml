@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="36dp">
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="81dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/foundUserReportBtn"
@@ -47,21 +47,22 @@
                     android:text="Button" />
 
                 <TextView
-                    android:id="@+id/foundUserMainStatus"
-                    android:layout_width="286dp"
-                    android:layout_height="52dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="0dp"
+                    android:id="@+id/foundUserName"
+                    android:layout_width="278dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:text="TextView" />
+
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/foundUserName"
-                android:layout_width="389dp"
-                android:layout_height="54dp"
-                android:layout_marginStart="8dp"
+                android:id="@+id/foundUserMainStatus"
+                android:layout_width="286dp"
+                android:layout_height="52dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="TextView" />
@@ -89,6 +90,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:onClick="likeUserBtnClck"
                     android:text="Button" />
 
                 <Button
@@ -100,17 +102,27 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="78dp"
                     android:layout_marginBottom="8dp"
+                    android:onClick="dislikeUserBtnClck"
                     android:text="Button" />
             </RelativeLayout>
 
-            <ListView
-                android:id="@+id/userMatchedAnswersList"
-                android:layout_width="395dp"
-                android:layout_height="211dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/userMatchedAnswers1"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/userMatchedAnswers2"
+                android:layout_width="match_parent"
+                android:layout_height="112dp"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/userMatchedAnswers3"
+                android:layout_width="match_parent"
+                android:layout_height="122dp"
+                android:text="TextView" />
 
         </LinearLayout>
     </ScrollView>

@@ -21,7 +21,12 @@ public class FirestoreDataTranslator {
         Map<String,Object> map = queryDocumentSnapshot.getData();
         //Log.i("FDT/QDS_string_to_array", map.toString());
         String s="";
-        s=map.get(arg).toString();
+        if(arg.equals("id")) {
+            s = queryDocumentSnapshot.getId();
+        }
+        else {
+            s = map.get(arg).toString();
+        }
         return s;
     }
 
