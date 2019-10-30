@@ -41,6 +41,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     private ArrayList<String> topicList = new ArrayList<>();
     private ArrayList<String> finalList = new ArrayList<>();
     private ArrayList<String> qIDList = new ArrayList<>();
+    private ArrayList<String> uIDList = new ArrayList<>();
     private FirebaseUsers fbu = new FirebaseUsers();
     private FirebaseCloudstore fbcs = new FirebaseCloudstore();
     private FirestoreDataTranslator fdt = new FirestoreDataTranslator();
@@ -64,6 +65,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         topicList.clear();
         qIDList.clear();
         special.clear();
+        uIDList.clear();
     //    cb_mode = 3; CB
     //    serverSideOLD(arg); OLD
         if(arg!=arg_mode) {
@@ -75,12 +77,11 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     private void setListInView(){
         Log.i("a5",universalList.size()+" "+extraInfoList.size());
         if(arg_mode==1) {
-            mView.setList(universalList, extraInfoList, topicList,qIDList, "LAA");
+            mView.setList(universalList, extraInfoList, topicList,qIDList,uIDList, "LAA");
         }
-    }
-
-    public void startQA(){
-        mView.startIntent("Questions");
+        if(arg_mode == 2){
+            mView.setList(universalList, extraInfoList, topicList,qIDList,uIDList, "LAM");
+        }
     }
 
     @Override
@@ -112,12 +113,14 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                             Log.i("a1",universalList.size()+" "+extraInfoList.size());
 
 
-                            String topic,qID;
+                            String topic,qID,uID;
                             for(String str : special){
                                 topic = str.split(",")[0];
                                 topicList.add(topic);
                                 qID = str.split(",")[1];
                                 qIDList.add(qID);
+                                uID = str.split(",")[2];
+                                uIDList.add(uID);
                                 Log.i("wtf",topic+" "+qID);
                                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
                                 DocumentReference docRef2 = db.collection("interests").document(topic).collection("questions").document(qID);
@@ -138,6 +141,11 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                             } else {
                                                 Log.d("LP/SS()", "No such document");
                                                 extraInfoList.add("null");
+                                                j++;
+                                                if(j==special.size()){
+                                                    j=0;
+                                                    setListInView();
+                                                }
                                             }
                                         } else {
                                             Log.d("LP/SS", "get failed with ", task.getException());
@@ -146,10 +154,6 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                     }
                                 });
                             }
-
-
-
-                            Log.i("SSNEW",(special.get(0)));
                         } else {
                             Log.d("LA/getList()", "No such document");
                         }
@@ -161,7 +165,63 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
             Log.i("a3",universalList.size()+" "+extraInfoList.size());
 
         }
-        Log.i("a4",universalList.size()+" "+extraInfoList.size());
+        if(arg==2){
+            DocumentReference docRef = fbcs.DBInstance().collection("users").document(new FirebaseUsers().uID()).collection("likes").document("meLikes");
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("LP/getList()", "DocumentSnapshot (mode2) data: " + document.getData());
+                            extraInfoList = fdt.DS_LP_getList_string_to_array(document, "meLikes/uid");
+
+
+                            for(String str : extraInfoList){
+                                Log.i("dd",str);
+                                FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
+                                DocumentReference docRef2 = db.collection("users").document(str.replaceAll("\\s",""));
+                                docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                universalList.add(document.get("name").toString());
+                                                j++;
+                                                if(j==extraInfoList.size()){
+                                                    j=0;
+                                                    setListInView();
+                                                    Log.i("sliv","lol");
+                                                }
+                                            } else {
+                                                Log.d("LP/SS()", "No such document");
+                                                universalList.add("null");
+                                                j++;
+                                                if(j==extraInfoList.size()){
+                                                    j=0;
+                                                    setListInView();
+                                                    Log.i("LP/2","else1");
+                                                }
+                                            }
+                                        } else {
+                                            Log.d("LP/SS", "get failed with ", task.getException());
+                                            universalList.add("null");
+                                        }
+                                    }
+                                });
+                            }
+
+
+                        } else {
+                            Log.d("LA/getList()", "No such document");
+                        }
+                    } else {
+                        Log.d("LA/getList()", "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
     }
 
 

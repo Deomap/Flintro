@@ -6,13 +6,15 @@ public class UnitLAA {
     private String answer;
     private String topic;
     private String qID;
+    private String uID;
 
-    public UnitLAA(String answer, String question, String topic, String qID){
+    public UnitLAA(String answer, String question, String topic, String qID, String uID){
         this.question = question;
         this.liked=true;
         this.answer = answer;
         this.topic = topic;
         this.qID = qID;
+        this.uID = uID;
     }
     public String getQuestion() {
         return this.question;
@@ -27,6 +29,7 @@ public class UnitLAA {
         return this.topic;
     }
     public String getqID(){return this.qID;}
+    public String getuID(){return this.uID;}
 
     public boolean getLiked() {
         return liked;

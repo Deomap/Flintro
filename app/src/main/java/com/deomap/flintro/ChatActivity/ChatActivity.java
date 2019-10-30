@@ -21,16 +21,10 @@ import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
 import com.deomap.flintro.adapter.MainPartContract;
-import com.deomap.flintro.adapter.Product;
-import com.deomap.flintro.adapter.ProductAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ChatActivity extends AppCompatActivity implements MainPartContract.iChatActivity{
     private MainPartContract.iChatPresenter mPresenter;
-
-    ArrayList<Product> products = new ArrayList();
-
-    ListView productList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -97,18 +91,6 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
         mPresenter = new ChatPresenter(this);
         navView.getMenu().findItem(R.id.navigation_chat).setChecked(true);
         overridePendingTransition(0, 0);
-
-
-        if(products.size()==0){
-            products.add(new Product("Картофель", "кг."));
-            products.add(new Product("Чай", "шт."));
-            products.add(new Product("Яйца", "шт."));
-            products.add(new Product("Молоко", "л."));
-            products.add(new Product("Макароны", "кг."));
-        }
-        productList = (ListView) findViewById(R.id.productList);
-        ProductAdapter adapter = new ProductAdapter(this, R.layout.list_item, products);
-        productList.setAdapter(adapter);
     }
 
     @Override

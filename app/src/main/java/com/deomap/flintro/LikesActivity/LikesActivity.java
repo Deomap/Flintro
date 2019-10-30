@@ -22,6 +22,8 @@ import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
 import com.deomap.flintro.adapter.Adapter_LA_Answers.AdapterLAA;
 import com.deomap.flintro.adapter.Adapter_LA_Answers.UnitLAA;
+import com.deomap.flintro.adapter.Apadter_LA_Matches.AdapterLAM;
+import com.deomap.flintro.adapter.Apadter_LA_Matches.UnitLAM;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -41,7 +43,8 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     private int toPresenterCBMode = 3;
     private int arg_mode;
 
-    ArrayList<UnitLAA> units = new ArrayList<>();
+    ArrayList<UnitLAA> unitsLAA = new ArrayList<>();
+    ArrayList<UnitLAM> unitsLAM = new ArrayList<>();
     ListView unitsList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -159,17 +162,27 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     };
 
     @Override
-    public void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList, ArrayList<String> topicsList,ArrayList<String> qIDList, String arg){
-        units.clear();
-        if(arg.equals("LAA")){
-            for(int i=0;i<universalList.size();i++){
-                units.add(new UnitLAA(universalList.get(i),extraInfoList.get(i),topicsList.get(i),qIDList.get(i)));
-                Log.i("wtf2","@");
+    public void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList, ArrayList<String> topicsList,ArrayList<String> qIDList,ArrayList<String> uIDList, String arg){
+        unitsLAA.clear();
+        unitsLAM.clear();
+        if(arg.equals("LAA")) {
+            for (int i = 0; i < universalList.size(); i++) {
+                unitsLAA.add(new UnitLAA(universalList.get(i), extraInfoList.get(i), topicsList.get(i), qIDList.get(i), uIDList.get(i)));
+                Log.i("wtf2", "@");
             }
+            unitsList = (ListView) findViewById(R.id.likesList);
+            AdapterLAA adapter = new AdapterLAA(this, R.layout.unit_laa, unitsLAA);
+            unitsList.setAdapter(adapter);
         }
-        unitsList = (ListView) findViewById(R.id.likesList);
-        AdapterLAA adapter = new AdapterLAA(this, R.layout.unit_laa, units);
-        unitsList.setAdapter(adapter);
+        if(arg.equals("LAM")){
+            for (int i = 0; i < universalList.size(); i++) {
+                unitsLAM.add(new UnitLAM(universalList.get(i)));
+                Log.i("wtf3", "@");
+            }
+            unitsList = (ListView) findViewById(R.id.likesList);
+            AdapterLAM adapter = new AdapterLAM(this, R.layout.unit_lam, unitsLAM);
+            unitsList.setAdapter(adapter);
+        }
     }
 
     @Override

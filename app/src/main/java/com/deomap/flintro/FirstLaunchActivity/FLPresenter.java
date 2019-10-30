@@ -27,12 +27,13 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class FLPresenter implements MainPartContract.iFLPresenter  {
 
     Map<String, Object> userPickedInterests = new HashMap<>();
+    Map<String, Object> name = new HashMap<>();
     TopicsPositionMatch tpm = new TopicsPositionMatch();
     private int stage = 0;
     String userName = "";
+    String text="";
     FirebaseCloudstore fbcu = new FirebaseCloudstore();
     FirebaseUsers fbu = new FirebaseUsers();
-
 
     private MainPartContract.iFLActivity mView;
     private MainPartContract.iOpsModel mRepository;
@@ -46,6 +47,9 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     //arg in stage 2 is name
     public void initiateNextStage(String arg) {
         //Log.i("stage before",Integer.toString(stage));
+        if(stage == 1){
+            userName = text;
+        }
         stage++;
         //Log.i("stage after",Integer.toString(stage));
         FirebaseFirestore db = fbcu.DBInstance();
@@ -84,14 +88,20 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
         Log.i("put","cff");
     }
 
+    @Override
+    public void setTextFromET(String text) {
+        this.text = text;
+    }
+
     private void buildProfile(){
         Log.i("buildProfile","!!");
         mView.uploadImage();
+        name.put("name",userName);
 
         FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
 
         db.collection("users").document(new FirebaseUsers().uID()).collection("interests").document("topics")
-                .set(userPickedInterests)
+                .update(userPickedInterests)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -104,6 +114,22 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                         Log.w("FLP/buildProfile()", "Error writing document", e);
                     }
                 });
+
+        db.collection("users").document(new FirebaseUsers().uID())
+                .update(name)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("FLP/buildProfile()", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FLP/buildProfile()", "Error writing document", e);
+                    }
+                });
+
         loadProfileData();
 
         mView.startIntent("Questions");

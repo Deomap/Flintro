@@ -12,7 +12,10 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -221,6 +224,7 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
     }
 
     public void goNextStageClicked(View view){
+        mPresenter.setTextFromET(editText1.getText().toString());
         mPresenter.initiateNextStage(editText1.getText().toString());
     }
 

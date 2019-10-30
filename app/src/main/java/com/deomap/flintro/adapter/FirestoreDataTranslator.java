@@ -81,6 +81,16 @@ public class FirestoreDataTranslator {
             return list;
         }
 
+        if(arg.equals("meLikes/uid")){
+            ArrayList<String> list = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue().toString();
+                list.add(key);
+            }
+            return list;
+        }
+
         if(arg.equals("iLike/answers")){
             ArrayList<String> list = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {

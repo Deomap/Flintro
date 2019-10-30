@@ -116,4 +116,5 @@ FirebaseFirestore db ;
 --addusertodatabase (lvp)
 --serverside functions: errors
 --QuestionsPresenter conttructor (delete)
+--serverside in list adapter !!!! (докатились)
  */
