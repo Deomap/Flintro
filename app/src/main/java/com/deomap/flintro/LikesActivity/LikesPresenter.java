@@ -111,7 +111,9 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                             universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
                             special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
                             Log.i("a1",universalList.size()+" "+extraInfoList.size());
-
+                            if(special.size()==0){
+                                setListInView();
+                            }
 
                             String topic,qID,uID;
                             for(String str : special){

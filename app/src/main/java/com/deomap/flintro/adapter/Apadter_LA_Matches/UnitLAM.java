@@ -6,9 +6,10 @@ public class UnitLAM {
     private String uID;
 
 
-    public UnitLAM(String userName){
+    public UnitLAM(String userName, String uID){
         this.userName = userName;
         this.liked=true;
+        this.uID = uID;
     }
     public String getUserName(){
         return this.userName;

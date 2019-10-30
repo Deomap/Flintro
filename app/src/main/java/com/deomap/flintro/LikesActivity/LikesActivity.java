@@ -35,7 +35,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     private Button meLikesButton;
     private Button iLikeButton;
     private Button reactionsButton;
-    private ListView likesList;
+    //private ListView likesList;
     private CheckBox stOptionCB;
     private CheckBox ndOptionCB;
     private int st_cb_state = 1;
@@ -109,7 +109,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         meLikesButton = findViewById(R.id.meLikesButton);
         reactionsButton = findViewById(R.id.reactionsButton);
         iLikeButton = findViewById(R.id.iLikeButton);
-        // likesList = findViewById(R.id.likesList);
+        unitsList = findViewById(R.id.likesList);
         stOptionCB = findViewById(R.id.stOptionCB);
         ndOptionCB = findViewById(R.id.ndOptionCB);
 
@@ -165,24 +165,33 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     public void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList, ArrayList<String> topicsList,ArrayList<String> qIDList,ArrayList<String> uIDList, String arg){
         unitsLAA.clear();
         unitsLAM.clear();
+        unitsList.setVisibility(View.GONE);
+        Log.i("yaya","setlist");
         if(arg.equals("LAA")) {
             for (int i = 0; i < universalList.size(); i++) {
                 unitsLAA.add(new UnitLAA(universalList.get(i), extraInfoList.get(i), topicsList.get(i), qIDList.get(i), uIDList.get(i)));
                 Log.i("wtf2", "@");
             }
-            unitsList = (ListView) findViewById(R.id.likesList);
-            AdapterLAA adapter = new AdapterLAA(this, R.layout.unit_laa, unitsLAA);
-            unitsList.setAdapter(adapter);
+            if(universalList.size()!=0) {
+                unitsList = (ListView) findViewById(R.id.likesList);
+                AdapterLAA adapter = new AdapterLAA(this, R.layout.unit_laa, unitsLAA);
+                unitsList.setAdapter(adapter);
+                unitsList.setVisibility(View.VISIBLE);
+            }
         }
         if(arg.equals("LAM")){
             for (int i = 0; i < universalList.size(); i++) {
-                unitsLAM.add(new UnitLAM(universalList.get(i)));
+                unitsLAM.add(new UnitLAM(universalList.get(i),extraInfoList.get(i)));
                 Log.i("wtf3", "@");
             }
-            unitsList = (ListView) findViewById(R.id.likesList);
-            AdapterLAM adapter = new AdapterLAM(this, R.layout.unit_lam, unitsLAM);
-            unitsList.setAdapter(adapter);
+            if(universalList.size()!=0) {
+                unitsList = (ListView) findViewById(R.id.likesList);
+                AdapterLAM adapter = new AdapterLAM(this, R.layout.unit_lam, unitsLAM);
+                unitsList.setAdapter(adapter);
+                unitsList.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
     @Override
