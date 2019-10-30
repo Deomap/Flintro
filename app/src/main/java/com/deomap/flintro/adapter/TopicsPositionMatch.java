@@ -12,4 +12,13 @@ public class TopicsPositionMatch {
         return topicsRus[pos];
     }
     public String topicNameEng(int pos) {return topicsEng[pos];}
+
+    public int topicPosEng(String topic){
+        for(int i =0;i<topicsEng.length;i++){
+            if(topicsEng[i].equals(topic)){
+                return i;
+            }
+        }
+        return 0;
+    }
 }

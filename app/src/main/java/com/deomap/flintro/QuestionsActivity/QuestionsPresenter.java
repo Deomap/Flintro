@@ -61,8 +61,12 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         this.mRepository = new MainOpsModel();
     }
 
+    public QuestionsPresenter() {
+
+    }
+
     @Override
-    public void getQuestions(int pos) {
+    public void getQuestions(int pos, int fromLA) {
         FirebaseFirestore db = fbcs.DBInstance();
 
         questionsList.clear();
@@ -70,6 +74,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         questionsVotesList.clear();
         selectedTopic = tpm.topicNameEng(pos);
         //
+
         db.collection("interests").document(selectedTopic).collection("questions")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -83,6 +88,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                                 questionsIDList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"id"));
                                 questionsVotesList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"votes"));
                             }
+
                         } else {
                             Log.d("dd", "Error getting documents: ", task.getException());
                         }
@@ -97,12 +103,18 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     }
 
     @Override
-    public void getAnswers(int pos) {
+    public void getAnswers(int pos, String fromWho) {
         FirebaseFirestore db = fbcs.DBInstance();
         //
         answersList.clear();
         answersUserIDList.clear();
-        selectedQuestion = questionsIDList.get(pos);
+        if(!fromWho.equals("fromQA")){
+            selectedTopic = tpm.topicNameEng(pos);
+            selectedQuestion = fromWho;
+        }
+        else{
+            selectedQuestion = questionsIDList.get(pos);
+        }
         //Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
         //Log.d("QP/getAnswers()", "DocumentSnapshot data: " + selectedTopic+" "+selectedQuestion);
         DocumentReference docRef = db.collection("interests").document(selectedTopic).collection("answers").document(selectedQuestion);
@@ -128,6 +140,12 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
             }
         });
         //SHOULD BE IN MODEL!
+    }
+
+    @Override
+    public void fromLikesActivity(int pos,  String qID){
+        getAnswers(pos,qID);
+
     }
 
     @Override

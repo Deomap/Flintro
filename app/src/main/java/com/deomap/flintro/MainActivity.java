@@ -115,4 +115,5 @@ FirebaseFirestore db ;
 --FLA:back button
 --addusertodatabase (lvp)
 --serverside functions: errors
+--QuestionsPresenter conttructor (delete)
  */

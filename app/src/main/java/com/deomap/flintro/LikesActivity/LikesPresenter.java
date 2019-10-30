@@ -38,12 +38,16 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     private ArrayList<String> extraInfoList = new ArrayList<>();
     private ArrayList<String> special = new ArrayList<>();
     //final list NU
+    private ArrayList<String> topicList = new ArrayList<>();
     private ArrayList<String> finalList = new ArrayList<>();
+    private ArrayList<String> qIDList = new ArrayList<>();
     private FirebaseUsers fbu = new FirebaseUsers();
     private FirebaseCloudstore fbcs = new FirebaseCloudstore();
     private FirestoreDataTranslator fdt = new FirestoreDataTranslator();
     private int arg_mode;
     final int cb_mode = 2;
+
+    int j=  0;
 
     public LikesPresenter(MainPartContract.iLikesActivity view){
         this.mView = view;
@@ -57,7 +61,8 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
 
         universalList.clear();
         extraInfoList.clear();
-        finalList.clear();
+        topicList.clear();
+        qIDList.clear();
         special.clear();
     //    cb_mode = 3; CB
     //    serverSideOLD(arg); OLD
@@ -68,7 +73,14 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     }
 
     private void setListInView(){
-        mView.setList(universalList,extraInfoList);
+        Log.i("a5",universalList.size()+" "+extraInfoList.size());
+        if(arg_mode==1) {
+            mView.setList(universalList, extraInfoList, topicList,qIDList, "LAA");
+        }
+    }
+
+    public void startQA(){
+        mView.startIntent("Questions");
     }
 
     @Override
@@ -97,8 +109,47 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                             Log.d("LA/getList()answers", "DocumentSnapshot data: " + document.getData());
                             universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
                             special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
+                            Log.i("a1",universalList.size()+" "+extraInfoList.size());
 
-                            Log.i("SSNEW",Integer.toString(universalList.size()));
+
+                            String topic,qID;
+                            for(String str : special){
+                                topic = str.split(",")[0];
+                                topicList.add(topic);
+                                qID = str.split(",")[1];
+                                qIDList.add(qID);
+                                Log.i("wtf",topic+" "+qID);
+                                FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
+                                DocumentReference docRef2 = db.collection("interests").document(topic).collection("questions").document(qID);
+                                docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                Log.d("LP/SS", "DocumentSnapshot data: " + document.getData());
+                                                extraInfoList.add(document.get("text").toString());
+                                                j++;
+                                                if(j==special.size()){
+                                                    j=0;
+                                                    setListInView();
+                                                }
+                                                Log.i("a2",universalList.size()+" "+extraInfoList.size());
+                                            } else {
+                                                Log.d("LP/SS()", "No such document");
+                                                extraInfoList.add("null");
+                                            }
+                                        } else {
+                                            Log.d("LP/SS", "get failed with ", task.getException());
+                                            extraInfoList.add("null");
+                                        }
+                                    }
+                                });
+                            }
+
+
+
+                            Log.i("SSNEW",(special.get(0)));
                         } else {
                             Log.d("LA/getList()", "No such document");
                         }
@@ -107,34 +158,10 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                     }
                 }
             });
+            Log.i("a3",universalList.size()+" "+extraInfoList.size());
 
-            String topic,qID;
-
-            for(String str : special){
-                 topic = str.split(",")[0];
-                 qID = str.split(",")[1];
-                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
-                 DocumentReference docRef2 = db.collection("interests").document(topic).collection("answers").document(qID);
-                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d("LP/SS", "DocumentSnapshot data: " + document.getData());
-                                extraInfoList.add(document.get("text").toString());
-                            } else {
-                                Log.d("LP/SS()", "No such document");
-                            }
-                        } else {
-                            Log.d("LP/SS", "get failed with ", task.getException());
-                        }
-                    }
-                });
-            }
         }
-
-        setListInView();
+        Log.i("a4",universalList.size()+" "+extraInfoList.size());
     }
 
 

@@ -72,6 +72,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
+
         mPresenter = new QuestionsPresenter(this);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -89,6 +90,13 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         questionsList = findViewById(R.id.questionsList);
         questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
 
+
+        Intent intent   = getIntent();
+        if(intent.hasExtra("fromLAPos")){
+            mPresenter.fromLikesActivity(intent.getIntExtra("fromLAPos",-1), intent.getStringExtra("fromLAQID"));
+        }
+
+
         itemsAvailibilitySet(0);
         //
         overridePendingTransition(0, 0);
@@ -99,7 +107,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-            mPresenter.getQuestions(position);
+            mPresenter.getQuestions(position,0);
             Log.i("okk","!!!!!!!!!!");
 
         }
@@ -109,7 +117,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.i("QA/questionsList.OICL","clicked");
-            mPresenter.getAnswers(position);
+            mPresenter.getAnswers(position, "fromQA");
         }
     };
 

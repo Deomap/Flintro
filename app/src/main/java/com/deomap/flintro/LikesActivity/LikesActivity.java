@@ -20,6 +20,8 @@ import com.deomap.flintro.ProfileActivity.ProfileActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
+import com.deomap.flintro.adapter.Adapter_LA_Answers.AdapterLAA;
+import com.deomap.flintro.adapter.Adapter_LA_Answers.UnitLAA;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,6 +40,9 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     private int nd_cb_state = 1;
     private int toPresenterCBMode = 3;
     private int arg_mode;
+
+    ArrayList<UnitLAA> units = new ArrayList<>();
+    ListView unitsList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -101,7 +106,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         meLikesButton = findViewById(R.id.meLikesButton);
         reactionsButton = findViewById(R.id.reactionsButton);
         iLikeButton = findViewById(R.id.iLikeButton);
-        likesList = findViewById(R.id.likesList);
+        // likesList = findViewById(R.id.likesList);
         stOptionCB = findViewById(R.id.stOptionCB);
         ndOptionCB = findViewById(R.id.ndOptionCB);
 
@@ -116,6 +121,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         overridePendingTransition(0, 0);
+
     }
 
     @Override
@@ -153,10 +159,17 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     };
 
     @Override
-    public void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList){
-       // ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, finalList);
-       // likesList.setAdapter(adapter);
-        likesList.setOnItemClickListener(likesListOnItemClickListener);
+    public void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList, ArrayList<String> topicsList,ArrayList<String> qIDList, String arg){
+        units.clear();
+        if(arg.equals("LAA")){
+            for(int i=0;i<universalList.size();i++){
+                units.add(new UnitLAA(universalList.get(i),extraInfoList.get(i),topicsList.get(i),qIDList.get(i)));
+                Log.i("wtf2","@");
+            }
+        }
+        unitsList = (ListView) findViewById(R.id.likesList);
+        AdapterLAA adapter = new AdapterLAA(this, R.layout.unit_laa, units);
+        unitsList.setAdapter(adapter);
     }
 
     @Override

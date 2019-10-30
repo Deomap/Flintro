@@ -97,6 +97,7 @@ public class FirestoreDataTranslator {
                 String key = entry.getKey();
                 String value = entry.getValue().toString();
                 list.add(key);
+                //Log.i("value",key);
             }
             return list;
         }
