@@ -19,7 +19,7 @@ public interface MainPartContract {
 
     interface iQuestionsActivity extends View{
         void initiateQuestionsList(ArrayList questionsList);
-        void initiateAnswersList(ArrayList answersList);
+        void initiateAnswersList(ArrayList answersList, ArrayList ansFinalList);
         void setMainText(String text);
         void itemsAvailibilitySet(int stage);
     }
@@ -37,7 +37,7 @@ public interface MainPartContract {
     }
 
     interface iSwipeActivity extends View{
-
+        void setFoundUserInfo(String fuName, String fuStatus, String fuTxt1,String fuTxt2,String fuTxt3);
     }
 
     interface iFLActivity extends View{
@@ -78,7 +78,8 @@ public interface MainPartContract {
     }
 
     interface iSwipePresenter extends Presenter{
-
+        void startShowing();
+        void showInLoop();
     }
 
     interface iFLPresenter extends Presenter{

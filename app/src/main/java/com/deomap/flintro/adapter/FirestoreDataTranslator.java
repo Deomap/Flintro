@@ -48,9 +48,36 @@ public class FirestoreDataTranslator {
             for(Map.Entry<String, Object> entry : map.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue().toString();
+                //String nk = key.split(",")[0];
                 answersIDList.add(key);
             }
             return answersIDList;
+        }
+        if(arg.equals("AVL")){
+            ArrayList<String> answersIDList = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue().toString();
+                //String nk = key.split(",")[1];
+
+            }
+            return answersIDList;
+        }
+        return null;
+    }
+
+    public ArrayList<String> DS_SP_getList_string_to_array(DocumentSnapshot documentSnapshot, String arg){
+        int size = documentSnapshot.getData().size();
+        Map<String,Object> map = documentSnapshot.getData();
+        //Log.i("FDT/QDS_string_to_array", map.toString());
+        if(arg.equals("PSInfo/swipe")){
+            ArrayList<String> list = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue().toString();
+                list.add(key);
+            }
+            return list;
         }
         return null;
     }

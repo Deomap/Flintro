@@ -40,8 +40,10 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     private ArrayList<String>  questionsIDList = new ArrayList<>();
     private ArrayList<String>  answersList  = new ArrayList<>();
     private ArrayList<String>  answersUserIDList =  new ArrayList<>();
+    private ArrayList<String> votesList = new ArrayList<>();
     String selectedQuestion = "nullQuestion";
     public String selectedTopic = "nullTopic";
+    private ArrayList<String>  answersFinalList = new ArrayList<>();
 
     private int stage = 0;
     /*
@@ -87,15 +89,16 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                                 questionsList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"text"));
                                 questionsIDList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"id"));
                                 questionsVotesList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"votes"));
+
+                                stage = 1;
+                                mView.setMainText("Вопросы");
+                                mView.initiateQuestionsList(questionsList);
+                                mView.itemsAvailibilitySet(stage);
                             }
 
                         } else {
                             Log.d("dd", "Error getting documents: ", task.getException());
                         }
-                        stage = 1;
-                        mView.setMainText("Вопросы");
-                        mView.initiateQuestionsList(questionsList);
-                        mView.itemsAvailibilitySet(stage);
 
                     }
                 });
@@ -108,6 +111,8 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         //
         answersList.clear();
         answersUserIDList.clear();
+        votesList.clear();
+        answersFinalList.clear();
         if(!fromWho.equals("fromQA")){
             selectedTopic = tpm.topicNameEng(pos);
             selectedQuestion = fromWho;
@@ -127,16 +132,23 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         Log.d("QP/getAnswers()", "DocumentSnapshot data: " + document.getData());
                         answersList = fdt.DS_QP_getAnswers_string_to_array(document,"AL");
                         answersUserIDList = fdt.DS_QP_getAnswers_string_to_array(document,"AIDL");
+                        votesList = fdt.DS_QP_getAnswers_string_to_array(document, "AVL");
+
+                        mView.setMainText("Ответы пользователей");
+                        stage = 2;
+
+                        for(int i = 0 ;i<answersList.size();i++){
+                            answersFinalList.add(selectedTopic+","+selectedQuestion+","+answersUserIDList.get(i));
+                        }
+                        mView.initiateAnswersList(answersList, answersFinalList);
+
+                        mView.itemsAvailibilitySet(stage);
                     } else {
                         Log.d("QP/getAnswers()", "No such document");
                     }
                 } else {
                     Log.d("QP/getAnswers()", "get failed with ", task.getException());
                 }
-                mView.setMainText("Ответы пользователей");
-                stage = 2;
-                mView.initiateAnswersList(answersList);
-                mView.itemsAvailibilitySet(stage);
             }
         });
         //SHOULD BE IN MODEL!
@@ -183,6 +195,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
 
     @Override
     public void answerClicked(int pos) {
+        /*
         Map<String, Object> like = new HashMap<>();
         //Log.i("QP/sendUserAnswer()", fbu.curUser().getUid()+" "+selectedQuestion);
         //Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
@@ -205,6 +218,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                 });
 
         mView.toast("liked",0);
+        */
     }
 
     @Override

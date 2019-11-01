@@ -105,20 +105,40 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
         userMatchedAnswers2 = findViewById(R.id.userMatchedAnswers2);
         userMatchedAnswers3 = findViewById(R.id.userMatchedAnswers3);
 
+        mPresenter.startShowing();
+
         overridePendingTransition(0, 0);
     }
 
 
     public void likeUserBtnClck(View view){
-
+        foundUserName.setText("");
+        foundUserMainStatus.setText("");
+        userMatchedAnswers3.setText("");
+        userMatchedAnswers2.setText("");
+        userMatchedAnswers1.setText("");
+        mPresenter.showInLoop();
     }
 
     public void dislikeUserBtnClck(View view){
-
+        foundUserName.setText("");
+        foundUserMainStatus.setText("");
+        userMatchedAnswers3.setText("");
+        userMatchedAnswers2.setText("");
+        userMatchedAnswers1.setText("");
     }
 
     @Override
     public void toast(String msg, int time) {
 
+    }
+
+    @Override
+    public void setFoundUserInfo(String fuName, String fuStatus, String fuTxt1, String fuTxt2, String fuTxt3) {
+        foundUserName.setText(fuName);
+        foundUserMainStatus.setText(fuStatus);
+        userMatchedAnswers1.setText(fuTxt1);
+        userMatchedAnswers2.setText(fuTxt2);
+        userMatchedAnswers3.setText(fuTxt3);
     }
 }

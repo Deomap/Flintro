@@ -23,6 +23,8 @@ import com.deomap.flintro.LikesActivity.LikesActivity;
 import com.deomap.flintro.ProfileActivity.ProfileActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
+import com.deomap.flintro.adapter.Apadter_QA_Answers.AdapterQAA;
+import com.deomap.flintro.adapter.Apadter_QA_Answers.UnitQAA;
 import com.deomap.flintro.adapter.ImageTextAdapter;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,6 +43,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     private GridView topicsGrid;
     private ListView questionsList;
     private ListView answersList;
+    ArrayList<UnitQAA> unitsQAA = new ArrayList<>();
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -167,9 +171,17 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     }
 
     @Override
-    public void initiateAnswersList(ArrayList answersArray) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, answersArray);
-        answersList.setAdapter(adapter);
+    public void initiateAnswersList(ArrayList answersArray, ArrayList ansFinalList) {
+        unitsQAA.clear();
+        for (int i = 0; i < answersArray.size(); i++) {
+            unitsQAA.add(new UnitQAA(answersArray.get(i).toString(),ansFinalList.get(i).toString(),"0"));
+            Log.i("wtf2", "@");
+        }
+        if(answersArray.size()!=0) {
+            answersList = (ListView) findViewById(R.id.answersList);
+            AdapterQAA adapter = new AdapterQAA(this, R.layout.unit_qaa, unitsQAA);
+            answersList.setAdapter(adapter);
+        }
     }
 
     @Override

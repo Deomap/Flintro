@@ -117,4 +117,5 @@ FirebaseFirestore db ;
 --serverside functions: errors
 --QuestionsPresenter conttructor (delete)
 --serverside in list adapter !!!! (докатились)
+--
  */
