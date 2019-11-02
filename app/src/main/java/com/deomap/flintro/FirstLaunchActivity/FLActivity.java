@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+//активность заполнения профиля, открывается сразу после регистрации или первого входа
 public class FLActivity extends AppCompatActivity implements MainPartContract.iFLActivity{
     private MainPartContract.iFLPresenter mPresenter;
     private FirebaseStorageApi fsapi;
@@ -65,6 +66,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fl);
+
+        //mPresenter - как раз тот самый presenter, в который должна обращаться активность для действий не связанных с "внешним видом"
         mPresenter = new FLPresenter(this);
         editText1 = findViewById(R.id.editText1);
         textView1 = findViewById(R.id.textView1);
@@ -79,13 +82,14 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
 
         changeItemsAvailibility("onCreate");
 
-        //mPresenter.initiateNextStage("");
         interestsGrid.setAdapter(new ImageTextAdapter(this));
         interestsGrid.setOnItemClickListener(gridviewOnItemClickListener);
 
         sph = new SharedPreferencesHub(this);
     }
 
+    //нужно для изменения видимости элементов в зависимости от стадии
+    //(если сейчас спрашивается имя пользователя, то приветственное сообщение нужно скрыть)
     @Override
     public void changeItemsAvailibility(String arg){
         if(arg.equals("onCreate")){
@@ -160,12 +164,13 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         }
     }
 
+    //слушатель нажатей для сетки интересов
     private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
-            Log.i("kk","!!!!!!!!!!");
+            Log.i("grid clicked","!");
             mPresenter.onPickedInterest(position);
 
         }
@@ -199,18 +204,18 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
 
     }
 
+    //происходит вызов активности, где пользователь может выбрать свое фото
+    //для этого нужны слудующие 2 метода
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PICK_IMAGE_AVATAR && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_AVATAR && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             photoPath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoPath);
                 downloadedPhoto.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -223,11 +228,13 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_AVATAR);
     }
 
+    //метод для обработки нажатия кнопки "Далее"
     public void goNextStageClicked(View view){
         mPresenter.setTextFromET(editText1.getText().toString());
         mPresenter.initiateNextStage(editText1.getText().toString());
     }
 
+    //да, у FLActivity есть свой метод для работы с внутренним хранилищем ¯\_(ツ)_/¯
     @Override
     public void accessSharedPreferences(String mode, String prefName, String type,String key, String value){
         if(mode.equals("put")){
@@ -241,6 +248,7 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         }
     }
 
+    //загрузка выбранного пользователем фото в хранилище Firebase
     @Override
     public void uploadImage() {
 

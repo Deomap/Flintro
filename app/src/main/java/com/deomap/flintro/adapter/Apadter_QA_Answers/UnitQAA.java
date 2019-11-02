@@ -1,5 +1,6 @@
 package com.deomap.flintro.adapter.Apadter_QA_Answers;
 
+//аналогично UnitLAA
 
 public class UnitQAA {
     private String answerText;

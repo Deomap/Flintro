@@ -77,14 +77,12 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 break;
             default:
                 break;
-
         }
-
     }
 
     @Override
     public void onPickedInterest(int position) {
-        userPickedInterests.put(tpm.topicNameEng(position),-2);
+        userPickedInterests.put(tpm.topicNameEng(position),5);
         Log.i("put","cff");
     }
 
@@ -93,12 +91,41 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
         this.text = text;
     }
 
+    //создание основных папок и файлов пользователя, запись имени и выбранных интересов в базу данных
     private void buildProfile(){
         Log.i("buildProfile","!!");
         mView.uploadImage();
         name.put("name",userName);
 
         FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
+
+
+        Map<String, Object> setup = new HashMap<>();
+        setup.put("null","null");
+        new FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().uID()).set(setup).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                //запись в БД о том, что пользователь прошел заполнение профиля и заходит не в первый раз
+                Map<String, Object> FL = new HashMap<>();
+                FL.put("firstLaunch","y");
+                new FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().uID())
+                        .update(FL)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("FLP/buildProfile()", "DocumentSnapshot successfully written!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("FLP/buildProfile()", "Error writing document", e);
+                            }
+                        });
+
+            }
+        });
 
         db.collection("users").document(new FirebaseUsers().uID()).collection("interests").document("topics")
                 .update(userPickedInterests)
@@ -131,12 +158,46 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 });
 
         loadProfileData();
-
         mView.startIntent("Questions");
     }
 
+    //загрузка имени пользователя во внутренее хранилище
     private void loadProfileData(){
         mView.accessSharedPreferences("put", "userProfile","String", "userName", userName);
+        setupDocuments();
+    }
+
+    //всё также, формирование необходимых файлов в БД
+    private void setupDocuments(){
+        FirebaseUsers fu = new FirebaseUsers();
+        Map<String, Object> setup = new HashMap<>();
+
+
+        setup.put("mainStatus","null");
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        setup.clear();
+
+        setup.put("txtSwipe1","null");
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        setup.clear();
+
+        setup.put("txtSwipe2","null");
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        setup.clear();
+
+        setup.put("txtSwipe3","null");
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        setup.clear();
+
+        setup.put("null","null");
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("PSInfo").document("forSwipe").set(setup);
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("answeredQuestions").document("null").set(setup);
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("interests").document("topics").set(setup);
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("MLNotMutual").set(setup);
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("answers").set(setup);
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("meLikes").set(setup);
+        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("swipe").set(setup);
+        setup.clear();
     }
 
 }

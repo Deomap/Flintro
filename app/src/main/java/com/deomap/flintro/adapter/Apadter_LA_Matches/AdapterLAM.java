@@ -28,6 +28,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//подробно работа адаптера описана в AdapterLAA.java.
+//Данный адаптер служит для LikesActivity, когда пользователю необходимо показать список тех, кто ему нравится, и это взаимно
+
 public class AdapterLAM extends ArrayAdapter<UnitLAM> {
     private LayoutInflater inflater;
     private int layout;
@@ -41,8 +44,8 @@ public class AdapterLAM extends ArrayAdapter<UnitLAM> {
     }
 
     public View getView(int position, View convertView, final ViewGroup parent) {
-
         final ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = inflater.inflate(this.layout, parent, false);
             viewHolder = new ViewHolder(convertView);
@@ -50,6 +53,7 @@ public class AdapterLAM extends ArrayAdapter<UnitLAM> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         final UnitLAM unit = unitList.get(position);
 
         viewHolder.nameField.setText(unit.getUserName());

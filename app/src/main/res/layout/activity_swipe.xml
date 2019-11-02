@@ -91,7 +91,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:onClick="likeUserBtnClck"
-                    android:text="Button" />
+                    android:text="like" />
 
                 <Button
                     android:id="@+id/foundUserDislikeBtn"
@@ -103,7 +103,7 @@
                     android:layout_marginEnd="78dp"
                     android:layout_marginBottom="8dp"
                     android:onClick="dislikeUserBtnClck"
-                    android:text="Button" />
+                    android:text="dis" />
             </RelativeLayout>
 
             <TextView

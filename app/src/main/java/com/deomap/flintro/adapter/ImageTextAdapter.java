@@ -11,47 +11,28 @@ import android.widget.TextView;
 
 import com.deomap.flintro.R;
 
+//эта страшная штука нужна для GridView, чтобы работало и отображало в ячейках сетки одновременно и текст и картинку
 public class ImageTextAdapter extends BaseAdapter {
         private Context mContext;
+
         TopicsPositionMatch tpm = new TopicsPositionMatch();
 
         public ImageTextAdapter(Context c) {
             mContext = c;
         }
-
         public int getCount() {
             return mThumbIds.length;
         }
-
         public Object getItem(int position) {
             return mThumbIds[position];
         }
-
         public long getItemId(int position) {
             return position;
         }
 
-        // create a new ImageView for each item referenced by the Adapter
-        // public View getView(int position, View convertView, ViewGroup parent) {
-        // ImageView imageView;
-        // if (convertView == null) {
-        // // if it's not recycled, initialize some attributes
-        // imageView = new ImageView(mContext);
-        // imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-        // imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        // imageView.setPadding(8, 8, 8, 8);
-        // } else {
-        // imageView = (ImageView) convertView;
-        // }
-        //
-        // imageView.setImageResource(mThumbIds[position]);
-        // return imageView;
-        // }
-
+        //аналогично адаптеру производятся манипуляции с каждой отдельной ячейкой
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-
             View grid;
 
             if (convertView == null) {
@@ -66,12 +47,13 @@ public class ImageTextAdapter extends BaseAdapter {
             ImageView imageView = (ImageView) grid.findViewById(R.id.imagepart);
             TextView textView = (TextView) grid.findViewById(R.id.textpart);
             imageView.setImageResource(mThumbIds[position]);
+            //здесь определяется текст, который доолжны стоять в каждой ячейки
             textView.setText(tpm.topicNameRus(position));
 
             return grid;
         }
 
-        // references to our images
+        //здесь определяются ссылки на картинки, который доолжны стоять в каждой ячейки
         public Integer[] mThumbIds = { R.drawable.wowrcon, R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon};
     }
 

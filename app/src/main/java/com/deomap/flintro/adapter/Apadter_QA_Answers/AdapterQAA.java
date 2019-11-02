@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//подробно работа адаптера описана в AdapterLAA.java.
+//Данный адаптер служит для QuestionsActivity, когда пользователю необходимо список ответов других пользователей с использованием кнопки "Нравится"
+
 public class AdapterQAA extends ArrayAdapter<UnitQAA> {
     private LayoutInflater inflater;
     private int layout;
@@ -43,8 +46,8 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
     }
 
     public View getView(int position, View convertView, final ViewGroup parent) {
-
         final ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = inflater.inflate(this.layout, parent, false);
             viewHolder = new ViewHolder(convertView);
@@ -52,16 +55,19 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         final UnitQAA unit = unitList.get(position);
 
         viewHolder.answerTextField.setText(unit.getAnswerText());
 
+        //здесь происходит добавление ответа в понравившиеся и установление связи между пользователями (который нажал "Нравится" и который написал ответ)
+        //для дальнейшего подбора во вкладке Swipe
         viewHolder.likedIBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Map<String, Object> like = new HashMap<>();
                 like.put(unit.getPath(),unit.getAnswerText());
-                //
+
                 new  FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().curUser().getUid()).collection("likes").document("answers")
                         .update(like)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -79,8 +85,8 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
                         });
 
                 Map<String, Object> toLikedUser = new HashMap<>();
-                toLikedUser.put("3,"+new FirebaseUsers().uID(),"my_ans_liked");
-                //
+                toLikedUser.put(new FirebaseUsers().uID(),"3");
+
                 new  FirebaseCloudstore().DBInstance().collection("users").document(unit.getPath().split(",")[2]).collection("PSInfo").document("forSwipe")
                         .update(toLikedUser)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -98,8 +104,8 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
                         });
 
                 Map<String, Object> toMe = new HashMap<>();
-                toMe.put("2,"+unit.getPath().split(",")[2],"sb_ans_liked");
-                //
+                toMe.put(unit.getPath().split(",")[2],"2");
+
                 new  FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().curUser().getUid()).collection("PSInfo").document("forSwipe")
                         .update(toMe)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -117,8 +123,6 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
                         });
             }
         });
-
-
 
         return convertView;
     }

@@ -17,6 +17,7 @@ import java.util.concurrent.Executor;
 
 import static android.content.ContentValues.TAG;
 
+//здесь собрано все для аутентификации пользователя средствами FirebaseAuth
 public class LoginModel implements LoginContract.Repository {
 
     FirebaseUsers fbu = new FirebaseUsers();
@@ -26,7 +27,8 @@ public class LoginModel implements LoginContract.Repository {
     private String SIPassword;
 
 
-    //Return result of SIGNING UP(!)
+
+    //коллбэки нужны, потому как только Presenter может обращаться в модел, а не наоборот
     public interface MyCallback{
         void returnCallbackLoggedIn();
         void returnCallbackNotLoggedIn();

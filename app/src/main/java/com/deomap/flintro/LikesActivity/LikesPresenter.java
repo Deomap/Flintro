@@ -19,19 +19,6 @@ import java.util.ArrayList;
 
 public class LikesPresenter implements MainPartContract.iLikesPresenter{
 
-    //1 ilikes 2 melikes 3 reactions ----argmode
-   //MAIN - velue, EXTRA - key
-    /*
-    mode
-    1 st and nd
-    2 st
-    3 nd
-    4 !st and !nd
-    ------cbmode
-     */
-
-    //to use CB's -> get rid of comments marked "CB"
-
     private MainPartContract.iLikesActivity mView;
     private MainPartContract.iOpsModel mRepository;
     private ArrayList<String> universalList = new ArrayList<>();
@@ -55,25 +42,23 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         this.mRepository = new MainOpsModel();
     }
 
+    //старые списки очищаются, если та же кнопка не нажата подряд, получаются новые
     @Override
     public void getList(int arg) {
-
-    //    mView.setCB(arg); CB
-
         universalList.clear();
         extraInfoList.clear();
         topicList.clear();
         qIDList.clear();
         special.clear();
         uIDList.clear();
-    //    cb_mode = 3; CB
-    //    serverSideOLD(arg); OLD
+
         if(arg!=arg_mode) {
             arg_mode = arg;
             serverSide(arg);
         }
     }
 
+    //инициируется показ списка пользователю в активности
     private void setListInView(){
         Log.i("a5",universalList.size()+" "+extraInfoList.size());
         if(arg_mode==1) {
@@ -84,20 +69,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         }
     }
 
-    @Override
-    public void likesListClicked(int pos) {
-        if(arg_mode == 1){
-            //get photo, name etc
-        }
-        if(arg_mode == 2){
-            //
-        }
-        //pass
-    }
-
-
-    //new
-
+    //здес списки понравившихся пользователей или ответов загружаются из БД по агременту (описано в активности)
     private void serverSide(int arg){
         if(arg == 1){
             DocumentReference docRef = fbcs.DBInstance().collection("users").document(new FirebaseUsers().uID()).collection("likes").document("answers");
@@ -115,6 +87,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                 setListInView();
                             }
 
+                            //выделение из полученной записи БД ID пользователя, ID вопроса, темы
                             String topic,qID,uID;
                             for(String str : special){
                                 topic = str.split(",")[0];
@@ -165,7 +138,6 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                 }
             });
             Log.i("a3",universalList.size()+" "+extraInfoList.size());
-
         }
         if(arg==2){
             DocumentReference docRef = fbcs.DBInstance().collection("users").document(new FirebaseUsers().uID()).collection("likes").document("meLikes");
@@ -177,7 +149,6 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         if (document.exists()) {
                             Log.d("LP/getList()", "DocumentSnapshot (mode2) data: " + document.getData());
                             extraInfoList = fdt.DS_LP_getList_string_to_array(document, "meLikes/uid");
-
 
                             for(String str : extraInfoList){
                                 Log.i("dd",str);
@@ -213,8 +184,6 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                     }
                                 });
                             }
-
-
                         } else {
                             Log.d("LA/getList()", "No such document");
                         }
@@ -225,154 +194,5 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
             });
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //OLD ---->>
-
-
-    private void serverSideOLD(int arg){
-        final String uID = fbu.uID();
-
-        if(arg == 1) {
-            DocumentReference docRef = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("answers");
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d("LA/getList()answers", "DocumentSnapshot data: " + document.getData());
-                            universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
-                            special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
-
-                            Log.i("DDDkans",Integer.toString(universalList.size()));
-                        } else {
-                            Log.d("LA/getList()", "No such document");
-                        }
-                    } else {
-                        Log.d("LA/getList()", "get failed with ", task.getException());
-                    }
-
-                    compileListsOLD(cb_mode);
-                }
-            });
-
-            DocumentReference docRef2 = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("swipe");
-            docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d("LA/getList()swipe", "DocumentSnapshot data: " + document.getData());
-
-                            extraInfoList = fdt.DS_LP_getList_string_to_array(document,"iLike/swipe");
-
-                            Log.i("DDDkswipe",Integer.toString(extraInfoList.size()));
-
-                        } else {
-                            Log.d("LA/getList()", "No such document");
-                        }
-                    } else {
-                        Log.d("LA/getList()", "get failed with ", task.getException());
-                    }
-
-                    compileListsOLD(cb_mode);
-                }
-            });
-        }
-
-        if(arg == 2) {
-            DocumentReference docRef = fbcs.DBInstance().collection("users").document(uID).collection("likes").document("meLikes");
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d("LA/getList()", "DocumentSnapshot (mode2) data: " + document.getData());
-                            universalList = fdt.DS_LP_getList_string_to_array(document,"meLikes/nom");
-                            extraInfoList = fdt.DS_LP_getList_string_to_array(document, "meLikes/yesm");
-
-                            /*
-                            for(String s : universalList){
-                                Log.i("d",s);
-                            }
-                            */
-
-                        } else {
-                            Log.d("LA/getList()", "No such document");
-                        }
-                    } else {
-                        Log.d("LA/getList()", "get failed with ", task.getException());
-                    }
-
-                    compileListsOLD(cb_mode);
-                }
-            });
-        }
-
-        if(arg == 3) {
-            //pass
-        }
-
-    }
-
-    @Override
-    public void compileListsOLD(int mode){
-        finalList.clear();
-        //    cb_mode = mode;
-        switch (mode) {
-            case 1:
-                if(!universalList.isEmpty()) {
-                    for (String str : universalList) finalList.add(str);
-                }
-                if(!extraInfoList.isEmpty()) {
-                    for (String str : extraInfoList) finalList.add(str);
-                }
-
-                break;
-            case 2:
-                if(!universalList.isEmpty()) {
-                    for (String str : universalList) finalList.add(str);
-                }
-                break;
-            case 3:
-                if(!extraInfoList.isEmpty()) {
-                    for (String str : extraInfoList) finalList.add(str);
-                }
-                break;
-            case 4:
-                break;
-        }
-        //mView.setList(finalList);
-    }
-
-
-    @Override
-    public void setCBMode(int mode) {
-        //    cb_mode = mode; CB
-    }
-
 }
 

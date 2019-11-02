@@ -42,7 +42,7 @@ FirebaseFirestore db ;
         db = fbcs.DBInstance();
 
         //
-        //fbu.userInstance().signOut();
+        fbu.userInstance().signOut();
 
 
         contextOfApplication = getApplicationContext();
@@ -83,6 +83,7 @@ FirebaseFirestore db ;
                         }
                     } else {
                         Log.d("MA", "No such document");
+                        startActivity(new Intent(MainActivity.this, FLActivity.class));
                     }
                 } else {
                     Log.d("MA", "get failed with ", task.getException());

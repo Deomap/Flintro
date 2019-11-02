@@ -7,6 +7,8 @@ import com.deomap.flintro.MainPart.MainOpsModel;
 
 import java.util.ArrayList;
 
+//зачем это подробно написано в LoginContract
+//единственная проблема - эту часть было писать значительно сложнее и в итоге я решил все общение с БД перевести в Presenter  :(
 public interface MainPartContract {
     interface View{
         void startIntent(String intentName);
@@ -26,10 +28,6 @@ public interface MainPartContract {
 
     interface iLikesActivity extends View{
         void setList(ArrayList<String> universalList, ArrayList<String> extraInfoList, ArrayList<String> topicsList, ArrayList<String> qIDList, ArrayList<String> uIDList, String arg);
-        void likesListClickedNext(int arg_mode);
-        void checkBoxesStateChange(String mode);
-        void nullFinalList();
-        void setCB(int arg);
     }
 
     interface iProfileActivity extends View{
@@ -68,9 +66,6 @@ public interface MainPartContract {
 
     interface iLikesPresenter extends Presenter{
         void getList(int arg);
-        void setCBMode(int mode);
-        void compileListsOLD(int mode);
-        void likesListClicked(int pos);
     }
 
     interface iProfilePresenter extends Presenter{
@@ -80,6 +75,8 @@ public interface MainPartContract {
     interface iSwipePresenter extends Presenter{
         void startShowing();
         void showInLoop();
+        void liked();
+        void disliked();
     }
 
     interface iFLPresenter extends Presenter{

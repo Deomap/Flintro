@@ -126,6 +126,7 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
         userMatchedAnswers3.setText("");
         userMatchedAnswers2.setText("");
         userMatchedAnswers1.setText("");
+        mPresenter.showInLoop();
     }
 
     @Override

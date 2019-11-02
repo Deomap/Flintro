@@ -1,9 +1,10 @@
 package com.deomap.flintro.adapter.Apadter_LA_Matches;
 
+//аналогично UnitLAA
+
 public class UnitLAM {
-    private String userName;
+    private String userName, uID;
     private boolean liked;
-    private String uID;
 
 
     public UnitLAM(String userName, String uID){
@@ -11,15 +12,16 @@ public class UnitLAM {
         this.liked=true;
         this.uID = uID;
     }
+
     public String getUserName(){
         return this.userName;
     }
-    public void setLiked(boolean liked) {
-        this.liked = liked;
+    public boolean getLiked() {
+        return liked;
     }
     public String getuID(){return this.uID;}
 
-    public boolean getLiked() {
-        return liked;
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }

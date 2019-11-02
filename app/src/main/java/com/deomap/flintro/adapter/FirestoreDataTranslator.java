@@ -9,17 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//данный класс активно эксплуатируется другими, чтобы не захламлять и так большую гору кода в Presenter'ах
+//Методы не универсальны, для каждого типа документа и для разных задач написан отдельный метод
+//Названия методов не самые лучшие, зато говорящие, класс все равно больше похож на самописную библиотеку
 public class FirestoreDataTranslator {
-    //QueryDocumentSnapshot queryDocumentSnapshot;
 
+    //конструктор
     public FirestoreDataTranslator(){
 
     }
 
     public String QDS_string_to_array(QueryDocumentSnapshot queryDocumentSnapshot,String arg){
-        int size = queryDocumentSnapshot.getData().size();
         Map<String,Object> map = queryDocumentSnapshot.getData();
-        //Log.i("FDT/QDS_string_to_array", map.toString());
         String s="";
         if(arg.equals("id")) {
             s = queryDocumentSnapshot.getId();
@@ -30,10 +31,11 @@ public class FirestoreDataTranslator {
         return s;
     }
 
+    //например здесь происходит перевод HashMap, полученного из базы данных Firebase в список, содержащий только value
+    //весь метод по сути создан для QuestionsPresenter
     public ArrayList<String> DS_QP_getAnswers_string_to_array(DocumentSnapshot documentSnapshot, String arg){
-        int size = documentSnapshot.getData().size();
+
         Map<String,Object> map = documentSnapshot.getData();
-        //Log.i("FDT/QDS_string_to_array", map.toString());
         if(arg.equals("AL")){
             ArrayList<String> answersList = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {
@@ -43,6 +45,7 @@ public class FirestoreDataTranslator {
             }
             return answersList;
         }
+        //а здесь key
         if(arg.equals("AIDL")){
             ArrayList<String> answersIDList = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {
@@ -53,29 +56,25 @@ public class FirestoreDataTranslator {
             }
             return answersIDList;
         }
-        if(arg.equals("AVL")){
-            ArrayList<String> answersIDList = new ArrayList<>();
-            for(Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue().toString();
-                //String nk = key.split(",")[1];
 
-            }
-            return answersIDList;
-        }
         return null;
     }
 
     public ArrayList<String> DS_SP_getList_string_to_array(DocumentSnapshot documentSnapshot, String arg){
-        int size = documentSnapshot.getData().size();
         Map<String,Object> map = documentSnapshot.getData();
-        //Log.i("FDT/QDS_string_to_array", map.toString());
-        if(arg.equals("PSInfo/swipe")){
+        if(arg.equals("PSInfo/swipeID")){
             ArrayList<String> list = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {
                 String key = entry.getKey();
-                String value = entry.getValue().toString();
                 list.add(key);
+            }
+            return list;
+        }
+        if(arg.equals("PSInfo/swipePriority")){
+            ArrayList<String> list = new ArrayList<>();
+            for(Map.Entry<String, Object> entry : map.entrySet()) {
+                String value = entry.getValue().toString();
+                list.add(value);
             }
             return list;
         }
@@ -86,33 +85,11 @@ public class FirestoreDataTranslator {
 
         int size = documentSnapshot.getData().size();
         Map<String,Object> map = documentSnapshot.getData();
-        //Log.i("FDT/QDS_string_to_array", map.toString());
-
-        if(arg.equals("meLikes/yesm")){
-            ArrayList<String> list = new ArrayList<>();
-            for(Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue().toString();
-                if(value.equals("yesm")) {list.add(key);}
-            }
-            return list;
-        }
-
-        if(arg.equals("meLikes/nom")){
-            ArrayList<String> list = new ArrayList<>();
-            for(Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue().toString();
-                if(value.equals("nom")){list.add(key);}
-            }
-            return list;
-        }
 
         if(arg.equals("meLikes/uid")){
             ArrayList<String> list = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {
                 String key = entry.getKey();
-                String value = entry.getValue().toString();
                 list.add(key);
             }
             return list;
@@ -121,7 +98,6 @@ public class FirestoreDataTranslator {
         if(arg.equals("iLike/answers")){
             ArrayList<String> list = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
                 String value = entry.getValue().toString();
                 list.add(value);
             }
@@ -132,18 +108,6 @@ public class FirestoreDataTranslator {
             ArrayList<String> list = new ArrayList<>();
             for(Map.Entry<String, Object> entry : map.entrySet()) {
                 String key = entry.getKey();
-                String value = entry.getValue().toString();
-                list.add(key);
-                //Log.i("value",key);
-            }
-            return list;
-        }
-
-        if(arg.equals("iLike/swipe")){
-            ArrayList<String> list = new ArrayList<>();
-            for(Map.Entry<String, Object> entry : map.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue().toString();
                 list.add(key);
             }
             return list;

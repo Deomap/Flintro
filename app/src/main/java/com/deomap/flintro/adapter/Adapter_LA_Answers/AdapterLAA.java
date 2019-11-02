@@ -27,17 +27,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+//адаптер для LikesActivity для отображения ответов в виде сложного списка
 public class AdapterLAA extends ArrayAdapter<UnitLAA> {
+
     private LayoutInflater inflater;
     private int layout;
     private ArrayList<UnitLAA> unitList;
 
+    //в этот конструктор передается список с описанием, которое должно быть вставлено в каждую отдельную ячейку списка, к которому адаптер прикреплен
     public AdapterLAA(Context context, int resource, ArrayList<UnitLAA> units) {
         super(context, resource, units);
         this.unitList = units;
         this.layout = resource;
         this.inflater = LayoutInflater.from(context);
     }
+
+    //сюда циклом передается каждая ячейка списка
     public View getView(int position, View convertView, final ViewGroup parent) {
 
         final ViewHolder viewHolder;
@@ -45,15 +51,19 @@ public class AdapterLAA extends ArrayAdapter<UnitLAA> {
             convertView = inflater.inflate(this.layout, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
-        }
-        else{
+        } else{
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
+        //получаем инфу для конкретно этой ячейки списка по позиции
         final UnitLAA unit = unitList.get(position);
 
+        //заполняем ячейку (в данном случае понравившимися ответами других пользователей и соответственно вопросами
         viewHolder.answerField.setText(unit.getAnswer());
         viewHolder.questionField.setText(unit.getQuestion());
 
+        //ставим слушатель, который при нажатии на кнопку будет удалять ответ из понравившихся
+        //(да, понимаю, адаптер списка, работающий напрямую с сетью, это жестко, но мне показалось это лучше чем писать отдельную модель)
         viewHolder.likedIBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,13 +85,7 @@ public class AdapterLAA extends ArrayAdapter<UnitLAA> {
             }
         });
 
-        viewHolder.answerField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
+        //при нажатии на поле вопроса все тот же слушатель кликов открывает ChatActivity, куда передате ID собеседника)
         viewHolder.questionField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +101,7 @@ public class AdapterLAA extends ArrayAdapter<UnitLAA> {
         return convertView;
     }
 
+    //тут хранятся объекты "обобщенной ячейки" списка (описание ячейки лежит в unit_laa.xml)
     private class ViewHolder {
         final ImageButton likedIBtn;
         final TextView questionField, answerField;

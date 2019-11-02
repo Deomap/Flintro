@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.nio.file.FileVisitResult;
 
+//здесь просто
 public class LoginPresenter implements LoginContract.LoginPresenter{
     private LoginContract.vSignIn mView;
     private LoginContract.Repository mRepository;

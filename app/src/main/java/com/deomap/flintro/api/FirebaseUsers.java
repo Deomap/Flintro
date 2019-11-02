@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+//аналогично FirebaseCloustore, только для Auth и User
 public class FirebaseUsers{
 
     //FBU CRASHES APP

@@ -70,6 +70,10 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                                 mView.showToast("NP");
 
 
+                                Map<String, Object> setup = new HashMap<>();
+                                setup.put("mainStatus","null");
+
+
                                 DocumentReference docRef = new FirebaseCloudstore().DBInstance().collection("users").document(fbu.curUser().getUid());
                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
