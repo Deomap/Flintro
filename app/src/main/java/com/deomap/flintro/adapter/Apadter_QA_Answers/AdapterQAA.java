@@ -74,6 +74,8 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d("AQAA", "DocumentSnapshot successfully written!");
+
+                                viewHolder.likedIBtn.setImageResource(R.drawable.round_favorite_black_18);
                                 //viewHolder.likedIBtn.set
                             }
                         })

@@ -40,9 +40,11 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     private ArrayList<String>  questionsIDList = new ArrayList<>();
     private ArrayList<String>  answersList  = new ArrayList<>();
     private ArrayList<String>  answersUserIDList =  new ArrayList<>();
-    private ArrayList<String> votesList = new ArrayList<>();
+    //private ArrayList<String> votesList = new ArrayList<>();
     String selectedQuestion = "null";
     public String selectedTopic = "null";
+    public  String selectedTopicRus ="null";
+    int poss;
     private ArrayList<String>  answersFinalList = new ArrayList<>();
 
     //stage отвечает за режим, в котором сейчас все отображается в активности
@@ -77,6 +79,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         questionsIDList.clear();
         questionsVotesList.clear();
         selectedTopic = tpm.topicNameEng(pos);
+        selectedTopicRus=tpm.topicNameRus(pos);
 
         db.collection("interests").document(selectedTopic).collection("questions")
                 .get()
@@ -92,7 +95,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                                 //questionsVotesList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"votes"));
 
                                 stage = 1;
-                                mView.setMainText("Вопросы");
+                                mView.setMainText(selectedTopicRus);
                                 mView.initiateQuestionsList(questionsList);
                                 mView.itemsAvailibilitySet(stage);
                             }
@@ -107,14 +110,15 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     //получение списка ответов по выбранному вопросу
     @Override
     public void getAnswers(int pos, String fromWho) {
+        this.poss=pos;
         FirebaseFirestore db = fbcs.DBInstance();
         //
         answersList.clear();
         answersUserIDList.clear();
-        votesList.clear();
         answersFinalList.clear();
         if(!fromWho.equals("fromQA")){
             selectedTopic = tpm.topicNameEng(pos);
+            selectedTopicRus=tpm.topicNameRus(pos);
             selectedQuestion = fromWho;
         }
         else{
@@ -131,9 +135,9 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         Log.d("QP/getAnswers()", "DocumentSnapshot data: " + document.getData());
                         answersList = fdt.DS_QP_getAnswers_string_to_array(document,"AL");
                         answersUserIDList = fdt.DS_QP_getAnswers_string_to_array(document,"AIDL");
-                        votesList = fdt.DS_QP_getAnswers_string_to_array(document, "AVL");
+                        //votesList = fdt.DS_QP_getAnswers_string_to_array(document, "AVL");
 
-                        mView.setMainText("Ответы пользователей");
+                        mView.setMainText(selectedTopicRus+": "+questionsList.get(poss));
                         stage = 2;
 
                         for(int i = 0 ;i<answersList.size();i++){
@@ -160,7 +164,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     //отправка ответа пользователя в БД
     @Override
     public void sendUserAnswer(String answerText) {
-        if(!answerText.isEmpty()){
+        if(!(answerText.length()<30 || answerText.length()>170)){
             String userID = fbu.curUser().getUid();
 
             Map<String, Object> answer = new HashMap<>();
@@ -185,12 +189,24 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                             Log.w("QP/sendUserAnswer", "Error writing document", e);
                         }
                     });
+        } else{
+            if(answerText.length()<30) mView.toast("Вы написали слишком мало :(",1);
+            if(answerText.length()>150) mView.toast("Вы написали слишком много :)",1);
+        }
+    }
+
+    private void setTextWithStage(){
+        switch (stage) {
+            case 0:mView.setMainText("О чём вы сейчас думаете?"); break;
+            case 1:mView.setMainText(selectedTopicRus); break;
+            case 2:mView.setMainText(selectedTopicRus+": "+questionsList.get(poss)); break;
         }
     }
 
     //нажата кнопка "Назад"
     @Override
     public void backStage() {
+        setTextWithStage();
         stage--;
         mView.itemsAvailibilitySet(stage);
     }

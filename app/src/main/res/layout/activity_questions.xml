@@ -11,41 +11,31 @@
         android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:background="@color/colorWhite"
-        app:itemIconTint="@color/graygray"
+        app:itemIconTint="@color/bottom_nav_icon_color_selector"
         app:itemTextColor="@color/graygray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation" />
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
+        android:gravity = "center"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-    <GridView
-        android:id="@+id/interestsGrid"
-        android:layout_width="380dp"
-        android:layout_height="468dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:horizontalSpacing="1dp"
-        android:numColumns="3"
-        android:verticalSpacing="1dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/nav_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.469" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="О чём вы сейчас думаете?"
+            android:gravity = "center"
+            android:textSize="20sp"
+            android:id="@+id/toolbarTV1" />
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/mainText"
@@ -55,20 +45,41 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:enabled="false"
         android:gravity="center"
         android:text="О чем думаете?"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.011" />
+
+    <GridView
+        android:id="@+id/interestsGrid"
+        android:layout_width="387dp"
+        android:layout_height="451dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:horizontalSpacing="1dp"
+        android:numColumns="3"
+        android:verticalSpacing="7dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.784" />
 
     <ListView
         android:id="@+id/questionsList"
-        android:layout_width="382dp"
-        android:layout_height="466dp"
+        android:layout_width="385dp"
+        android:layout_height="377dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -76,25 +87,25 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.555"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.465" />
+        app:layout_constraintVertical_bias="0.637" />
 
     <ListView
         android:id="@+id/answersList"
-        android:layout_width="381dp"
-        android:layout_height="464dp"
+        android:layout_width="388dp"
+        android:layout_height="376dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintHorizontal_bias="0.785"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.478" />
+        app:layout_constraintVertical_bias="0.63" />
 
     <EditText
         android:id="@+id/userAnswer"
@@ -102,7 +113,9 @@
         android:layout_width="302dp"
         android:layout_height="52dp"
         android:ems="10"
+        android:hint="Ответ от 20 до 170 символов"
         android:inputType="textPersonName"
+        android:maxLength="150"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.146"
@@ -136,11 +149,103 @@
         android:tint="#FF8C00"
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.017"
+        app:layout_constraintHorizontal_bias="0.014"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054"
+        app:layout_constraintVertical_bias="0.094"
         app:srcCompat="@drawable/arrowleftcircle" />
+
+    <ImageView
+        android:id="@+id/PopularBtn"
+        android:layout_width="95dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.943"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.109"
+        app:srcCompat="@drawable/alertcircle" />
+
+    <ImageView
+        android:id="@+id/FavoriteBtn"
+        android:layout_width="95dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.112"
+        app:srcCompat="@drawable/alertcircle" />
+
+    <ImageView
+        android:id="@+id/forYouBtn"
+        android:layout_width="84dp"
+        android:layout_height="73dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.106"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.113"
+        app:srcCompat="@drawable/alertcircle" />
+
+    <TextView
+        android:id="@+id/sTV1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Для вас"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.143"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.218" />
+
+    <TextView
+        android:id="@+id/sTV2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Избранное"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.205" />
+
+    <TextView
+        android:id="@+id/sTV3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Популярное"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.208" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

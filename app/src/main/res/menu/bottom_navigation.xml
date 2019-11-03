@@ -2,26 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_swipe"
-        android:icon="@drawable/weatherhurricane"
-        android:title="@string/title_swipe" />
+        android:icon="@drawable/baseline_explore_black_48"
+        android:title="@string/title_swipe"
+        />
 
     <item
         android:id="@+id/navigation_likes"
-        android:icon="@drawable/heartmultiple"
+        android:icon="@drawable/round_favorite_black_48"
         android:title="@string/title_likes" />
 
     <item
         android:id="@+id/navigation_questions"
-        android:icon="@drawable/help"
+        android:icon="@drawable/baseline_help_black_48"
         android:title="@string/title_questions" />
 
     <item
         android:id="@+id/navigation_chat"
-        android:icon="@drawable/chat"
+        android:icon="@drawable/round_forum_black_48"
         android:title="@string/title_chat" />
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/account2"
+        android:icon="@drawable/baseline_person_black_48"
         android:title="@string/title_profile" />
 </menu>

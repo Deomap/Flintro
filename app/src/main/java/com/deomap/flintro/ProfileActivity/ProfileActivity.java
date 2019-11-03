@@ -67,6 +67,10 @@ public class ProfileActivity extends AppCompatActivity implements MainPartContra
         profilePhoto = findViewById(R.id.profilePhoto);
         userName = findViewById(R.id.userName);
         mPresenter.setupProfile();
+
+        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         navView.getMenu().findItem(R.id.navigation_profile).setChecked(true);
         overridePendingTransition(0, 0);
     }

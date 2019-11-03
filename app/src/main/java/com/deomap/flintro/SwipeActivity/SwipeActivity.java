@@ -96,6 +96,9 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_swipe).setChecked(true);
 
+        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         foundUserDislikeBtn = findViewById(R.id.foundUserDislikeBtn);
         foundUserLikeBtn = findViewById(R.id.foundUserLikeBtn);
         foundUserMainStatus = findViewById(R.id.foundUserMainStatus);

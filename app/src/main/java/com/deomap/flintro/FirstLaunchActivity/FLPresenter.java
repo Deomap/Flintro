@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.deomap.flintro.MainPart.MainOpsModel;
+import com.deomap.flintro.adapter.FirestoreDataTranslator;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.deomap.flintro.adapter.TopicsPositionMatch;
 import com.deomap.flintro.api.FirebaseCloudstore;
@@ -34,6 +35,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     private int stage = 0;
     String userName = "";
     String text="";
+    String  topic;
     FirebaseCloudstore fbcu = new FirebaseCloudstore();
     FirebaseUsers fbu = new FirebaseUsers();
 
@@ -50,8 +52,26 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     public void initiateNextStage(String arg) {
         //Log.i("stage before",Integer.toString(stage));
         if(stage == 1){
-            userName = text;
+            if(!(text.length()<2 || text.length()>30)){
+                userName=text;
+                text="";
+            }
+            else{
+                mView.toast("Введите имя длиной от 2 до 30 символов",1);
+                stage--;
+            }
         }
+        if(stage == 4 || stage == 5 || stage == 6){
+            if(!(text.length()<30 || text.length()>170)){
+                userName=text;
+                text="";
+            }
+            else{
+                mView.toast("Ответ должен быть длиной от 30 до 170 символов",1);
+                stage--;
+            }
+        }
+
         stage++;
         //Log.i("stage after",Integer.toString(stage));
         FirebaseFirestore db = fbcu.DBInstance();
@@ -66,14 +86,24 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 Log.i("st1","!!");
                 break;
             case 3:
-                if(!arg.equals("")){
-                    userName = arg;
-                    mView.askInterests();
-                    mView.changeItemsAvailibility("interests");
-                    Log.i("st2","!!");
-                }
+                userName = arg;
+                mView.askInterests();
+                mView.changeItemsAvailibility("interests");
+                Log.i("st2","!!");
                 break;
             case 4:
+                mView.askQ1m("Что бы о вас сказал ваш лучший друг?");
+                mView.changeItemsAvailibility("q1m");
+                break;
+            case 5:
+                mView.askQ2("Как вы относитесь к фильмам ужасов?");
+                mView.changeItemsAvailibility("q2");
+                break;
+            case 6:
+                mView.askQ3("Согласился бы ты быть единственным зрителем на концерте любимой группы?");
+                mView.changeItemsAvailibility("q3");
+                break;
+            case 7:
                 mView.changeItemsAvailibility("finish");
                 buildProfile();
                 break;
@@ -195,34 +225,34 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     //всё также, формирование необходимых файлов в БД
     private void setupDocuments(){
         FirebaseUsers fu = new FirebaseUsers();
-        Map<String, Object> setup = new HashMap<>();
+        final Map<String, Object> setup = new HashMap<>();
 
-
+        final FirebaseFirestore fcs_db =  new FirebaseCloudstore().DBInstance();
         setup.put("mainStatus","null");
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
         setup.put("txtSwipe1","null");
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
         setup.put("txtSwipe2","null");
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
         setup.put("txtSwipe3","null");
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).update(setup);
+        fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
         setup.put("null","null");
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("PSInfo").document("forSwipe").set(setup);
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("answeredQuestions").document("null").set(setup);
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("interests").document("topics").set(setup);
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("MLNotMutual").set(setup);
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("answers").set(setup);
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("meLikes").set(setup);
-        new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("likes").document("swipe").set(setup);
-        setup.clear();
+        fcs_db.collection("users").document(fu.uID()).collection("PSInfo").document("forSwipe").set(setup);
+        fcs_db.collection("users").document(fu.uID()).collection("answeredQuestions").document("null").set(setup);
+        fcs_db.collection("users").document(fu.uID()).collection("interests").document("topics").set(setup);
+        fcs_db.collection("users").document(fu.uID()).collection("likes").document("MLNotMutual").set(setup);
+        fcs_db.collection("users").document(fu.uID()).collection("likes").document("answers").set(setup);
+        fcs_db.collection("users").document(fu.uID()).collection("likes").document("meLikes").set(setup);
+        fcs_db.collection("users").document(fu.uID()).collection("likes").document("swipe").set(setup);
+        //setup.clear();
     }
 
 }

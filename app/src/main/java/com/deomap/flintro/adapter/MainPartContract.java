@@ -42,6 +42,10 @@ public interface MainPartContract {
         void askName();
         void askInterests();
         void askPhoto();
+        void askSex();
+        void askQ1m(String txt);
+        void askQ2(String txt);
+        void askQ3(String txt);
         void accessSharedPreferences(String mode, String prefName, String type,String key, String value);
         void changeItemsAvailibility(String arg);
         void uploadImage();

@@ -45,7 +45,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     private ListView questionsList;
     private ListView answersList;
     ArrayList<UnitQAA> unitsQAA = new ArrayList<>();
-
+    private androidx.appcompat.widget.Toolbar myToolbar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -95,7 +95,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         questionsList = findViewById(R.id.questionsList);
         questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
 
-        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
         //если активность открыта из LikesActivity (пользователь нажал на текстовое поле с вопросом), то открывается список ответов на этот вопрос
@@ -187,7 +187,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
 
     @Override
     public void setMainText(String text){
-        mainText.setText(text);
+        TextView tv = findViewById(R.id.toolbarTV1);
+        tv.setText(text);
     }
 
     //все ListView находятся на одном экране, следовательно в зависимости от того, смотрит пользователь список тем, вопросов, или ответов, нужно устанавливать видимыми разные списки

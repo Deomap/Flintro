@@ -97,6 +97,9 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         BottomNavigationView navView = findViewById(R.id.nav_view);
         unitsList = findViewById(R.id.likesList);
 
+        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         overridePendingTransition(0, 0);

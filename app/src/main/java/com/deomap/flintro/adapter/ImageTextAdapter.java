@@ -54,6 +54,13 @@ public class ImageTextAdapter extends BaseAdapter {
         }
 
         //здесь определяются ссылки на картинки, который доолжны стоять в каждой ячейки
-        public Integer[] mThumbIds = { R.drawable.wowrcon, R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon,R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon};
+        public Integer[] mThumbIds = {
+                R.drawable.wowrcon,R.drawable.wowrcon, R.drawable.wowrcon,
+                R.drawable.wowrcon,R.drawable.wowrcon, R.drawable.wowrcon,
+                R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon,
+                R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon,
+                R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon,
+                R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon,
+                R.drawable.wowrcon, R.drawable.wowrcon, R.drawable.wowrcon};
     }
 

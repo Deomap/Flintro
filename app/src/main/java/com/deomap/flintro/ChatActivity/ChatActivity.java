@@ -3,7 +3,9 @@ package com.deomap.flintro.ChatActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -22,12 +24,19 @@ import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.adapter.TopicsPositionMatch;
+import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseUsers;
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 //активность чата, здесь происходит общение с собеседником
 public class ChatActivity extends AppCompatActivity implements MainPartContract.iChatActivity{
@@ -104,6 +113,10 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mPresenter = new ChatPresenter(this);
+
+        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Чат");
+        setSupportActionBar(myToolbar);
 
         //здесь определяется с каким собеседником нужно открыть диалог по полученному из LikesActivity User-ID
         Intent intent = getIntent();

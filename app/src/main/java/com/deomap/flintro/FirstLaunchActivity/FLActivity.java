@@ -24,6 +24,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.deomap.flintro.MainActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
@@ -148,6 +149,62 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
         }
+        if(arg.equals("sex")){
+            editText1.setVisibility(View.VISIBLE);
+            editText1.setEnabled(true);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(true);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
+        }
+        if(arg.equals("q1m")){
+            editText1.setVisibility(View.VISIBLE);
+            editText1.setEnabled(true);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(true);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
+        }
+        if(arg.equals("q2")){
+            editText1.setVisibility(View.VISIBLE);
+            editText1.setEnabled(true);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(true);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
+        }
+        if(arg.equals("q3")){
+            editText1.setVisibility(View.VISIBLE);
+            editText1.setEnabled(true);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(true);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
+        }
         if(arg.equals("finish")){
             editText1.setVisibility(View.GONE);
             editText1.setEnabled(false);
@@ -185,11 +242,13 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
 
     @Override
     public void toast(String msg, int time) {
-
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void askName() {
+        editText1.setHint("Имя");
+        editText1.setText("");
         textView1.setText("Как вас зовут?");
     }
 
@@ -202,6 +261,31 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
     public void askPhoto() {
         textView1.setText("Загрузите ваше фото: ");
 
+    }
+
+    @Override
+    public void askSex() {
+    }
+
+    @Override
+    public void askQ1m(String txt) {
+        editText1.setText("");
+        editText1.setHint("Ответ");
+        textView1.setText("Что бы о вас сказал ваш лучший друг?");
+    }
+
+    @Override
+    public void askQ2(String txt) {
+        editText1.setText("");
+        editText1.setHint("Ответ");
+        textView1.setText("Как вы относитесь к фильмам ужасов?");
+    }
+
+    @Override
+    public void askQ3(String txt) {
+        editText1.setText("");
+        editText1.setHint("Ответ");
+        textView1.setText("Согласились ли вы быть единственным зрителем на концерте любимой группы?");
     }
 
     //происходит вызов активности, где пользователь может выбрать свое фото

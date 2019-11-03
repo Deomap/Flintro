@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".ChatActivity.ChatActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,12 +15,22 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:background="@color/colorWhite"
-        app:itemIconTint="@color/graygray"
         app:itemTextColor="@color/graygray"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:itemIconTint="@color/bottom_nav_icon_color_selector"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_navigation" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <EditText
         android:id="@+id/input"
@@ -31,7 +42,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
-        android:hint="  От 20 до 150 символов"
+        android:hint=""
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,17 +74,18 @@
     <ImageButton
         android:id="@+id/fab"
         style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="67dp"
-        android:layout_height="67dp"
+        android:layout_width="53dp"
+        android:layout_height="57dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="#F9F9F9"
+        android:tint="#00BFFF"
         app:layout_constraintBottom_toBottomOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.94"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.896"
-        app:srcCompat="@drawable/sendcircle" />
+        app:srcCompat="@drawable/round_send_black_48" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
