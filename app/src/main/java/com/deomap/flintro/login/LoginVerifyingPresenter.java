@@ -34,6 +34,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 //MODE 1 - REGISTER
 //MODE 3 - SIGNED IN, EMAIL NOT VERIFIED
 
+//Presenter для VerifyingSignInActivity
+//эти 2 класса отвечают за весь вход и регистрацию пользователя
 public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPresenter, LoginModel.MyCallback {
     private LoginContract.vSignInVerifying mView;
     private LoginContract.Repository mRepository;
@@ -47,6 +49,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
         this.mRepository = new LoginModel();
     }
 
+    //проверка на совпадение пароля и его повтора
     @Override
     public void checkPassword(String passwordNeeded, String passwordEntered, TextView v){
         if(passwordNeeded.equals(passwordEntered)){
@@ -54,9 +57,12 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
         }
     }
 
+    //здесь в зависимости от режима (режим прописан сверху) происходит регистрация пользователя/запрос разрешения на вход
     @Override
     public void tryTo(final String email, String password, String passwordRepeated, int mode) {
         Log.i("LVP-modeswitch", String.valueOf(mode));
+
+        //вход
         if(mode == 0){
             mRepository.logIn(email,password);
             fbu.userInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
@@ -67,12 +73,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                         FirebaseUser user = fbu.curUser();
                         if(user != null){
                             if(user.isEmailVerified()){
-                                mView.showToast("NP");
-
-
-                                Map<String, Object> setup = new HashMap<>();
-                                setup.put("mainStatus","null");
-
+                                mView.showToast("Добро пожаловать :)");
 
                                 DocumentReference docRef = new FirebaseCloudstore().DBInstance().collection("users").document(fbu.curUser().getUid());
                                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -81,9 +82,8 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                                         if (task.isSuccessful()) {
                                             DocumentSnapshot document = task.getResult();
                                             if (document.exists()) {
-                                                Log.d("MA", "DocumentSnapshot data: " );
+                                                Log.d("LVP", "DocumentSnapshot data: " );
                                                 String docData=document.getString("firstLaunch");
-                                                //!YY!H!Y!HUH!!!UYHCIUWBCIOWNXIMX<OPW<
                                                 if(docData.equals("y")){
                                                     mView.goToMainScreen(13);
                                                 }
@@ -91,23 +91,18 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                                                     mView.goToMainScreen(0);
                                                 }
                                             } else {
-                                                Log.d("MA", "No such document");
+                                                Log.d("LVP", "No such document");
                                             }
                                         } else {
-                                            Log.d("MA", "get failed with ", task.getException());
+                                            Log.d("LVP", "get failed with ", task.getException());
                                         }
                                     }
                                 });
-
                             }
                             else{
                                 mView.neededMode(3);
                                 mView.showToast("No email verified");
                             }
-                        //}
-                        //else{
-                        //    mView.showToast("login failure");
-                        //}
                         flag = false;
                     }
                     else{
@@ -116,6 +111,8 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                 }
             });
         }
+
+        //регистрация
         if(mode == 1) {
             if (checkPassword(password, passwordRepeated) == 1) {
                 FirebaseUser user = fbu.curUser();
@@ -126,6 +123,8 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
                 mView.showToast("Пароли не совпадают");
             }
         }
+
+        //пользователь зарегестрирован, но не подтвердил почту
         if(mode == 3){
             Log.i("LVP-modeswitch", String.valueOf(mode));
             FirebaseUser user = fbu.curUser();
@@ -163,8 +162,7 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
             });
     }
 
-
-
+    //добавление пользователя в БД с пометкой, что он входит в первый раз
     @Override
     public void addUserToDatabase() {
         FirebaseFirestore db = fbcs.DBInstance();
@@ -197,8 +195,9 @@ public class LoginVerifyingPresenter implements LoginContract.LoginVerifyingPres
         }
     }
 
-    //LOGGED IN = SIGNED UP :)
+    //LOGGED IN = зарегестрирован :)
 
+    //если регистрация прошла успешно, пользователю отсылается письмо
     @Override
     public void returnCallbackLoggedIn() {
         mView.neededMode(3);

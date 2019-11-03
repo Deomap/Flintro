@@ -13,6 +13,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import static android.content.ContentValues.TAG;
 
+
+
+//этот класс никак не используется, но в идеале тут должна быть вся работа с сетью
+
+
+
+
 public class MainOpsModel implements MainPartContract.iOpsModel {
 
     private FirebaseCloudstore fbcs = new FirebaseCloudstore();

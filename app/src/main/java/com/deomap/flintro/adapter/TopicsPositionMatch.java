@@ -5,9 +5,9 @@ package com.deomap.flintro.adapter;
 public class TopicsPositionMatch {
 
     //здесь определяются темы на русском (этот список например используется в ImageTextAdapter при заполнении самой сетки (на русском))
-    final String[] topicsRus = new String[]{"Избранное","Популярное","Матеша???","ИВР","Философия","Мировоззрение","Тема 7","Тема 8","Тема 9","Тема 10", "Тема 11","Тема 12"};
+    final String[] topicsRus = new String[]{"Избранное","Популярное","","ИВР","Философия","Мировоззрение","Тема 7","Тема 8","Тема 9","Тема 10", "Тема 11","Тема 12"};
     //здесь определяются темы на английском (так они определены в БД)
-    final String[] topicsEng = new String[]{"FavoriteQuestions","Popular", "Math","","",""};
+    final String[] topicsEng = new String[]{"Favorite","Popular", "Math","","",""};
 
     public TopicsPositionMatch(){
     }

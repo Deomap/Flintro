@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import android.widget.ListView;
@@ -127,7 +128,7 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
 
     //здесь происходит отправка сообщения в базу данных реального времен с помощью FirebaseRealtimeDatabase
     private void afterCreation(){
-        Button fab =
+        ImageButton fab =
                 findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {

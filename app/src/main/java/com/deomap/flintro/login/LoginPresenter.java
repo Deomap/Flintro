@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.nio.file.FileVisitResult;
 
-//здесь просто
+//здесь просто обрабатывается выбор пользователя "Регистрация" или "Вход"
 public class LoginPresenter implements LoginContract.LoginPresenter{
     private LoginContract.vSignIn mView;
     private LoginContract.Repository mRepository;

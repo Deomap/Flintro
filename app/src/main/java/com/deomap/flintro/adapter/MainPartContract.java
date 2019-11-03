@@ -8,7 +8,7 @@ import com.deomap.flintro.MainPart.MainOpsModel;
 import java.util.ArrayList;
 
 //зачем это подробно написано в LoginContract
-//единственная проблема - эту часть было писать значительно сложнее и в итоге я решил все общение с БД перевести в Presenter  :(
+//единственная проблема - эту часть было писать значительно сложнее и в итоге я решил все общение с БД перевести в Presenter'ы  :(
 public interface MainPartContract {
     interface View{
         void startIntent(String intentName);
@@ -59,7 +59,6 @@ public interface MainPartContract {
         void getQuestions(int pos, int fromLA);
         void getAnswers(int pos, String fromWho);
         void sendUserAnswer(String answerText);
-        void answerClicked(int pos);
         void backStage();
         void fromLikesActivity(int pos, String qID);
     }

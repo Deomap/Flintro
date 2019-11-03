@@ -20,6 +20,8 @@ import com.deomap.flintro.adapter.MainPartContract;
 import com.deomap.flintro.api.SharedPreferencesHub;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+//активность профиля пользователя
+//здесь же можно перейти в настройки и тд
 public class ProfileActivity extends AppCompatActivity implements MainPartContract.iProfileActivity {
 
     ImageButton settingsButton;

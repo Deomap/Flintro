@@ -41,10 +41,11 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     private ArrayList<String>  answersList  = new ArrayList<>();
     private ArrayList<String>  answersUserIDList =  new ArrayList<>();
     private ArrayList<String> votesList = new ArrayList<>();
-    String selectedQuestion = "nullQuestion";
-    public String selectedTopic = "nullTopic";
+    String selectedQuestion = "null";
+    public String selectedTopic = "null";
     private ArrayList<String>  answersFinalList = new ArrayList<>();
 
+    //stage отвечает за режим, в котором сейчас все отображается в активности
     private int stage = 0;
     /*
     stage:
@@ -67,6 +68,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
 
     }
 
+    //получение списка вопросов по выбранной теме
     @Override
     public void getQuestions(int pos, int fromLA) {
         FirebaseFirestore db = fbcs.DBInstance();
@@ -75,7 +77,6 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         questionsIDList.clear();
         questionsVotesList.clear();
         selectedTopic = tpm.topicNameEng(pos);
-        //
 
         db.collection("interests").document(selectedTopic).collection("questions")
                 .get()
@@ -88,23 +89,22 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                                 queryDocumentSnapshot = document;
                                 questionsList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"text"));
                                 questionsIDList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"id"));
-                                questionsVotesList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"votes"));
+                                //questionsVotesList.add(fdt.QDS_string_to_array(queryDocumentSnapshot,"votes"));
 
                                 stage = 1;
                                 mView.setMainText("Вопросы");
                                 mView.initiateQuestionsList(questionsList);
                                 mView.itemsAvailibilitySet(stage);
                             }
-
                         } else {
                             Log.d("dd", "Error getting documents: ", task.getException());
                         }
 
                     }
                 });
-        //SHOULD BE IN MODEL!
     }
 
+    //получение списка ответов по выбранному вопросу
     @Override
     public void getAnswers(int pos, String fromWho) {
         FirebaseFirestore db = fbcs.DBInstance();
@@ -120,8 +120,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
         else{
             selectedQuestion = questionsIDList.get(pos);
         }
-        //Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
-        //Log.d("QP/getAnswers()", "DocumentSnapshot data: " + selectedTopic+" "+selectedQuestion);
+
         DocumentReference docRef = db.collection("interests").document(selectedTopic).collection("answers").document(selectedQuestion);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -141,7 +140,6 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                             answersFinalList.add(selectedTopic+","+selectedQuestion+","+answersUserIDList.get(i));
                         }
                         mView.initiateAnswersList(answersList, answersFinalList);
-
                         mView.itemsAvailibilitySet(stage);
                     } else {
                         Log.d("QP/getAnswers()", "No such document");
@@ -151,15 +149,15 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                 }
             }
         });
-        //SHOULD BE IN MODEL!
     }
 
+    //получсение ответов по ID вопроса, на который кликнул пользователь в LikesActivity
     @Override
     public void fromLikesActivity(int pos,  String qID){
         getAnswers(pos,qID);
-
     }
 
+    //отправка ответа пользователя в БД
     @Override
     public void sendUserAnswer(String answerText) {
         if(!answerText.isEmpty()){
@@ -169,7 +167,6 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
             answer.put(userID, answerText);
 
             FirebaseFirestore db = fbcs.DBInstance();
-            //Log.i("QP/sendUserAnswer()", selectedTopic+" "+selectedQuestion);
             Log.i("QP/sendUserAnswer()", selectedQuestion+"!");
             //
             db.collection("interests").document(selectedTopic).collection("answers").document(selectedQuestion)
@@ -178,6 +175,7 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("QP/sendUserAnswer()", "DocumentSnapshot successfully written!");
+                            mView.toast("Ответ отправлен :)",1);
                             addAnsweredQuestionToUser();
                         }
                     })
@@ -187,46 +185,17 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                             Log.w("QP/sendUserAnswer", "Error writing document", e);
                         }
                     });
-            //
         }
-
-        //MODELMODELMODEL!
     }
 
-    @Override
-    public void answerClicked(int pos) {
-        /*
-        Map<String, Object> like = new HashMap<>();
-        //Log.i("QP/sendUserAnswer()", fbu.curUser().getUid()+" "+selectedQuestion);
-        //Log.i("QP/sendUserAnswer()", selectedQuestion+"!!");
-        String answerPath = selectedTopic+","+selectedQuestion+","+answersUserIDList.get(pos);
-        like.put(answerPath,answersList.get(pos));
-        //
-        fbcs.DBInstance().collection("users").document(fbu.curUser().getUid()).collection("likes").document("answers")
-                .update(like)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("QP/answerClicked()", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("QP/answerClicked()", "Error writing document", e);
-                    }
-                });
-
-        mView.toast("liked",0);
-        */
-    }
-
+    //нажата кнопка "Назад"
     @Override
     public void backStage() {
         stage--;
         mView.itemsAvailibilitySet(stage);
     }
 
+    //добавление  отвеченного вопроса в профиль пользователя
     private void addAnsweredQuestionToUser(){
         Map<String, Object> answer = new HashMap<>();
         //Log.i("QP/sendUserAnswer()", fbu.curUser().getUid()+" "+selectedQuestion);
@@ -248,7 +217,5 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                 });
     }
 }
-
-// 9 11 9 10
 
 

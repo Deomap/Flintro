@@ -37,6 +37,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
         mLoginButton = findViewById(R.id.loginButton);
         mEmailVerified =findViewById(R.id.emailVerified);
         Intent intent = getIntent();
+        //получаем информацию из SignInActivity, что хочет пользователь, зарегестрироваться или войти
         mode = intent.getIntExtra("mode", 1);
         neededMode(mode);
 
@@ -49,12 +50,13 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
+    //UI
     @Override
     public void changeTextViewColor(TextView v, String color) {
-        //NO CHANGING COLOR ACTUALLY - ADD
         v.setEnabled(false);
     }
 
+    //посколько все элементы для всех 3х режимов находятся на одном экране, для каждого режима устанавливается видимость отдельных элементов
     @Override
     public void neededMode(int mode) {
         this.mode = mode;
@@ -94,17 +96,20 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
         }
     }
 
+    //переход непосрдетственно в основную активность или в активность заполнения профиля (в зависимости от режима)
     @Override
     public void goToMainScreen(int param) {
-        mPresenter.addUserToDatabase();
 
         if(param!=0) {
             startActivity(new Intent(this, FLActivity.class));
+            mPresenter.addUserToDatabase();
         }
         else{
             startActivity(new Intent(this, QuestionsActivity.class));
         }
     }
+
+    //обработка нажатий пользователя:
 
     public void getEmail(View view){
         mPresenter.tryTo(mEmailField.getText().toString(), mPasswordField.getText().toString(),mPasswordConfirmation.getText().toString(),mode);

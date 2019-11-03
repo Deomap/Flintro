@@ -6,6 +6,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="23dp"
         android:id="@+id/message_user"
         android:textStyle="normal|bold" />
 
@@ -14,15 +15,21 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/message_user"
         android:layout_alignParentEnd="true"
+        android:textSize="12sp"
+        android:layout_marginEnd="18dp"
         android:id="@+id/message_time" />
 
     <TextView
+        android:id="@+id/message_text"
         android:layout_width="wrap_content"
+        android:maxWidth="270dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/message_user"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="23dp"
         android:layout_marginTop="5dp"
-        android:id="@+id/message_text"
+        android:maxLines="10"
+        android:singleLine="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp" />
 </RelativeLayout>

@@ -43,7 +43,7 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
 
     FirestoreDataTranslator fdt = new FirestoreDataTranslator();
 
-
+    //первоначальная загрузка списка пользователей, которые могут подойти текущему
     @Override
     public void startShowing() {
         FirebaseUsers fu =  new FirebaseUsers();
@@ -68,6 +68,7 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
         });
     }
 
+    //по очереди из списка берется ID пользователя и из БД загружается фото и другая информация
     @Override
     public void showInLoop(){
         FirebaseUsers fu =  new FirebaseUsers();
@@ -115,6 +116,8 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
         }
     }
 
+    //если текущий пользователь уже нравится тому, кого лайкнул, то они оба находятся у друг друга в списке взаимных в LikesActivity и могу перейти в чат
+    //если нет, но пользомателю, которого текущий лайкнул, в список предлагаемых добавляется текущий
     @Override
     public void liked() {
         FirebaseFirestore db = new FirebaseCloudstore().DBInstance();

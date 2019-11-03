@@ -23,27 +23,39 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
+/*
+наверное это не нужно писать
+но
+в drawable лежат изображения, используемые в приложении
+в layout лежат макеты используемые  для отображения активностей (есть еще например cellgrid - макет ячейки для сетки интересов)
+в menu лежат меню (намример меню настроект в activity_profile.xml или основное меню приложения - нижняя полоса навигации)
+gradle - штука для сборки проекта
+AndroidManifest.xml - там прописано все что  должна знать ОС о моем приложении + необходимые разрешения и информация для Google play
+ */
+
+
+
+//MainActivity - основная точка входа в приложение, здесь проверяется нужно отправить пользователя в активность входа или в основную часть приложения
+//и не только
 public class MainActivity extends AppCompatActivity {
-TextView helloWorldD;
 
 public static Context contextOfApplication;
 
-FirebaseCloudstore fbcs;
+    FirebaseCloudstore fbcs;
     FirebaseUsers fbu;
-FirebaseFirestore db ;
+    FirebaseFirestore db ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
          fbu= new FirebaseUsers();
         FirebaseUser user = fbu.curUser();
-       // new ContextBridge().setContext(this);
         fbcs = new FirebaseCloudstore();
         db = fbcs.DBInstance();
 
-        //
-        fbu.userInstance().signOut();
-
+        //fbu.userInstance().signOut();
 
         contextOfApplication = getApplicationContext();
         appStarted as = new appStarted();
@@ -62,8 +74,9 @@ FirebaseFirestore db ;
                 startActivity(intent);
             }
         }
-
     }
+
+    //проверяется отметка в БД о том, входит пользователь в первый раз или нет
     private void ifFLActivityNeeded(){
         DocumentReference docRef = db.collection("users").document(fbu.curUser().getUid());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -74,7 +87,7 @@ FirebaseFirestore db ;
                     if (document.exists()) {
                         Log.d("MA", "DocumentSnapshot data: " );
                         String docData=document.getString("firstLaunch");
-                        //!YY!H!Y!HUH!!!UYHCIUWBCIOWNXIMX<OPW<
+
                         if(docData.equals("y")){
                             startActivity(new Intent(MainActivity.this, FLActivity.class));
                         }
@@ -91,10 +104,41 @@ FirebaseFirestore db ;
             }
         });
     }
+
+    //через этот метод все остальные классы (не активности) приложения могут получать контекст, чтобы делать некоторые из задач, которые могут напрямую только активности
     public static Context getContextOfApplication(){
         return contextOfApplication;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

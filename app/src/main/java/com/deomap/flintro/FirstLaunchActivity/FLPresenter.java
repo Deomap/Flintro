@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -127,6 +129,23 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
             }
         });
 
+        Map<String, Object> FL = new HashMap<>();
+        FL.put("firstLaunch","y");
+        new FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().uID())
+                .update(FL)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("FLP/buildProfile()", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FLP/buildProfile()", "Error writing document", e);
+                    }
+                });
+
         db.collection("users").document(new FirebaseUsers().uID()).collection("interests").document("topics")
                 .update(userPickedInterests)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -156,6 +175,12 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                         Log.w("FLP/buildProfile()", "Error writing document", e);
                     }
                 });
+
+        //updating displayName
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(userName).build();
+        new FirebaseUsers().curUser().updateProfile(profileUpdates);
+
 
         loadProfileData();
         mView.startIntent("Questions");

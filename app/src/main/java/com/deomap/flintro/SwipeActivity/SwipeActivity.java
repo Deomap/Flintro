@@ -21,6 +21,7 @@ import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+//автивность "Свайп"
 public class SwipeActivity extends AppCompatActivity implements MainPartContract.iSwipeActivity {
 
     private Button foundUserReportBtn;
@@ -32,7 +33,6 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
     private TextView foundUserMainStatus;
     private TextView foundUserName;
     private ImageView foundUserPhoto;
-
 
     private MainPartContract.iSwipePresenter mPresenter;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -86,6 +86,7 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
                 break;
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +111,7 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
         overridePendingTransition(0, 0);
     }
 
+    //пользователь нажимает "Нравится" или  "Не нравится", все поля обнуляются, у Presenterа запрашивается новый пользователь
 
     public void likeUserBtnClck(View view){
         foundUserName.setText("");
@@ -129,11 +131,13 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
         mPresenter.showInLoop();
     }
 
+
     @Override
     public void toast(String msg, int time) {
 
     }
 
+    //из Presenter устанавливается информация о другом предложенном пользователе
     @Override
     public void setFoundUserInfo(String fuName, String fuStatus, String fuTxt1, String fuTxt2, String fuTxt3) {
         foundUserName.setText(fuName);

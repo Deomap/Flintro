@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
 import com.deomap.flintro.LikesActivity.LikesActivity;
@@ -94,15 +95,16 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         questionsList = findViewById(R.id.questionsList);
         questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
 
+        androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
+        //если активность открыта из LikesActivity (пользователь нажал на текстовое поле с вопросом), то открывается список ответов на этот вопрос
         Intent intent   = getIntent();
         if(intent.hasExtra("fromLAPos")){
             mPresenter.fromLikesActivity(intent.getIntExtra("fromLAPos",-1), intent.getStringExtra("fromLAQID"));
         }
 
-
         itemsAvailibilitySet(0);
-        //
         overridePendingTransition(0, 0);
     }
 
@@ -112,7 +114,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         public void onItemClick(AdapterView<?> parent, View v, int position,
                                 long id) {
             mPresenter.getQuestions(position,0);
-            Log.i("okk","!!!!!!!!!!");
+            Log.i("QA/gvoicl","clicked");
 
         }
     };
@@ -129,7 +131,6 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.i("QA/answersList.OICL","clicked");
-            mPresenter.answerClicked(position);
         }
     };
 
@@ -189,6 +190,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         mainText.setText(text);
     }
 
+    //все ListView находятся на одном экране, следовательно в зависимости от того, смотрит пользователь список тем, вопросов, или ответов, нужно устанавливать видимыми разные списки
     @Override
     public void itemsAvailibilitySet(int stage) {
         if(stage == 0){
@@ -236,14 +238,13 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
 
     }
 
+    //обработка нажатия кнопки "Назад"
     public void backButtonClicked(View view){
         mPresenter.backStage();
     }
 
+
     public void userAnswerButtonClicked(View view){
         mPresenter.sendUserAnswer(userAnswer.getText().toString());
     }
-
-
-
 }

@@ -17,7 +17,7 @@ public SharedPreferencesHub(Context context){
 SharedPreferences.Editor editor;
 SharedPreferences prefs;
 
-//чтение информации
+    //чтение информации
     public String getStringSP(String prefName, String key){
         prefs = context.getSharedPreferences(prefName, MODE_PRIVATE);
         String needed =prefs.getString(key,"Nulled");
