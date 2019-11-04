@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
 import com.deomap.flintro.LikesActivity.LikesActivity;
@@ -17,8 +19,14 @@ import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.SwipeActivity.SwipeActivity;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.api.FirebaseUsers;
 import com.deomap.flintro.api.SharedPreferencesHub;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 //активность профиля пользователя
 //здесь же можно перейти в настройки и тд
@@ -63,12 +71,13 @@ public class ProfileActivity extends AppCompatActivity implements MainPartContra
         mPresenter = new ProfilePresenter((MainPartContract.iProfileActivity) this);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        settingsButton = findViewById(R.id.settingsButton);
+        //settingsButton = findViewById(R.id.settingsButton);
         profilePhoto = findViewById(R.id.profilePhoto);
         userName = findViewById(R.id.userName);
         mPresenter.setupProfile();
 
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Мой профиль");
         setSupportActionBar(myToolbar);
 
         navView.getMenu().findItem(R.id.navigation_profile).setChecked(true);
@@ -109,5 +118,31 @@ public class ProfileActivity extends AppCompatActivity implements MainPartContra
     @Override
     public void fillProfile(String name) {
         userName.setText(name);
+    }
+
+    @Override
+    public void loadPhoto(){
+        FirebaseUsers f = new FirebaseUsers();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://flintro-706e1.appspot.com");
+
+        // создаем ссылку на файл по адресу scoin.png
+        // вызываем getDownloadUrl() и устанавливаем слушатель успеха,
+        // который срабатывает в случае успеха процесса скачивания
+        storageRef.child("userAvatars").child(f.uID()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Picasso.with(ProfileActivity.this).load(uri)
+                        .into(profilePhoto);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Ошибка!", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 }

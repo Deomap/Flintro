@@ -206,8 +206,8 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     //нажата кнопка "Назад"
     @Override
     public void backStage() {
-        setTextWithStage();
         stage--;
+        setTextWithStage();
         mView.itemsAvailibilitySet(stage);
     }
 

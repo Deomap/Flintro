@@ -34,6 +34,10 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     TopicsPositionMatch tpm = new TopicsPositionMatch();
     private int stage = 0;
     String userName = "";
+    String ms  = "null";
+    Boolean photoDownloaded = false;
+    String q2 = "null";
+    String q3 =  "null";
     String text="";
     String  topic;
     FirebaseCloudstore fbcu = new FirebaseCloudstore();
@@ -59,19 +63,40 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
             else{
                 mView.toast("Введите имя длиной от 2 до 30 символов",1);
                 stage--;
+                text="";
             }
         }
         if(stage == 4 || stage == 5 || stage == 6){
             if(!(text.length()<30 || text.length()>170)){
-                userName=text;
+                if(stage==4){
+                    ms=text;
+                }
+                if(stage==5){
+                    q2=text;
+                }
+                if(stage==6){
+                    q3=text;
+                }
                 text="";
             }
             else{
                 mView.toast("Ответ должен быть длиной от 30 до 170 символов",1);
                 stage--;
+                text="";
             }
         }
-
+        if(stage==2){
+            if(photoDownloaded){
+                //pass
+                text="";
+            }
+            else{
+                mView.toast("Фото  не загружено :(",1);
+                stage--;
+                text="";
+            }
+        }
+        text="";
         stage++;
         //Log.i("stage after",Integer.toString(stage));
         FirebaseFirestore db = fbcu.DBInstance();
@@ -114,13 +139,18 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
 
     @Override
     public void onPickedInterest(int position) {
-        userPickedInterests.put(tpm.topicNameEng(position),5);
+        userPickedInterests.put(tpm.topicNameEng(position-2),5);
         Log.i("put","cff");
     }
 
     @Override
     public void setTextFromET(String text) {
         this.text = text;
+    }
+
+    @Override
+    public void setPhotoDownloadedTrue() {
+        photoDownloaded=true;
     }
 
     //создание основных папок и файлов пользователя, запись имени и выбранных интересов в базу данных
@@ -140,7 +170,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
 
                 //запись в БД о том, что пользователь прошел заполнение профиля и заходит не в первый раз
                 Map<String, Object> FL = new HashMap<>();
-                FL.put("firstLaunch","y");
+                FL.put("firstLaunch","n");
                 new FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().uID())
                         .update(FL)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -160,7 +190,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
         });
 
         Map<String, Object> FL = new HashMap<>();
-        FL.put("firstLaunch","y");
+        FL.put("firstLaunch","n");
         new FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().uID())
                 .update(FL)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -177,7 +207,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 });
 
         db.collection("users").document(new FirebaseUsers().uID()).collection("interests").document("topics")
-                .update(userPickedInterests)
+                .set(userPickedInterests)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -228,7 +258,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
         final Map<String, Object> setup = new HashMap<>();
 
         final FirebaseFirestore fcs_db =  new FirebaseCloudstore().DBInstance();
-        setup.put("mainStatus","null");
+        setup.put("mainStatus",ms);
         fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
@@ -236,20 +266,21 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
         fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
-        setup.put("txtSwipe2","null");
+        setup.put("txtSwipe2",q2);
         fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
 
-        setup.put("txtSwipe3","null");
+        setup.put("txtSwipe3",q3);
         fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();
-
+        setup.put("null,null,null","null");
+        fcs_db.collection("users").document(fu.uID()).collection("likes").document("answers").set(setup);
+        setup.clear();
         setup.put("null","null");
         fcs_db.collection("users").document(fu.uID()).collection("PSInfo").document("forSwipe").set(setup);
         fcs_db.collection("users").document(fu.uID()).collection("answeredQuestions").document("null").set(setup);
-        fcs_db.collection("users").document(fu.uID()).collection("interests").document("topics").set(setup);
+        //fcs_db.collection("users").document(fu.uID()).collection("interests").document("topics").set(setup);
         fcs_db.collection("users").document(fu.uID()).collection("likes").document("MLNotMutual").set(setup);
-        fcs_db.collection("users").document(fu.uID()).collection("likes").document("answers").set(setup);
         fcs_db.collection("users").document(fu.uID()).collection("likes").document("meLikes").set(setup);
         fcs_db.collection("users").document(fu.uID()).collection("likes").document("swipe").set(setup);
         //setup.clear();

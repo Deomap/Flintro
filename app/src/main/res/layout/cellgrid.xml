@@ -7,8 +7,12 @@
 
     <ImageView
         android:id="@+id/imagepart"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:tint="@color/colorWhite"
+        android:padding="5dp"
+        android:background="@drawable/bg_inter_grid" />
 
     <TextView
         android:id="@+id/textpart"

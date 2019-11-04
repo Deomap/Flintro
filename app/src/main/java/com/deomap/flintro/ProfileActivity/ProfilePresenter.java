@@ -3,6 +3,7 @@ package com.deomap.flintro.ProfileActivity;
 import com.deomap.flintro.MainActivity;
 import com.deomap.flintro.MainPart.MainOpsModel;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.api.FirebaseUsers;
 import com.deomap.flintro.api.SharedPreferencesHub;
 
 public class ProfilePresenter implements MainPartContract.iProfilePresenter{
@@ -19,7 +20,8 @@ public class ProfilePresenter implements MainPartContract.iProfilePresenter{
 
     @Override
     public void setupProfile() {
-        String userName = sph.getStringSP("userProfile", "userName");
+        String userName = new FirebaseUsers().curUser().getDisplayName();
+        mView.loadPhoto();
         mView.fillProfile(userName);
     }
 

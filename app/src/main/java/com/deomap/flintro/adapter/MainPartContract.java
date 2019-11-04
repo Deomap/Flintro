@@ -32,6 +32,7 @@ public interface MainPartContract {
 
     interface iProfileActivity extends View{
         void fillProfile(String userName);
+        void loadPhoto();
     }
 
     interface iSwipeActivity extends View{
@@ -86,6 +87,7 @@ public interface MainPartContract {
         void initiateNextStage(String name);
         void onPickedInterest(int position);
         void setTextFromET(String text);
+        void setPhotoDownloadedTrue();
     }
 
     interface Repository{

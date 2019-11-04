@@ -30,6 +30,7 @@ import com.deomap.flintro.MainActivity;
 import com.deomap.flintro.QuestionsActivity.QuestionsActivity;
 import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.ImageTextAdapter;
+import com.deomap.flintro.adapter.ImageTextAdapterFL;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.deomap.flintro.api.FirebaseStorageApi;
 import com.deomap.flintro.api.FirebaseUsers;
@@ -83,7 +84,7 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
 
         changeItemsAvailibility("onCreate");
 
-        interestsGrid.setAdapter(new ImageTextAdapter(this));
+        interestsGrid.setAdapter(new ImageTextAdapterFL(this));
         interestsGrid.setOnItemClickListener(gridviewOnItemClickListener);
 
         sph = new SharedPreferencesHub(this);
@@ -296,6 +297,7 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         if (requestCode == PICK_IMAGE_AVATAR && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             photoPath = data.getData();
+            mPresenter.setPhotoDownloadedTrue();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoPath);
                 downloadedPhoto.setImageBitmap(bitmap);

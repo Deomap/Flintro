@@ -12,7 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.deomap.flintro.ChatActivity.ChatActivity;
@@ -26,6 +29,7 @@ import com.deomap.flintro.adapter.Apadter_LA_Matches.AdapterLAM;
 import com.deomap.flintro.adapter.Apadter_LA_Matches.UnitLAM;
 import com.deomap.flintro.adapter.MainPartContract;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -35,6 +39,10 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
     ArrayList<UnitLAA> unitsLAA = new ArrayList<>();
     ArrayList<UnitLAM> unitsLAM = new ArrayList<>();
     ListView unitsList;
+    Button iLikeBtn,meLikesBtn,reactionsBtn;
+    TabLayout sliding_tabs;
+    TextView sadText;
+    ImageView sadImage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -96,6 +104,10 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         unitsList = findViewById(R.id.likesList);
+        TextView tv = findViewById(R.id.toolbarTV1);
+        sliding_tabs = findViewById(R.id.sliding_tabs);
+        sadText = findViewById(R.id.sadText);
+        sadImage = findViewById(R.id.sadImage);
 
         androidx.appcompat.widget.Toolbar myToolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -103,6 +115,36 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         overridePendingTransition(0, 0);
+
+        sadText.setVisibility(View.GONE);
+        sadImage.setVisibility(View.GONE);
+
+        sliding_tabs.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==0){
+                    meLikesClicked();
+                }
+                if(tab.getPosition()==1){
+                    iLikeClicked();
+                }
+                if(tab.getPosition()==2){
+                    reactionsClicked();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        meLikesClicked();
 
     }
 
@@ -113,17 +155,23 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
 
     //обработка нажатия кнопки (след. 3 метода)
     //1 - ответы
-    public void iLikeClicked(View view) {
+    public void iLikeClicked() {
+        sadText.setVisibility(View.GONE);
+        sadImage.setVisibility(View.GONE);
         mPresenter.getList(1);
     }
 
     //2 - взаимно
-    public void meLikesClicked(View view) {
+    public void meLikesClicked() {
+        sadText.setVisibility(View.GONE);
+        sadImage.setVisibility(View.GONE);
         mPresenter.getList(2);
     }
 
     //3 - реакции
-    public void reactionsClicked(View view) {
+    public void reactionsClicked() {
+        sadText.setVisibility(View.GONE);
+        sadImage.setVisibility(View.GONE);
         mPresenter.getList(3);
     }
 
@@ -136,7 +184,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         if(arg.equals("LAA")) {
             for (int i = 0; i < universalList.size(); i++) {
                 unitsLAA.add(new UnitLAA(universalList.get(i), extraInfoList.get(i), topicsList.get(i), qIDList.get(i), uIDList.get(i)));
-                Log.i("wtf2", "@");
+                Log.i("laa", "@");
             }
             if(universalList.size()!=0) {
                 unitsList = (ListView) findViewById(R.id.likesList);
@@ -144,17 +192,25 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
                 unitsList.setAdapter(adapter);
                 unitsList.setVisibility(View.VISIBLE);
             }
+            else{
+                sadText.setVisibility(View.VISIBLE);
+                sadImage.setVisibility(View.VISIBLE);
+            }
         }
         if(arg.equals("LAM")){
             for (int i = 0; i < universalList.size(); i++) {
                 unitsLAM.add(new UnitLAM(universalList.get(i),extraInfoList.get(i)));
-                Log.i("wtf3", "@");
+                Log.i("lam", "@");
             }
             if(universalList.size()!=0) {
                 unitsList = (ListView) findViewById(R.id.likesList);
                 AdapterLAM adapter = new AdapterLAM(this, R.layout.unit_lam, unitsLAM);
                 unitsList.setAdapter(adapter);
                 unitsList.setVisibility(View.VISIBLE);
+            }
+            else{
+                sadText.setVisibility(View.VISIBLE);
+                sadImage.setVisibility(View.VISIBLE);
             }
         }
     }

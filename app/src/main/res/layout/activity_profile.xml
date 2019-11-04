@@ -28,49 +28,68 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="right">
+
+            <ImageButton
+                android:id="@+id/toolbarIV"
+                android:layout_width="56dp"
+                android:layout_height="47dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="330dp"
+                android:layout_marginBottom="5dp"
+                android:background="#F2F2F2"
+                android:tint="@color/graygray"
+                app:srcCompat="@drawable/round_settings_applications_black_36" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Мой профиль"
+                android:gravity = "center"
+                android:textSize="20sp"
+                android:id="@+id/toolbarTV1" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/profilePhoto"
-        android:layout_width="285dp"
-        android:layout_height="313dp"
-        android:layout_marginStart="64dp"
+        android:layout_width="288dp"
+        android:layout_height="175dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="87dp"
-        android:layout_marginEnd="63dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="275dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.579"
         app:srcCompat="@drawable/common_google_signin_btn_text_disabled" />
-
-    <ImageButton
-        android:id="@+id/settingsButton"
-        android:layout_width="69dp"
-        android:layout_height="88dp"
-        android:layout_marginStart="171dp"
-        android:layout_marginTop="116dp"
-        android:layout_marginEnd="171dp"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profilePhoto"
-        app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
         android:id="@+id/userName"
-        android:layout_width="133dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="71dp"
+        android:layout_width="383dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="40dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginBottom="6dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/profilePhoto"
-        app:layout_constraintEnd_toStartOf="@+id/settingsButton"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="null"
+        android:paddingLeft="10dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.057" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

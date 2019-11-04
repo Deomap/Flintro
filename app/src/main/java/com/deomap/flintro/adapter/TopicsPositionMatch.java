@@ -9,7 +9,7 @@ public class TopicsPositionMatch {
             "Новые","Популярное","Психология",
             "Образование","Интернет","Кино",
             "Искусство","Музыка","Здоровье",
-            "Еда", "Технологии","География",
+            "Еда", "Технологии","Спорт",
             "Политика", "Наука", "Путешествия",
             "Транспорт", "Мода", "Философия",
             "Культура", "Отношения","Книги"};
@@ -18,7 +18,7 @@ public class TopicsPositionMatch {
             "New","Popular", "Psychology",
             "Education","Internet","Cinema",
             "Art","Music","Health",
-            "Food","Technologies","Geography",
+            "Food","Technologies","Sport",
             "Politic","Science","Adventures",
             "Transport","Fashion","Philosophy",
             "Culture","Relations","Books"};

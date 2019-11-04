@@ -69,7 +69,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
         }
     }
 
-    //здес списки понравившихся пользователей или ответов загружаются из БД по агременту (описано в активности)
+    //здесь списки понравившихся пользователей или ответов загружаются из БД по аргументу (описано в активности)
     private void serverSide(int arg){
         if(arg == 1){
             DocumentReference docRef = fbcs.DBInstance().collection("users").document(new FirebaseUsers().uID()).collection("likes").document("answers");
@@ -81,6 +81,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         if (document.exists()) {
                             Log.d("LA/getList()answers", "DocumentSnapshot data: " + document.getData());
                             universalList = fdt.DS_LP_getList_string_to_array(document,"iLike/answers");
+                            if(universalList.size()==0)setListInView();
                             special = fdt.DS_LP_getList_string_to_array(document,"iLike/answers/s");
                             Log.i("a1",universalList.size()+" "+extraInfoList.size());
                             if(special.size()==0){
@@ -96,7 +97,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                 qIDList.add(qID);
                                 uID = str.split(",")[2];
                                 uIDList.add(uID);
-                                Log.i("wtf",topic+" "+qID);
+                                Log.i("topicQID",topic+" "+qID);
                                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
                                 DocumentReference docRef2 = db.collection("interests").document(topic).collection("questions").document(qID);
                                 docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -125,15 +126,20 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                         } else {
                                             Log.d("LP/SS", "get failed with ", task.getException());
                                             extraInfoList.add("null");
+                                            mView.toast("Произошла ошибка при загрузке",1);
                                         }
                                     }
                                 });
                             }
                         } else {
                             Log.d("LA/getList()", "No such document");
+                            special.clear();
+                            extraInfoList.clear();
+                            setListInView();
                         }
                     } else {
                         Log.d("LA/getList()", "get failed with ", task.getException());
+                        mView.toast("Произошла ошибка при загрузке",1);
                     }
                 }
             });
@@ -149,9 +155,9 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                         if (document.exists()) {
                             Log.d("LP/getList()", "DocumentSnapshot (mode2) data: " + document.getData());
                             extraInfoList = fdt.DS_LP_getList_string_to_array(document, "meLikes/uid");
-
+                            if(extraInfoList.size()==0) setListInView();
                             for(String str : extraInfoList){
-                                Log.i("dd",str);
+                                Log.i("str",str);
                                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
                                 DocumentReference docRef2 = db.collection("users").document(str.replaceAll("\\s",""));
                                 docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -165,7 +171,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                                 if(j==extraInfoList.size()){
                                                     j=0;
                                                     setListInView();
-                                                    Log.i("sliv","lol");
+                                                    Log.i("sliv","j0");
                                                 }
                                             } else {
                                                 Log.d("LP/SS()", "No such document");
@@ -179,6 +185,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                                             }
                                         } else {
                                             Log.d("LP/SS", "get failed with ", task.getException());
+                                            mView.toast("Произошла ошибка при загрузке",1);
                                             universalList.add("null");
                                         }
                                     }
@@ -186,9 +193,11 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                             }
                         } else {
                             Log.d("LA/getList()", "No such document");
+                            setListInView();
                         }
                     } else {
                         Log.d("LA/getList()", "get failed with ", task.getException());
+                        mView.toast("Произошла ошибка при загрузке",1);
                     }
                 }
             });
