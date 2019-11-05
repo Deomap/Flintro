@@ -39,7 +39,7 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
 
     private String curUserID="null", curUserPriority = "null";
 
-    private String fuName,fuStatus, fuTxt1, fuTxt2, fuTxt3;
+    private String fuName,fuStatus, fuTxt1, fuTxt2, fuTxt3, city;
 
     FirestoreDataTranslator fdt = new FirestoreDataTranslator();
 
@@ -90,6 +90,7 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
                             fuTxt1 = document.get("txtSwipe1").toString();
                             fuTxt2 = document.get("txtSwipe2").toString();
                             fuTxt3 = document.get("txtSwipe3").toString();
+                            city = document.get("city").toString();
                             whereShowingNow++;
                             setInView();
 
@@ -173,7 +174,7 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
 
             docRef = db.collection("users").document(curUserID).collection("PSInfo").document("forSwipe");
             Map<String, Object> del2 = new HashMap<>();
-            del2.put(curUserID, FieldValue.delete());
+            del2.put(fu.uID(), FieldValue.delete());
             docRef.update(del2).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -183,9 +184,9 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
         }
         else{
             Map<String, Object> updates1 = new HashMap<>();
-            updates1.put(curUserID,"1");
+            updates1.put(fu.uID(),"1");
 
-            new FirebaseCloudstore().DBInstance().collection("users").document(fu.uID()).collection("PSInfo").document("forSwipe")
+            new FirebaseCloudstore().DBInstance().collection("users").document(curUserID).collection("PSInfo").document("forSwipe")
                     .update(updates1)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -200,23 +201,15 @@ public class SwipePresenter implements MainPartContract.iSwipePresenter {
                         }
                     });
 
-            Map<String, Object> updates2 = new HashMap<>();
-            updates2.put(fu.uID(),"1");
-
-            new FirebaseCloudstore().DBInstance().collection("users").document(curUserID).collection("likes").document("meLikes")
-                    .update(updates2)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("SP/liked", "DocumentSnapshot successfully written!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("SP/liked", "Error writing document", e);
-                        }
-                    });
+            DocumentReference docRef = db.collection("users").document(fu.uID()).collection("PSInfo").document("forSwipe");
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(curUserID, FieldValue.delete());
+            docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Log.i("SP/dis2", "deleted");
+                }
+            });
         }
     }
 

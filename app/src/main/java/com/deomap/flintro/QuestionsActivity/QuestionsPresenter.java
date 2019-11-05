@@ -1,6 +1,7 @@
 package com.deomap.flintro.QuestionsActivity;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -46,6 +47,8 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
     public  String selectedTopicRus ="null";
     int poss;
     private ArrayList<String>  answersFinalList = new ArrayList<>();
+
+    String LAQ="null";
 
     //stage отвечает за режим, в котором сейчас все отображается в активности
     private int stage = 0;
@@ -109,20 +112,37 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
 
     //получение списка ответов по выбранному вопросу
     @Override
-    public void getAnswers(int pos, String fromWho) {
+    public void getAnswers(int pos, final String fromWho) {
         this.poss=pos;
         FirebaseFirestore db = fbcs.DBInstance();
         //
         answersList.clear();
         answersUserIDList.clear();
         answersFinalList.clear();
-        if(!fromWho.equals("fromQA")){
-            selectedTopic = tpm.topicNameEng(pos);
-            selectedTopicRus=tpm.topicNameRus(pos);
-            selectedQuestion = fromWho;
+        if(fromWho.equals("fromQA")){
+            selectedQuestion = questionsIDList.get(pos);
         }
         else{
-            selectedQuestion = questionsIDList.get(pos);
+            selectedQuestion = fromWho;
+            selectedTopic = tpm.topicNameEng(pos);
+            final DocumentReference docRef = db.collection("interests").document(selectedTopic).collection("questions").document(selectedQuestion);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            LAQ = document.get("text").toString();
+                        } else {
+                            Log.d("QP/gettingAnswerLA", "No such document");
+                            LAQ="null";
+                        }
+                    } else {
+                        Log.d("QP/gettingAnswerLA", "get failed with ", task.getException());
+                        LAQ="null";
+                    }
+                }
+            });
         }
 
         DocumentReference docRef = db.collection("interests").document(selectedTopic).collection("answers").document(selectedQuestion);
@@ -136,8 +156,12 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         answersList = fdt.DS_QP_getAnswers_string_to_array(document,"AL");
                         answersUserIDList = fdt.DS_QP_getAnswers_string_to_array(document,"AIDL");
                         //votesList = fdt.DS_QP_getAnswers_string_to_array(document, "AVL");
-
-                        mView.setMainText(selectedTopicRus+": "+questionsList.get(poss));
+                        if(fromWho.equals("fromQA")) {
+                            mView.setMainText(selectedTopicRus + ": " + questionsList.get(poss));
+                        }
+                        else{
+                            mView.setMainText(selectedTopicRus+": "+LAQ);
+                        }
                         stage = 2;
 
                         for(int i = 0 ;i<answersList.size();i++){
@@ -145,11 +169,18 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         }
                         mView.initiateAnswersList(answersList, answersFinalList);
                         mView.itemsAvailibilitySet(stage);
+                        if (!fromWho.equals("fromQA")){
+                            mView.blockBackButton();
+                        }
                     } else {
-                        Log.d("QP/getAnswers()", "No such document");
+                        Log.d("QP/getAnswers()", "No such documentttt");
+                        mView.initiateAnswersList(answersList, answersFinalList);
+                        stage=2;
+                        mView.itemsAvailibilitySet(stage);
                     }
                 } else {
                     Log.d("QP/getAnswers()", "get failed with ", task.getException());
+                    mView.toast("При загрузке произошла ошибка :(",1);
                 }
             }
         });
@@ -180,6 +211,8 @@ public class QuestionsPresenter implements MainPartContract.iQuestionsPresenter 
                         public void onSuccess(Void aVoid) {
                             Log.d("QP/sendUserAnswer()", "DocumentSnapshot successfully written!");
                             mView.toast("Ответ отправлен :)",1);
+                            mView.clearAnsField();
+                            getAnswers(poss,"fromQA");
                             addAnsweredQuestionToUser();
                         }
                     })

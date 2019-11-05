@@ -12,13 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".FirstLaunchActivity.FLActivity" android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".ProfileActivity.OtherProfileActivity"></activity>
+        <activity
+            android:name=".FirstLaunchActivity.FLActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".SwipeActivity.SwipeActivity" />
-        <activity android:name=".QuestionsActivity.QuestionsActivity" android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".QuestionsActivity.QuestionsActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ProfileActivity.ProfileActivity" />
-        <activity android:name=".ChatActivity.ChatActivity" android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ChatActivity.ChatActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LikesActivity.LikesActivity" />
-        <activity android:name=".login.VerifyingSignInActivity" android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".login.VerifyingSignInActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".login.SignInActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -131,12 +131,11 @@ public class AdapterQAA extends ArrayAdapter<UnitQAA> {
 
     private class ViewHolder {
         final ImageButton likedIBtn;
-        final TextView answerTextField, votesInfo;
+        final TextView answerTextField;
 
         ViewHolder(View view) {
             likedIBtn = (ImageButton) view.findViewById(R.id.likedIBtn);
             answerTextField = (TextView) view.findViewById(R.id.answerTextField);
-            votesInfo = view.findViewById(R.id.votesInfo);
         }
     }
 }

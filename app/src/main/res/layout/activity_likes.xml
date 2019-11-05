@@ -34,18 +34,15 @@
             android:layout_height="match_parent"
             android:text="О ком вы сейчас думаете?"
             android:gravity = "center"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:id="@+id/toolbarTV1" />
     </androidx.appcompat.widget.Toolbar>
 
     <ListView
         android:id="@+id/likesList"
-        android:layout_width="393dp"
-        android:layout_height="464dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="10dp"
         android:divider="@color/graygray"
         android:dividerHeight="1px"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"

@@ -67,7 +67,7 @@ public class AdapterLAM extends ArrayAdapter<UnitLAM> {
                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
                 FirebaseUsers fu = new FirebaseUsers();
                 DocumentReference docRef = db.collection("users").document(fu.uID()).collection("likes").document("meLikes");
-                if(unit.getuID()!=null) {
+                if(!unit.getuID().equals("null")) {
                     Map<String, Object> updates = new HashMap<>();
                     updates.put(unit.getuID(), FieldValue.delete());
                     docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -85,6 +85,7 @@ public class AdapterLAM extends ArrayAdapter<UnitLAM> {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
                 intent.putExtra("fromALAM",unit.getuID());
+                Log.i("ff",unit.getuID());
                 getContext().startActivity(intent);
             }
         });

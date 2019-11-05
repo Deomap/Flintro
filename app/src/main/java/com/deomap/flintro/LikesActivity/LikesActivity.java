@@ -28,6 +28,7 @@ import com.deomap.flintro.adapter.Adapter_LA_Answers.UnitLAA;
 import com.deomap.flintro.adapter.Apadter_LA_Matches.AdapterLAM;
 import com.deomap.flintro.adapter.Apadter_LA_Matches.UnitLAM;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.api.FirebaseUsers;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -59,9 +60,9 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
                 case R.id.navigation_questions:
                     startIntent("Questions");
                     return true;
-                case R.id.navigation_chat:
-                    startIntent("Chat");
-                    return true;
+                //case R.id.navigation_chat:
+                    //startIntent("Chat");
+                    //return true;
                 case R.id.navigation_profile:
                     startIntent("Profile");
                     return true;
@@ -101,6 +102,7 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
         mPresenter = new LikesPresenter(this);
+        toast(new FirebaseUsers().curUser().getDisplayName(),1);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         unitsList = findViewById(R.id.likesList);
@@ -200,7 +202,8 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         if(arg.equals("LAM")){
             for (int i = 0; i < universalList.size(); i++) {
                 unitsLAM.add(new UnitLAM(universalList.get(i),extraInfoList.get(i)));
-                Log.i("lam", "@");
+
+                Log.i("lam", universalList.get(i)+" , "+extraInfoList.get(i));
             }
             if(universalList.size()!=0) {
                 unitsList = (ListView) findViewById(R.id.likesList);

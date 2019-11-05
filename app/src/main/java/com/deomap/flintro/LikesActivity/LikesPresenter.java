@@ -33,7 +33,9 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
     private FirebaseCloudstore fbcs = new FirebaseCloudstore();
     private FirestoreDataTranslator fdt = new FirestoreDataTranslator();
     private int arg_mode;
+    String d;
     final int cb_mode = 2;
+    int ii =0;
 
     int j=  0;
 
@@ -90,6 +92,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
 
                             //выделение из полученной записи БД ID пользователя, ID вопроса, темы
                             String topic,qID,uID;
+                            j=0;
                             for(String str : special){
                                 topic = str.split(",")[0];
                                 topicList.add(topic);
@@ -146,6 +149,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
             Log.i("a3",universalList.size()+" "+extraInfoList.size());
         }
         if(arg==2){
+            j=0;
             DocumentReference docRef = fbcs.DBInstance().collection("users").document(new FirebaseUsers().uID()).collection("likes").document("meLikes");
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -156,40 +160,57 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                             Log.d("LP/getList()", "DocumentSnapshot (mode2) data: " + document.getData());
                             extraInfoList = fdt.DS_LP_getList_string_to_array(document, "meLikes/uid");
                             if(extraInfoList.size()==0) setListInView();
+                            for(int i = 0;i<extraInfoList.size();i++){
+                                universalList.add("null");
+                            }
+                            ii=0;
                             for(String str : extraInfoList){
                                 Log.i("str",str);
                                 FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
-                                DocumentReference docRef2 = db.collection("users").document(str.replaceAll("\\s",""));
-                                docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                universalList.add(document.get("name").toString());
-                                                j++;
+                                d=str;
+                                DocumentReference docRef2 = db.collection("users").document(str);
+
+                                try {
+                                    docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    universalList.set(ii,document.get("name").toString());
+                                                    j++;
+                                                    if(j==extraInfoList.size()){
+                                                        j=0;
+                                                        setListInView();
+                                                        Log.i("sliv","j0");
+                                                    }
+                                                } else {
+
+                                                    Log.d("LP/SS()", "No such document");
+                                                    j++;
+                                                    if(j==extraInfoList.size()){
+                                                        j=0;
+                                                        setListInView();
+                                                        Log.i("LP/2","else1");
+                                                    }
+                                                }
+                                                ii++;
+                                            } else {
+                                                Log.d("LP/SS", "get failed with ", task.getException());
+                                                //mView.toast("Произошла ошибка при загрузке",1);
                                                 if(j==extraInfoList.size()){
                                                     j=0;
                                                     setListInView();
                                                     Log.i("sliv","j0");
                                                 }
-                                            } else {
-                                                Log.d("LP/SS()", "No such document");
-                                                universalList.add("null");
+                                                ii++;
                                                 j++;
-                                                if(j==extraInfoList.size()){
-                                                    j=0;
-                                                    setListInView();
-                                                    Log.i("LP/2","else1");
-                                                }
                                             }
-                                        } else {
-                                            Log.d("LP/SS", "get failed with ", task.getException());
-                                            mView.toast("Произошла ошибка при загрузке",1);
-                                            universalList.add("null");
                                         }
-                                    }
-                                });
+                                    });
+                                } catch (Exception e){
+
+                                }
                             }
                         } else {
                             Log.d("LA/getList()", "No such document");
@@ -198,6 +219,7 @@ public class LikesPresenter implements MainPartContract.iLikesPresenter{
                     } else {
                         Log.d("LA/getList()", "get failed with ", task.getException());
                         mView.toast("Произошла ошибка при загрузке",1);
+                        setListInView();
                     }
                 }
             });

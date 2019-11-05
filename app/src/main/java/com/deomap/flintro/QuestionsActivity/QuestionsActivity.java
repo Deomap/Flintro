@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,7 +41,6 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     private TextView mainText;
     private EditText userAnswer;
     private ImageView userAnswerButton;
-    private ImageView backButton;
     private GridView topicsGrid;
     private ListView questionsList;
     private ListView answersList;
@@ -62,9 +62,9 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
                 case R.id.navigation_questions:
                     startIntent("Questions");
                     return true;
-                case R.id.navigation_chat:
-                    startIntent("Chat");
-                    return true;
+                //case R.id.navigation_chat:
+                    //startIntent("Chat");
+                    //return true;
                 case R.id.navigation_profile:
                     startIntent("Profile");
                     return true;
@@ -85,8 +85,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         mainText = findViewById(R.id.mainText);
         userAnswer = findViewById(R.id.userAnswer);
         userAnswerButton = findViewById(R.id.userAnswerButton);
-        backButton = findViewById(R.id.backButton);
-        //SHOULD BE IN FRAGMENTS:
+
         answersList = findViewById(R.id.answersList);
         topicsGrid = findViewById(R.id.interestsGrid);
         topicsGrid.setOnItemClickListener(gridviewOnItemClickListener);
@@ -96,6 +95,7 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         questionsList.setOnItemClickListener(questionsListviewOnItemClickListener);
 
         myToolbar = findViewById(R.id.my_toolbar);
+        myToolbar.setNavigationIcon(R.drawable.baseline_keyboard_arrow_left_black_48);
         setSupportActionBar(myToolbar);
 
         //если активность открыта из LikesActivity (пользователь нажал на текстовое поле с вопросом), то открывается список ответов на этот вопрос
@@ -107,6 +107,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
         itemsAvailibilitySet(0);
         overridePendingTransition(0, 0);
     }
+
+    //слушатели нажатий:
 
     private GridView.OnItemClickListener gridviewOnItemClickListener = new GridView.OnItemClickListener() {
 
@@ -133,6 +135,18 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
             Log.i("QA/answersList.OICL","clicked");
         }
     };
+
+    //обработка нажатия кнопки назад
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mPresenter.backStage();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void startIntent(String intentName) {
@@ -168,20 +182,34 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     @Override
     public void initiateQuestionsList(ArrayList questionsArray) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, questionsArray);
-        questionsList.setAdapter(adapter);
+        if(questionsArray.size()!=0) {
+            questionsList.setAdapter(adapter);
+        }
+        else{
+            toast("Ошибочка вышла...",1);
+        }
     }
 
     @Override
     public void initiateAnswersList(ArrayList answersArray, ArrayList ansFinalList) {
         unitsQAA.clear();
         for (int i = 0; i < answersArray.size(); i++) {
-            unitsQAA.add(new UnitQAA(answersArray.get(i).toString(),ansFinalList.get(i).toString(),"0"));
-            Log.i("wtf2", "@");
+                unitsQAA.add(new UnitQAA(answersArray.get(i).toString(), ansFinalList.get(i).toString(), "0"));
+                Log.i("ial", "@");
         }
-        if(answersArray.size()!=0) {
+        if(unitsQAA.size()!=0) {
             answersList = (ListView) findViewById(R.id.answersList);
             AdapterQAA adapter = new AdapterQAA(this, R.layout.unit_qaa, unitsQAA);
             answersList.setAdapter(adapter);
+        }
+        else{
+            answersArray.add(" ");
+            ansFinalList.add("null,null,null");
+            toast("Тут пока пусто, но вы можете дать ответ первым :)",1);
+            unitsQAA.add(new UnitQAA(answersArray.get(0).toString(),ansFinalList.get(0).toString(),"0"));
+            AdapterQAA adapter = new AdapterQAA(this, R.layout.unit_qaa, unitsQAA);
+            answersList.setAdapter(adapter);
+
         }
     }
 
@@ -189,6 +217,11 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
     public void setMainText(String text){
         TextView tv = findViewById(R.id.toolbarTV1);
         tv.setText(text);
+    }
+
+    @Override
+    public void clearAnsField() {
+        userAnswer.setText("");
     }
 
     //все ListView находятся на одном экране, следовательно в зависимости от того, смотрит пользователь список тем, вопросов, или ответов, нужно устанавливать видимыми разные списки
@@ -205,8 +238,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
             userAnswer.setEnabled(false);
             userAnswerButton.setVisibility(View.GONE);
             userAnswerButton.setEnabled(false);
-            backButton.setVisibility(View.GONE);
-            backButton.setEnabled(false);
+            //backButton.setVisibility(View.GONE);
+           // backButton.setEnabled(false);
         }
         if(stage == 1){
             topicsGrid.setVisibility(View.GONE);
@@ -219,8 +252,8 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
             userAnswer.setEnabled(false);
             userAnswerButton.setVisibility(View.GONE);
             userAnswerButton.setEnabled(false);
-            backButton.setVisibility(View.VISIBLE);
-            backButton.setEnabled(true);
+           // backButton.setVisibility(View.VISIBLE);
+           // backButton.setEnabled(true);
         }
         if(stage == 2){
             topicsGrid.setVisibility(View.GONE);
@@ -233,19 +266,20 @@ public class QuestionsActivity extends AppCompatActivity implements MainPartCont
             userAnswer.setEnabled(true);
             userAnswerButton.setVisibility(View.VISIBLE);
             userAnswerButton.setEnabled(true);
-            backButton.setVisibility(View.VISIBLE);
-            backButton.setEnabled(true);
+           // backButton.setVisibility(View.VISIBLE);
+           // backButton.setEnabled(true);
         }
 
     }
 
-    //обработка нажатия кнопки "Назад"
-    public void backButtonClicked(View view){
-        mPresenter.backStage();
-    }
+    @Override
+    public void blockBackButton() {
 
+    }
 
     public void userAnswerButtonClicked(View view){
         mPresenter.sendUserAnswer(userAnswer.getText().toString());
     }
+
+
 }

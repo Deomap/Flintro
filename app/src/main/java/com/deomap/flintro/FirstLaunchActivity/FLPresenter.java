@@ -36,9 +36,11 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     String userName = "";
     String ms  = "null";
     Boolean photoDownloaded = false;
+    String city = "null";
     String q2 = "null";
     String q3 =  "null";
     String text="";
+    String cityNameFLA="";
     String  topic;
     FirebaseCloudstore fbcu = new FirebaseCloudstore();
     FirebaseUsers fbu = new FirebaseUsers();
@@ -66,15 +68,15 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 text="";
             }
         }
-        if(stage == 4 || stage == 5 || stage == 6){
+        if(stage == 5 || stage == 6 || stage == 7){
             if(!(text.length()<30 || text.length()>170)){
-                if(stage==4){
+                if(stage==5){
                     ms=text;
                 }
-                if(stage==5){
+                if(stage==6){
                     q2=text;
                 }
-                if(stage==6){
+                if(stage==7){
                     q3=text;
                 }
                 text="";
@@ -85,7 +87,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 text="";
             }
         }
-        if(stage==2){
+        if(stage==3){
             if(photoDownloaded){
                 //pass
                 text="";
@@ -95,6 +97,9 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 stage--;
                 text="";
             }
+        }
+        if(stage==2){
+            city = cityNameFLA;
         }
         text="";
         stage++;
@@ -106,29 +111,33 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
                 mView.changeItemsAvailibility("name");
                 break;
             case 2:
+                mView.askCity();
+                mView.changeItemsAvailibility("city");
+                break;
+            case 3:
                 mView.askPhoto();
                 mView.changeItemsAvailibility("photo");
                 Log.i("st1","!!");
                 break;
-            case 3:
+            case 4:
                 userName = arg;
                 mView.askInterests();
                 mView.changeItemsAvailibility("interests");
                 Log.i("st2","!!");
                 break;
-            case 4:
+            case 5:
                 mView.askQ1m("Что бы о вас сказал ваш лучший друг?");
                 mView.changeItemsAvailibility("q1m");
                 break;
-            case 5:
+            case 6:
                 mView.askQ2("Как вы относитесь к фильмам ужасов?");
                 mView.changeItemsAvailibility("q2");
                 break;
-            case 6:
+            case 7:
                 mView.askQ3("Согласился бы ты быть единственным зрителем на концерте любимой группы?");
                 mView.changeItemsAvailibility("q3");
                 break;
-            case 7:
+            case 8:
                 mView.changeItemsAvailibility("finish");
                 buildProfile();
                 break;
@@ -139,7 +148,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
 
     @Override
     public void onPickedInterest(int position) {
-        userPickedInterests.put(tpm.topicNameEng(position-2),5);
+        userPickedInterests.put(tpm.topicNameEng(position+2),5);
         Log.i("put","cff");
     }
 
@@ -151,6 +160,11 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     @Override
     public void setPhotoDownloadedTrue() {
         photoDownloaded=true;
+    }
+
+    @Override
+    public void setNameFLA(String name) {
+        cityNameFLA = name;
     }
 
     //создание основных папок и файлов пользователя, запись имени и выбранных интересов в базу данных
@@ -188,6 +202,24 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
 
             }
         });
+
+        Map<String, Object> cityMap = new HashMap<>();
+        cityMap.put("city",city);
+        new FirebaseCloudstore().DBInstance().collection("users").document(new FirebaseUsers().uID())
+                .update(cityMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("FLP/buildProfile()", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FLP/buildProfile()", "Error writing document", e);
+                    }
+                });
+
 
         Map<String, Object> FL = new HashMap<>();
         FL.put("firstLaunch","n");
@@ -238,7 +270,7 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
 
         //updating displayName
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(userName).build();
+                .setDisplayName(userName+","+new FirebaseUsers().uID()).build();
         new FirebaseUsers().curUser().updateProfile(profileUpdates);
 
 
@@ -255,9 +287,9 @@ public class FLPresenter implements MainPartContract.iFLPresenter  {
     //всё также, формирование необходимых файлов в БД
     private void setupDocuments(){
         FirebaseUsers fu = new FirebaseUsers();
-        final Map<String, Object> setup = new HashMap<>();
+         Map<String, Object> setup = new HashMap<>();
 
-        final FirebaseFirestore fcs_db =  new FirebaseCloudstore().DBInstance();
+         FirebaseFirestore fcs_db =  new FirebaseCloudstore().DBInstance();
         setup.put("mainStatus",ms);
         fcs_db.collection("users").document(fu.uID()).update(setup);
         setup.clear();

@@ -53,9 +53,9 @@ public class ProfileActivity extends AppCompatActivity implements MainPartContra
                 case R.id.navigation_questions:
                     startIntent("Questions");
                     return true;
-                case R.id.navigation_chat:
-                    startIntent("Chat");
-                    return true;
+                //case R.id.navigation_chat:
+                    //startIntent("Chat");
+                    //return true;
                 case R.id.navigation_profile:
                     startIntent("Profile");
                     return true;

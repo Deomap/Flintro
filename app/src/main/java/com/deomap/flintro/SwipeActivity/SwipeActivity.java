@@ -59,9 +59,9 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
                 case R.id.navigation_questions:
                     startIntent("Questions");
                     return true;
-                case R.id.navigation_chat:
-                    startIntent("Chat");
-                    return true;
+                //case R.id.navigation_chat:
+                    //startIntent("Chat");
+                    //return true;
                 case R.id.navigation_profile:
                     startIntent("Profile");
                     return true;
@@ -126,6 +126,7 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
 
     public void likeUserBtnClck(View view){
         foundUserName.setText("");
+        mPresenter.liked();
         //foundUserMainStatus.setText("");
         userMatchedAnswers3.setText("");
         userMatchedAnswers2.setText("");
@@ -135,6 +136,7 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
 
     public void dislikeUserBtnClck(View view){
         foundUserName.setText("");
+        mPresenter.disliked();
         //foundUserMainStatus.setText("");
         userMatchedAnswers3.setText("");
         userMatchedAnswers2.setText("");
@@ -145,7 +147,7 @@ public class SwipeActivity extends AppCompatActivity implements MainPartContract
 
     @Override
     public void toast(String msg, int time) {
-
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
     //из Presenter устанавливается информация о другом предложенном пользователе

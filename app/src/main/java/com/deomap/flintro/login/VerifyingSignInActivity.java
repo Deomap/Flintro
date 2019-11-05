@@ -22,6 +22,7 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
     TextView mEmailField;
     Button mLoginButton;
     Button mGetEmailButton;
+    TextView tt;
     Button mEmailVerified;
     private int mode;
 
@@ -36,6 +37,8 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
         mGetEmailButton = findViewById(R.id.getEmailButton);
         mLoginButton = findViewById(R.id.loginButton);
         mEmailVerified =findViewById(R.id.emailVerified);
+        tt = findViewById(R.id.textView4);
+        tt.setVisibility(View.GONE);
         Intent intent = getIntent();
         //получаем информацию из SignInActivity, что хочет пользователь, зарегестрироваться или войти
         mode = intent.getIntExtra("mode", 1);
@@ -115,11 +118,15 @@ public class VerifyingSignInActivity extends AppCompatActivity implements LoginC
         mPresenter.tryTo(mEmailField.getText().toString(), mPasswordField.getText().toString(),mPasswordConfirmation.getText().toString(),mode);
     }
 
+
+
+
     public void emailVerified(View view){
         mPresenter.emailVerifiedClicked();
     }
 
     public void loginClicked(View view){
         mPresenter.tryTo(mEmailField.getText().toString(), mPasswordField.getText().toString(),mPasswordConfirmation.getText().toString(),mode);
+        tt.setVisibility(View.VISIBLE);
     }
 }

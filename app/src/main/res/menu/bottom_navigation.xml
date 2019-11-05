@@ -16,10 +16,7 @@
         android:icon="@drawable/baseline_help_black_48"
         android:title="@string/title_questions" />
 
-    <item
-        android:id="@+id/navigation_chat"
-        android:icon="@drawable/round_forum_black_48"
-        android:title="@string/title_chat" />
+
 
     <item
         android:id="@+id/navigation_profile"

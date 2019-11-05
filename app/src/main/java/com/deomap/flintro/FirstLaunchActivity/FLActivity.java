@@ -18,10 +18,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -32,11 +35,19 @@ import com.deomap.flintro.R;
 import com.deomap.flintro.adapter.ImageTextAdapter;
 import com.deomap.flintro.adapter.ImageTextAdapterFL;
 import com.deomap.flintro.adapter.MainPartContract;
+import com.deomap.flintro.api.FirebaseCloudstore;
 import com.deomap.flintro.api.FirebaseStorageApi;
 import com.deomap.flintro.api.FirebaseUsers;
 import com.deomap.flintro.api.SharedPreferencesHub;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -44,6 +55,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 //активность заполнения профиля, открывается сразу после регистрации или первого входа
@@ -57,7 +69,11 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
     private SharedPreferencesHub sph ;
     private Button downloadPhotoButton;
     private Uri photoPath;
+    private ImageView smile;
+    private TextView smileText;
     private ImageView downloadedPhoto;
+    private Spinner cities;
+    ArrayList<String> spinnerArray = new ArrayList<>();
 
     private FirebaseStorage storage;
     private StorageReference storageReference;
@@ -78,6 +94,10 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         downloadPhotoButton = findViewById(R.id.downloadPhotoButton);
         downloadedPhoto = findViewById(R.id.downloadedPhoto);
         fsapi = new FirebaseStorageApi();
+        cities=findViewById(R.id.cities);
+        smile=findViewById(R.id.smile);
+        smileText=findViewById(R.id.smileText);
+        setCities();
 
         storage = fsapi.FSInstance();
         storageReference = fsapi.FSReference();
@@ -107,6 +127,12 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
+            smileText.setVisibility(View.VISIBLE);
+            smileText.setEnabled(true);
+            smile.setVisibility(View.VISIBLE);
+            smile.setEnabled(true);
         }
         if(arg.equals("name")){
             editText1.setVisibility(View.VISIBLE);
@@ -121,6 +147,12 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
+            smileText.setVisibility(View.GONE);
+            smileText.setEnabled(false);
+            smile.setVisibility(View.GONE);
+            smile.setEnabled(false);
         }
         if(arg.equals("photo")){
             editText1.setVisibility(View.GONE);
@@ -135,6 +167,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(true);
             downloadedPhoto.setVisibility(View.VISIBLE);
             downloadedPhoto.setEnabled(true);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
         }
         if(arg.equals("interests")){
             editText1.setVisibility(View.GONE);
@@ -149,6 +183,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
         }
         if(arg.equals("sex")){
             editText1.setVisibility(View.VISIBLE);
@@ -163,6 +199,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
         }
         if(arg.equals("q1m")){
             editText1.setVisibility(View.VISIBLE);
@@ -177,6 +215,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
         }
         if(arg.equals("q2")){
             editText1.setVisibility(View.VISIBLE);
@@ -191,6 +231,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
         }
         if(arg.equals("q3")){
             editText1.setVisibility(View.VISIBLE);
@@ -205,6 +247,8 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
         }
         if(arg.equals("finish")){
             editText1.setVisibility(View.GONE);
@@ -219,6 +263,24 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
             downloadPhotoButton.setEnabled(false);
             downloadedPhoto.setVisibility(View.GONE);
             downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.GONE);
+            cities.setEnabled(false);
+        }
+        if(arg.equals("city")){
+            editText1.setVisibility(View.GONE);
+            editText1.setEnabled(false);
+            textView1.setVisibility(View.VISIBLE);
+            textView1.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+            nextButton.setEnabled(true);
+            interestsGrid.setVisibility(View.GONE);
+            interestsGrid.setEnabled(false);
+            downloadPhotoButton.setVisibility(View.GONE);
+            downloadPhotoButton.setEnabled(false);
+            downloadedPhoto.setVisibility(View.GONE);
+            downloadedPhoto.setEnabled(false);
+            cities.setVisibility(View.VISIBLE);
+            cities.setEnabled(true);
         }
     }
 
@@ -287,6 +349,46 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
         editText1.setText("");
         editText1.setHint("Ответ");
         textView1.setText("Согласились ли вы быть единственным зрителем на концерте любимой группы?");
+    }
+
+    private void setCities(){
+
+        FirebaseFirestore db = new FirebaseCloudstore().DBInstance();
+        db.collection("cities")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("FLA", document.getId() + " => " + document.getData());
+                                spinnerArray.add(document.getId());
+                            }
+                        } else {
+                            Log.d("FLA", "Error getting documents: ", task.getException());
+                            spinnerArray.add("null");
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(FLActivity.this, android.R.layout.simple_spinner_item, spinnerArray);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        cities.setAdapter(adapter);
+                        mPresenter.setNameFLA("Волгоград");
+                        cities.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                mPresenter.setNameFLA(spinnerArray.get(position));
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
+                });
+
+        cities.setSelection(0);
+
+
     }
 
     //происходит вызов активности, где пользователь может выбрать свое фото
@@ -369,5 +471,10 @@ public class FLActivity extends AppCompatActivity implements MainPartContract.iF
                         }
                     });
         }
+    }
+
+    @Override
+    public void askCity() {
+        textView1.setText("Выберите город");
     }
 }

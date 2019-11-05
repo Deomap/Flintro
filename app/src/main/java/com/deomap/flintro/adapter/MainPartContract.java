@@ -8,7 +8,7 @@ import com.deomap.flintro.MainPart.MainOpsModel;
 import java.util.ArrayList;
 
 //зачем это подробно написано в LoginContract
-//единственная проблема - эту часть было писать значительно сложнее и в итоге я решил все общение с БД перевести в Presenter'ы  :(
+//единственная проблема - эту часть было писать значительно сложнее и в итоге я решил все общение с БД перевести в Presenter'ы
 public interface MainPartContract {
     interface View{
         void startIntent(String intentName);
@@ -23,7 +23,9 @@ public interface MainPartContract {
         void initiateQuestionsList(ArrayList questionsList);
         void initiateAnswersList(ArrayList answersList, ArrayList ansFinalList);
         void setMainText(String text);
+        void clearAnsField();
         void itemsAvailibilitySet(int stage);
+        void blockBackButton();
     }
 
     interface iLikesActivity extends View{
@@ -50,6 +52,7 @@ public interface MainPartContract {
         void accessSharedPreferences(String mode, String prefName, String type,String key, String value);
         void changeItemsAvailibility(String arg);
         void uploadImage();
+        void askCity();
     }
 
     interface Presenter{
@@ -88,6 +91,7 @@ public interface MainPartContract {
         void onPickedInterest(int position);
         void setTextFromET(String text);
         void setPhotoDownloadedTrue();
+        void setNameFLA(String name);
     }
 
     interface Repository{
