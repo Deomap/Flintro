@@ -102,7 +102,6 @@ public class LikesActivity extends AppCompatActivity implements MainPartContract
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
         mPresenter = new LikesPresenter(this);
-        toast(new FirebaseUsers().curUser().getDisplayName(),1);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         unitsList = findViewById(R.id.likesList);

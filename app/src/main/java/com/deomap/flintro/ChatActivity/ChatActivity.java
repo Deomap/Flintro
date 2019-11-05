@@ -143,7 +143,8 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
     @Override
     protected void onResume(){
         super.onResume();
-
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.getMenu().findItem(R.id.navigation_likes).setChecked(true);
         fab = findViewById(R.id.fab);
         Intent intent = getIntent();
 
@@ -153,6 +154,7 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
             chatKey = Integer.toString(uID_fromIntent.hashCode()+fu.uID().hashCode());
             fab.setEnabled(true);
             displayChatMessages();
+            toast(uID_fromIntent,1);
         }
         else{
                 uID_fromIntent = "null";
@@ -271,7 +273,7 @@ public class ChatActivity extends AppCompatActivity implements MainPartContract.
 
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getMessageUser().split(",")[0]);
-                Log.i("ff",model.getMessageUser());
+                Log.i("user",model.getMessageUser());
                 if(model.getMessageUser().split(",")[1].equals(fu.uID())){
                     messageUser.setTextColor(getResources().getColor(R.color.red_200));
                 }
