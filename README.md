@@ -104,7 +104,7 @@ Flintro/
 
 **Денис Лапенко**
 
-- ✉️ Email: [deomap@pm.me](mailto:deomapps@gmail.com)
+- ✉️ Email: [deomapps@gmail.com](mailto:deomapps@gmail.com)
 
 ---
 
