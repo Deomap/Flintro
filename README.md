@@ -37,12 +37,6 @@
 - ❓ Ответы на вопросы и просмотр вопросов других пользователей
 - 🔗 Подключение аккаунтов социальных сетей для более точного анализа интересов и круга общения
 
-<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 23 03" src="https://github.com/user-attachments/assets/969c7f7f-b5e3-437b-911d-007a0e91172f" />
-<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 22 41" src="https://github.com/user-attachments/assets/f64b9f9c-2d17-49e2-8ed8-52aa3d5f4a56" />
-<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 22 14" src="https://github.com/user-attachments/assets/35e0c9bb-5861-4c67-8492-01bc6ce6299e" />
-<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 22 01" src="https://github.com/user-attachments/assets/5d5fc1d7-b9bf-4fbf-98d8-d0459ecd186c" />
-
-
 ## 🆚 Почему не аналоги
 
 | Продукт | Ограничение |
@@ -53,6 +47,11 @@
 | Splish | недоступен на момент анализа |
 
 Flintro стремится закрыть эти пробелы за счёт более точного подбора и защиты от фейковых/спам-аккаунтов.
+
+<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 23 03" src="https://github.com/user-attachments/assets/969c7f7f-b5e3-437b-911d-007a0e91172f" />
+<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 22 41" src="https://github.com/user-attachments/assets/f64b9f9c-2d17-49e2-8ed8-52aa3d5f4a56" />
+<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 22 14" src="https://github.com/user-attachments/assets/35e0c9bb-5861-4c67-8492-01bc6ce6299e" />
+<img width="495" height="863" alt="Снимок экрана 2026-07-29 в 12 22 01" src="https://github.com/user-attachments/assets/5d5fc1d7-b9bf-4fbf-98d8-d0459ecd186c" />
 
 ## 🛠️ Технологии
 
@@ -104,7 +103,6 @@ Flintro/
 ## 👤 Автор
 
 **Денис Лапенко**
-Группа: 11-МИ-3
 
 - ✉️ Email: [deomap@pm.me](mailto:deomapps@gmail.com)
 
